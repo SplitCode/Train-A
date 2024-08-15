@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "lint": "eslint . --ext .ts",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "test": "jest --coverage --passWithNoTests"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +23,8 @@
     "@ngrx/effects": "^18.0.2",
     "@ngrx/store": "^18.0.2",
     "@ngrx/store-devtools": "^18.0.2",
+    "@testing-library/jest-dom": "^6.4.8",
+    "jest-preset-angular": "^14.2.2",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.9",
     "rxjs": "~7.8.0",
@@ -36,6 +39,7 @@
     "@eslint/config-array": "^0.18.0",
     "@eslint/object-schema": "^2.1.4",
     "@ngrx/eslint-plugin": "^18.0.2",
+    "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
     "autoprefixer": "^10.4.20",
@@ -48,6 +52,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "postcss": "^8.4.41",
     "prettier": "3.3.3",
+    "ts-node": "^10.9.2",
     "typescript": "~5.5.2"
   }
 }

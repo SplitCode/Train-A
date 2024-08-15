@@ -10,6 +10,8 @@ import { PrimeNGConfig } from 'primeng/api';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
+  init = 'sds';
+
   constructor(private primengConfig: PrimeNGConfig) {}
 
   ngOnInit() {

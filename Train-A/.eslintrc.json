@@ -26,8 +26,8 @@
         "js": "never",
         "ts": "never"
       }
-    ],
-    "no-console": "warn"
+    ]
+    // "no-console": "warn"
   },
   "settings": {
     "import/resolver": {

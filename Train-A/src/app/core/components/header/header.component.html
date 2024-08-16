@@ -1,3 +1,4 @@
-<p>
-  header works!
-</p>
+<div *ngIf="userRole$ | async as userRole">
+  Current User Role: {{ userRole }}
+</div>
+<app-custom-button [config]="{label: 'setRole'}" (clickEmitter)="setRole('GeneralUser')" />

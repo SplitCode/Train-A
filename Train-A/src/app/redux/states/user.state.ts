@@ -3,5 +3,5 @@ export interface UserState {
 }
 
 export const initialUserState: UserState = {
-  userRole: 'Guest',
+  userRole: 'Manager',
 };

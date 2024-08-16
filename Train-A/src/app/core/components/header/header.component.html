@@ -1,4 +1,42 @@
 <div *ngIf="userRole$ | async as userRole">
-  Current User Role: {{ userRole }}
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <i class="pi pi-prime" style="font-size: 2.5rem"></i>
+    </div>
+    <div class="p-toolbar-group-center">
+      <app-custom-button
+        routerLink="/home"
+        [config]="{ label: 'Home', link: true }"
+      />
+
+      <div *ngIf="userRole === 'GeneralUser' || userRole === 'Manager'">
+        <app-custom-button
+          routerLink="/profile"
+          [config]="{ label: 'Profile', link: true }"
+        />
+        <app-custom-button
+          routerLink="/orders"
+          [config]="{ label: 'My Orders', link: true }"
+        />
+      </div>
+    </div>
+    <div class="p-toolbar-group-end">
+      <div *ngIf="userRole === 'Guest'">
+        <app-custom-button
+          routerLink="/sign-in"
+          [config]="{ label: 'Sign In', link: true }"
+        />
+        <app-custom-button
+          routerLink="/sign-up"
+          [config]="{ label: 'Sign Up', link: true }"
+        />
+      </div>
+      <div *ngIf="userRole === 'Manager'">
+        <app-custom-button
+          routerLink="/admin"
+          [config]="{ label: 'Admin', link: true }"
+        />
+      </div>
+    </div>
+  </p-toolbar>
 </div>
-<app-custom-button [config]="{label: 'setRole'}" (clickEmitter)="setRole('GeneralUser')" />

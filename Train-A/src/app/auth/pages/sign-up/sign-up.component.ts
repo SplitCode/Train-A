@@ -10,7 +10,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CustomValidationInfoComponent } from '../../../shared/components/custom-validation-info/custom-validation-info.component';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 
@@ -24,6 +24,7 @@ import { CustomButtonComponent } from '../../../shared/components/custom-button/
     ReactiveFormsModule,
     CustomValidationInfoComponent,
     CustomButtonComponent,
+    RouterModule,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',

@@ -7,11 +7,12 @@
     <div class="form-group">
       <label for="email" class="block">Email</label>
       <input
+        type="text"
         pInputText
-        type="email"
         formControlName="email"
-        placeholder="Enter your email"
         class="w-full"
+        name="email"
+        placeholder="Enter your email"
       />
       <app-custom-validation-info
         [config]="{
@@ -25,13 +26,14 @@
 
     <div class="form-group">
       <label for="password" class="block">Password</label>
-      <p-password
+      <input
+        type="password"
+        pInputText
         formControlName="password"
+        class="w-full"
+        name="password"
         placeholder="Enter your password"
-        [feedback]="false"
-        [toggleMask]="false"
-        class="inline-block w-full"
-      ></p-password>
+      />
       <app-custom-validation-info
         [config]="{
           control: signUpForm.get('password'),
@@ -46,17 +48,20 @@
 
     <div class="form-group">
       <label for="repeatPassword" class="block">Repeat Password</label>
-      <p-password
+      <input
+        type="password"
+        pInputText
         formControlName="repeatPassword"
-        placeholder="Repeat your password"
-        [feedback]="false"
-        [toggleMask]="false"
         class="w-full"
+        name="repeatPassword"
+        placeholder="Repeat your password"
       />
       <app-custom-validation-info
         [config]="{
           control: signUpForm.get('repeatPassword'),
-          customErrorMessages: { passwordsMismatch: 'Passwords do not match' },
+          customErrorMessages: {
+            passwordsMismatch: 'Passwords do not match',
+          },
         }"
       ></app-custom-validation-info>
     </div>
@@ -67,6 +72,7 @@
           label: 'Register',
           severity: 'primary',
           type: 'submit',
+          styleClass: 'w-full',
           disabled: signUpForm.invalid,
         }"
       ></app-custom-button>
@@ -74,10 +80,10 @@
   </form>
 
   <ng-template pTemplate="footer">
-    <p class="text-center text-sm">
+    <div>
       Already have an account?
-      <a routerLink="/signin" class="text-blue-500">Sign In</a>
-    </p>
+      <a routerLink="/signin" class="text-violet-400">Sign In</a>
+    </div>
   </ng-template>
 </p-card>
 

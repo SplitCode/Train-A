@@ -1,0 +1,121 @@
+<p-card class="flex justify-center">
+  <ng-template pTemplate="header">
+    <h2 class="text-xxl font-bold text-center">Sign Up</h2>
+  </ng-template>
+
+  <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email" class="block">Email</label>
+      <input
+        pInputText
+        type="email"
+        formControlName="email"
+        placeholder="Enter your email"
+        class="w-full"
+      />
+      <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('email'),
+          requiredMessage: 'Email is required',
+          validMessage: 'Email looks good',
+          customErrorMessages: { email: 'Invalid email format' },
+        }"
+      ></app-custom-validation-info>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="block">Password</label>
+      <p-password
+        formControlName="password"
+        placeholder="Enter your password"
+        [feedback]="false"
+        [toggleMask]="false"
+        class="inline-block w-full"
+      ></p-password>
+      <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('password'),
+          requiredMessage: 'Password is required',
+          validMessage: 'Password looks good',
+          customErrorMessages: {
+            minlength: 'Password must be at least 8 characters long',
+          },
+        }"
+      ></app-custom-validation-info>
+    </div>
+
+    <div class="form-group">
+      <label for="repeatPassword" class="block">Repeat Password</label>
+      <p-password
+        formControlName="repeatPassword"
+        placeholder="Repeat your password"
+        [feedback]="false"
+        [toggleMask]="false"
+        class="w-full"
+      />
+      <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('repeatPassword'),
+          customErrorMessages: { passwordsMismatch: 'Passwords do not match' },
+        }"
+      ></app-custom-validation-info>
+    </div>
+
+    <div class="form-group">
+      <app-custom-button
+        [config]="{
+          label: 'Register',
+          severity: 'primary',
+          type: 'submit',
+          disabled: signUpForm.invalid,
+        }"
+      ></app-custom-button>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p class="text-center text-sm">
+      Already have an account?
+      <a routerLink="/signin" class="text-blue-500">Sign In</a>
+    </p>
+  </ng-template>
+</p-card>
+
+<!-- <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('email'),
+          requiredMessage: 'Email is required',
+          validMessage: 'Email looks good',
+          customErrorMessages: { email: 'Invalid email format' },
+        }"
+      ></app-custom-validation-info>
+
+      <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('password'),
+          requiredMessage: 'Password is required',
+          validMessage: 'Password looks good',
+          customErrorMessages: {
+            minlength: 'Password must be at least 8 characters long',
+          },
+        }"
+      ></app-custom-validation-info>
+
+      <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('repeatPassword'),
+          requiredMessage: 'Please repeat your password',
+          customErrorMessages: { passwordsMismatch: 'Passwords do not match' },
+        }"
+      ></app-custom-validation-info> -->
+
+<!-- <form [formGroup]="signUpForm" class="w-full max-w-xs">
+  <div class="p-inputwrapper">
+    <p-password
+      formControlName="password"
+      [feedback]="false"
+      [toggleMask]="true"
+      class="inline-block w-full"
+    />
+  </div>
+</form> -->

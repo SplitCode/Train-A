@@ -32,6 +32,8 @@ import { CustomButtonComponent } from '../../../shared/components/custom-button/
 export class SignUpComponent {
   signUpForm: FormGroup;
 
+  submitted = false;
+
   private router = inject(Router);
 
   private fb = inject(FormBuilder);
@@ -48,12 +50,19 @@ export class SignUpComponent {
   }
 
   passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password')?.value;
-    const repeatPassword = control.get('repeatPassword')?.value;
-    return password === repeatPassword ? null : { passwordsMismatch: true };
+    const password = control.get('password');
+    const repeatPassword = control.get('repeatPassword');
+
+    if (!password || !repeatPassword) {
+      return null;
+    }
+    return password.value === repeatPassword.value
+      ? null
+      : { passwordsMismatch: true };
   }
 
   onSubmit() {
+    this.submitted = true;
     if (this.signUpForm.valid) {
       // this.authService.signUp(this.signUpForm.value).subscribe(...)
       this.router.navigate(['/signin']);

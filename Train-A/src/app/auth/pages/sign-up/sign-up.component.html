@@ -17,9 +17,11 @@
       <app-custom-validation-info
         [config]="{
           control: signUpForm.get('email'),
-          requiredMessage: 'Email is required',
           validMessage: 'Email looks good',
-          customErrorMessages: { email: 'Invalid email format' },
+          customErrorMessages: {
+            email: 'Invalid email format',
+            required: 'Email is required',
+          },
         }"
       ></app-custom-validation-info>
     </div>
@@ -37,10 +39,10 @@
       <app-custom-validation-info
         [config]="{
           control: signUpForm.get('password'),
-          requiredMessage: 'Password is required',
           validMessage: 'Password looks good',
           customErrorMessages: {
             minlength: 'Password must be at least 8 characters long',
+            required: 'Password is required',
           },
         }"
       ></app-custom-validation-info>

@@ -1,7 +1,13 @@
+export enum UserRole {
+  Guest = 'Guest',
+  GeneralUser = 'GeneralUser',
+  Manager = 'Manager',
+}
+
 export interface UserState {
-  userRole: 'Guest' | 'GeneralUser' | 'Manager';
+  userRole: UserRole;
 }
 
 export const initialUserState: UserState = {
-  userRole: 'Manager',
+  userRole: UserRole.Guest,
 };

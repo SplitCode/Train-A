@@ -2,7 +2,7 @@
 @import "primeicons/primeicons.css";
 @import "primeng/resources/primeng.css";
 // https://primeng.org/theming#builtinthemes
-@layer tailwind-base, primeng, tailwind-utilities ;
+@layer tailwind-base, primeng, tailwind-utilities;
 
 // @layer tailwind-base {
 //   @tailwind base;
@@ -12,4 +12,3 @@
   @tailwind components;
   @tailwind utilities;
 }
-

@@ -1,3 +1,4 @@
+import { PRIME_NG_MODULES } from './app/shared/modules/prime-ng-modules';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app/app.component';
@@ -14,6 +15,7 @@ import { appConfig } from './app/app.config';
 startServer().then(() =>
   bootstrapApplication(AppComponent, {
     providers: [
+      PRIME_NG_MODULES.MessageService,
       ...appConfig.providers,
       importProvidersFrom(
         BrowserAnimationsModule,

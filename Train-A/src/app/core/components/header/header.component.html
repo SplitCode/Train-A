@@ -1,40 +1,64 @@
 <div *ngIf="userRole$ | async as userRole">
   <p-toolbar>
     <div class="p-toolbar-group-start">
-      <i class="pi pi-prime" style="font-size: 2.5rem"></i>
+      <span class="text-[#b968c7]">Example Logo</span>
     </div>
     <div class="p-toolbar-group-center">
       <app-custom-button
+        class="mx-1"
         routerLink="/home"
-        [config]="{ label: 'Home', link: true }"
+        [config]="{
+          label: 'Home',
+          outlined: !isActiveRoute('/home'),
+        }"
       />
 
-      <div *ngIf="userRole === 'GeneralUser' || userRole === 'Manager'">
-        <app-custom-button
-          routerLink="/profile"
-          [config]="{ label: 'Profile', link: true }"
-        />
-        <app-custom-button
-          routerLink="/order"
-          [config]="{ label: 'My Orders', link: true }"
-        />
-      </div>
+      <app-custom-button
+        class="mx-1"
+        *ngIf="userRole === 'GeneralUser' || userRole === 'Manager'"
+        routerLink="/profile"
+        [config]="{
+          label: 'Profile',
+          outlined: !isActiveRoute('/profile'),
+        }"
+      />
+      <app-custom-button
+        class="mx-1"
+        *ngIf="userRole === 'GeneralUser' || userRole === 'Manager'"
+        routerLink="/order"
+        [config]="{
+          label: 'My Orders',
+          outlined: !isActiveRoute('/order'),
+        }"
+      />
     </div>
     <div class="p-toolbar-group-end">
       <div *ngIf="userRole === 'Guest'">
         <app-custom-button
+          class="mx-1"
           routerLink="/sign-in"
-          [config]="{ label: 'Sign In', link: true }"
+          [config]="{
+            label: 'Sign In',
+            outlined: !isActiveRoute('/sign-in'),
+          }"
         />
         <app-custom-button
+          class="mx-1"
           routerLink="/sign-up"
-          [config]="{ label: 'Sign Up', link: true }"
+          [config]="{
+            label: 'Sign Up',
+            outlined: !isActiveRoute('/sign-up'),
+          }"
         />
       </div>
       <div *ngIf="userRole === 'Manager'">
         <app-custom-button
+          class="mx-1"
           routerLink="/admin"
-          [config]="{ label: 'Admin', link: true }"
+          [config]="{
+            label: 'Admin',
+            outlined: !isActiveRoute('/admin'),
+          }"
         />
       </div>
     </div>

@@ -6,7 +6,8 @@ import { selectUserRole } from '../../../redux/selectors/user.selectors';
 import { setUserRole } from '../../../redux/actions/user.actions';
 import { CommonModule } from '@angular/common';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { UserRole } from '../../../redux/states/user.state';
 
 @Component({
   selector: 'app-header',
@@ -19,19 +20,28 @@ import { RouterModule } from '@angular/router';
     PRIME_NG_MODULES.ToolbarModule,
     PRIME_NG_MODULES.SplitButtonModule,
     PRIME_NG_MODULES.InputTextModule,
+    PRIME_NG_MODULES.DropdownModule,
   ],
 })
 export class HeaderComponent implements OnInit {
-  userRole$: Observable<'Guest' | 'GeneralUser' | 'Manager'> = of('Manager');
+  public userRole$: Observable<'Guest' | 'GeneralUser' | 'Manager'> =
+    of('Manager');
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this.userRole$ = this.store.select(selectUserRole);
   }
 
-  // Samle to show me how to switch (will delete)
-  setRole(role: 'Guest' | 'GeneralUser' | 'Manager') {
+  // Samle to show how to switch (will delete)
+  public setRole(role: UserRole) {
     this.store.dispatch(setUserRole({ userRole: role }));
+  }
+
+  public isActiveRoute(route: string): boolean {
+    return this.router.url === route;
   }
 }

@@ -1,11 +1,18 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { UserState } from '../states/user.state';
+import { UserRole, UserState } from '../states/user.state';
 
 export const selectUserState = createFeatureSelector<UserState>('userState');
 
 export const selectUserRole = createSelector(
   selectUserState,
+  (state: UserState) => state.userRole,
+);
+
+export const selectIsManager = createSelector(
+  selectUserState,
   (state: UserState) => {
-    return state.userRole;
+    const isManager = state.userRole === UserRole.Manager;
+    console.log(`selectIsManager: ${isManager}`);
+    return isManager;
   },
 );

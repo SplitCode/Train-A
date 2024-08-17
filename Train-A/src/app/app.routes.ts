@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdminGuard } from './admin/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,7 @@ export const routes: Routes = [
       import('./admin/pages/admin-page/admin-page.routes').then(
         (m) => m.routes,
       ),
+    canActivate: [AdminGuard],
   },
   {
     path: 'sign-in',

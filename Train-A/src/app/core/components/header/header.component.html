@@ -15,7 +15,7 @@
 
       <app-custom-button
         class="mx-1"
-        *ngIf="userRole === 'GeneralUser' || userRole === 'Manager'"
+        *ngIf="isGeneralUserOrManager(userRole)"
         routerLink="/profile"
         [config]="{
           label: 'Profile',
@@ -24,7 +24,7 @@
       />
       <app-custom-button
         class="mx-1"
-        *ngIf="userRole === 'GeneralUser' || userRole === 'Manager'"
+        *ngIf="isGeneralUserOrManager(userRole)"
         routerLink="/order"
         [config]="{
           label: 'My Orders',
@@ -33,7 +33,7 @@
       />
     </div>
     <div class="p-toolbar-group-end">
-      <div *ngIf="userRole === 'Guest'">
+      <div *ngIf="isGuest(userRole)">
         <app-custom-button
           class="mx-1"
           routerLink="/sign-in"
@@ -51,7 +51,7 @@
           }"
         />
       </div>
-      <div *ngIf="userRole === 'Manager'">
+      <div *ngIf="isManager(userRole)">
         <app-custom-button
           class="mx-1"
           routerLink="/admin"

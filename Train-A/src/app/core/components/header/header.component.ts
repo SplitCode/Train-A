@@ -44,4 +44,16 @@ export class HeaderComponent implements OnInit {
   public isActiveRoute(route: string): boolean {
     return this.router.url === route;
   }
+
+  public isGeneralUserOrManager(userRole: string): boolean {
+    return userRole === 'GeneralUser' || userRole === 'Manager';
+  }
+
+  public isManager(userRole: string): boolean {
+    return userRole === 'Manager';
+  }
+
+  public isGuest(userRole: string): boolean {
+    return userRole === 'Guest';
+  }
 }

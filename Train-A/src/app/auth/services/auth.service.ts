@@ -1,48 +1,47 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { SignUpRequest } from '../interfaces/auth';
+import { AuthRequest, ServerError } from '../interfaces/auth';
 import { catchError, Observable, throwError } from 'rxjs';
+import { API_CONFIG } from '../../config/api.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpClient);
+  constructor(private http: HttpClient) {}
 
-  private apiUrl = '/api/signup';
-
-  public signUp(user: SignUpRequest): Observable<void> {
-    return this.http.post<void>(this.apiUrl, user).pipe(
+  public signUp(user: AuthRequest): Observable<void> {
+    return this.http.post<void>(API_CONFIG.signUpUrl, user).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => this.handleError(error));
       }),
     );
   }
 
-  private handleError(error: HttpErrorResponse): Error {
-    let errorMessage = 'Unknown error!';
+  private handleError(error: HttpErrorResponse): ServerError {
+    const errors: ServerError = {};
 
     if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
+      errors.general = `Error: ${error.error.message}`;
     } else {
       switch (error.error.reason) {
         case 'invalidFields':
-          errorMessage = 'Fields are empty';
+          errors.general = 'Fields are empty';
           break;
         case 'invalidEmail':
-          errorMessage = 'Email is wrong';
+          errors.email = 'Email is wrong';
           break;
         case 'invalidPassword':
-          errorMessage = 'Password is wrong';
+          errors.password = 'Password is wrong';
           break;
         case 'invalidUniqueKey':
-          errorMessage = 'User already exists';
+          errors.email = 'User already exists';
           break;
         default:
-          errorMessage = `Error: ${error.error.message}`;
+          errors.general = `Error: ${error.error.message}`;
       }
     }
 
-    return new Error(errorMessage);
+    return errors;
   }
 }

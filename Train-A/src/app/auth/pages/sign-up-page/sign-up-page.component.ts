@@ -14,6 +14,7 @@ import { CustomButtonComponent } from '../../../shared/components/custom-button/
 import { passwordsMatchValidator } from '../../../shared/directives/password-match.directive';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
+import { ServerError } from '../../interfaces/auth';
 
 @Component({
   selector: 'app-sign-up',
@@ -42,7 +43,13 @@ export class SignUpPageComponent {
   ) {
     this.signUpForm = this.fb.group(
       {
-        email: ['', [Validators.required, Validators.email]],
+        email: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(/^[\w\d_]+@[\w\d_]+.\w{2,7}$/),
+          ],
+        ],
         password: ['', [Validators.required, Validators.minLength(8)]],
         repeatPassword: ['', [Validators.required]],
       },
@@ -62,12 +69,12 @@ export class SignUpPageComponent {
           });
           this.router.navigate(['/signin']);
         },
-        error: (err) => {
-          if (err.message === 'User already exists') {
-            this.signUpForm.get('email')?.setErrors({ emailExists: true });
-          } else {
-            console.log(err.message);
-          }
+        error: (err: ServerError) => {
+          Object.keys(err).forEach((key) => {
+            this.signUpForm
+              .get(key)
+              ?.setErrors({ serverError: err[key as keyof ServerError] });
+          });
         },
       });
     }

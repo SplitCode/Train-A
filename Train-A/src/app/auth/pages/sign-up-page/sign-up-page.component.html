@@ -22,12 +22,12 @@
         <small *ngIf="signUpForm.get('email')?.hasError('required')"
           >Field is required.</small
         >
-        <small *ngIf="signUpForm.get('email')?.hasError('email')"
+        <small *ngIf="signUpForm.get('email')?.hasError('pattern')"
           >Invalid email format.</small
         >
-        <small *ngIf="signUpForm.get('email')?.hasError('emailExists')"
-          >Account with this email already exists.</small
-        >
+        <small *ngIf="signUpForm.get('email')?.hasError('serverError')">
+          {{ signUpForm.get("email")?.getError("serverError") }}
+        </small>
       </div>
     </div>
 
@@ -52,6 +52,9 @@
         <small *ngIf="signUpForm.get('password')?.hasError('minlength')"
           >Password must be at least 8 characters long.</small
         >
+        <small *ngIf="signUpForm.get('password')?.hasError('serverError')">
+          {{ signUpForm.get("password")?.getError("serverError") }}
+        </small>
       </div>
     </div>
 
@@ -105,34 +108,3 @@
     </div>
   </ng-template>
 </p-card>
-
-<!-- <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('email'),
-          validMessage: 'Email looks good',
-          customErrorMessages: {
-            email: 'Invalid email format',
-            required: 'Email is required',
-          },
-        }"
-      ></app-custom-validation-info> -->
-
-<!-- <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('password'),
-          validMessage: 'Password looks good',
-          customErrorMessages: {
-            minlength: 'Password must be at least 8 characters long',
-            required: 'Password is required',
-          },
-        }"
-      ></app-custom-validation-info> -->
-
-<!-- <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('repeatPassword'),
-          customErrorMessages: {
-            passwordsMismatch: 'Passwords do not match',
-          },
-        }"
-      ></app-custom-validation-info> -->

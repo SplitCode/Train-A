@@ -43,13 +43,7 @@ export class SignUpPageComponent {
   ) {
     this.signUpForm = this.fb.group(
       {
-        email: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(/^[\w\d_]+@[\w\d_]+.\w{2,7}$/),
-          ],
-        ],
+        email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(8)]],
         repeatPassword: ['', [Validators.required]],
       },
@@ -65,15 +59,23 @@ export class SignUpPageComponent {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Registration successful!',
+            detail: 'Register successfully!',
           });
           this.router.navigate(['/signin']);
         },
         error: (err: ServerError) => {
           Object.keys(err).forEach((key) => {
-            this.signUpForm
-              .get(key)
-              ?.setErrors({ serverError: err[key as keyof ServerError] });
+            if (key === 'general') {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: err[key],
+              });
+            } else {
+              this.signUpForm
+                .get(key)
+                ?.setErrors({ serverError: err[key as keyof ServerError] });
+            }
           });
         },
       });

@@ -1,6 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import {
@@ -13,13 +12,14 @@ import { Router, RouterModule } from '@angular/router';
 import { CustomValidationInfoComponent } from '../../../shared/components/custom-validation-info/custom-validation-info.component';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { passwordsMatchValidator } from '../../../shared/directives/password-match.directive';
+import { AuthService } from '../../services/auth.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
   imports: [
     InputTextModule,
-    PasswordModule,
     CardModule,
     ReactiveFormsModule,
     CustomValidationInfoComponent,
@@ -34,11 +34,12 @@ export class SignUpPageComponent {
 
   submitted = false;
 
-  private router = inject(Router);
-
-  private fb = inject(FormBuilder);
-
-  constructor() {
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private messageService: MessageService,
+    private fb: FormBuilder,
+  ) {
     this.signUpForm = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
@@ -52,18 +53,23 @@ export class SignUpPageComponent {
   onSubmit() {
     this.submitted = true;
     if (this.signUpForm.valid) {
-      // this.authService.signUp(this.signUpForm.value).subscribe(...)
-      this.router.navigate(['/signin']);
-      // this.authService.signUp(this.signUpForm.value).subscribe(
-      //   response => {
-      //     this.router.navigate(['/signin']);
-      //   },
-      //   error => {
-      //     if (error.status === 400 && error.error.reason === 'invalidUniqueKey') {
-      //       this.signUpForm.get('email')?.setErrors({ emailExists: true });
-      //     }
-      //   }
-      // );
+      this.authService.signUp(this.signUpForm.value).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Registration successful!',
+          });
+          this.router.navigate(['/signin']);
+        },
+        error: (err) => {
+          if (err.message === 'User already exists') {
+            this.signUpForm.get('email')?.setErrors({ emailExists: true });
+          } else {
+            console.log(err.message);
+          }
+        },
+      });
     }
   }
 }

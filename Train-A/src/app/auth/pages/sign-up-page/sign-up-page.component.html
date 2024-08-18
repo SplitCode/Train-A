@@ -14,16 +14,7 @@
         name="email"
         placeholder="Enter your email"
       />
-      <!-- <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('email'),
-          validMessage: 'Email looks good',
-          customErrorMessages: {
-            email: 'Invalid email format',
-            required: 'Email is required',
-          },
-        }"
-      ></app-custom-validation-info> -->
+
       <div
         *ngIf="submitted && signUpForm.get('email')?.errors"
         class="font-extralight text-red-500 mt-1"
@@ -33,6 +24,9 @@
         >
         <small *ngIf="signUpForm.get('email')?.hasError('email')"
           >Invalid email format.</small
+        >
+        <small *ngIf="signUpForm.get('email')?.hasError('emailExists')"
+          >Account with this email already exists.</small
         >
       </div>
     </div>
@@ -47,16 +41,7 @@
         name="password"
         placeholder="Enter your password"
       />
-      <!-- <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('password'),
-          validMessage: 'Password looks good',
-          customErrorMessages: {
-            minlength: 'Password must be at least 8 characters long',
-            required: 'Password is required',
-          },
-        }"
-      ></app-custom-validation-info> -->
+
       <div
         *ngIf="submitted && signUpForm.get('password')?.errors"
         class="font-extralight text-red-500 mt-1"
@@ -80,14 +65,7 @@
         name="repeatPassword"
         placeholder="Repeat your password"
       />
-      <!-- <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('repeatPassword'),
-          customErrorMessages: {
-            passwordsMismatch: 'Passwords do not match',
-          },
-        }"
-      ></app-custom-validation-info> -->
+
       <div
         *ngIf="
           submitted &&
@@ -127,3 +105,34 @@
     </div>
   </ng-template>
 </p-card>
+
+<!-- <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('email'),
+          validMessage: 'Email looks good',
+          customErrorMessages: {
+            email: 'Invalid email format',
+            required: 'Email is required',
+          },
+        }"
+      ></app-custom-validation-info> -->
+
+<!-- <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('password'),
+          validMessage: 'Password looks good',
+          customErrorMessages: {
+            minlength: 'Password must be at least 8 characters long',
+            required: 'Password is required',
+          },
+        }"
+      ></app-custom-validation-info> -->
+
+<!-- <app-custom-validation-info
+        [config]="{
+          control: signUpForm.get('repeatPassword'),
+          customErrorMessages: {
+            passwordsMismatch: 'Passwords do not match',
+          },
+        }"
+      ></app-custom-validation-info> -->

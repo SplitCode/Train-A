@@ -26,10 +26,9 @@ import { CustomButtonComponent } from '../../../shared/components/custom-button/
     CustomButtonComponent,
     RouterModule,
   ],
-  templateUrl: './sign-up.component.html',
-  styleUrl: './sign-up.component.scss',
+  templateUrl: './sign-up-page.component.html',
 })
-export class SignUpComponent {
+export class SignUpPageComponent {
   signUpForm: FormGroup;
 
   submitted = false;

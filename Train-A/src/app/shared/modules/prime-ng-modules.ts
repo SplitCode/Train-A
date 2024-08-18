@@ -24,8 +24,12 @@ import { PanelModule } from 'primeng/panel';
 import { StepperModule } from 'primeng/stepper';
 import { DialogModule } from 'primeng/dialog';
 import { ImageModule } from 'primeng/image';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 export const PRIME_NG_MODULES = {
+  ToastModule: [ToastModule],
+  MessageService: [MessageService],
   ImageModule: [ImageModule],
   DialogModule: [DialogModule],
   StepperModule: [StepperModule],

@@ -9,5 +9,7 @@ export interface CustomButtonConfig {
   outlined?: boolean;
   styleClass?: string;
   disabled?: boolean;
+  text?: boolean;
+  link?: boolean;
   type?: 'button' | 'submit' | 'reset';
 }

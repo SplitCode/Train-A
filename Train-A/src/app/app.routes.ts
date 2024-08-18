@@ -1,25 +1,46 @@
-import { RouterModule, Routes } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { Routes } from '@angular/router';
+import { AdminGuard } from './admin/guards/admin.guard';
 
 export const routes: Routes = [
   {
-    path: 'signup',
-    loadComponent: () =>
-      import('./auth/pages/sign-up/sign-up.component').then(
-        (m) => m.SignUpComponent,
+    path: 'home',
+    loadChildren: () =>
+      import('./home/pages/home-page/home-page.routes').then((m) => m.routes),
+  },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin/pages/admin-page/admin-page.routes').then(
+        (m) => m.routes,
       ),
+    canActivate: [AdminGuard],
   },
   {
     path: 'signin',
-    loadComponent: () =>
-      import('./auth/pages/sign-in/sign-in.component').then(
-        (m) => m.SignInComponent,
+    loadChildren: () =>
+      import('./auth/pages/sign-in-page/sign-in-page.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
+    path: 'signup',
+    loadChildren: () =>
+      import('./auth/pages/sign-up-page/sign-up-page.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
+    path: 'order',
+    loadChildren: () =>
+      import('./order/pages/order-page/order-page.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
+    path: 'profile',
+    loadChildren: () =>
+      import('./profile/pages/profile-page/profile-page.routes').then(
+        (m) => m.routes,
       ),
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutesModule {}

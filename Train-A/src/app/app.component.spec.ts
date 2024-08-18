@@ -3,7 +3,6 @@ import { AppComponent } from './app.component';
 import { PrimeNGConfig } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { SignUpComponent } from './auth/pages/sign-up/sign-up.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -11,7 +10,7 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, CommonModule, SignUpComponent, RouterOutlet],
+      imports: [AppComponent, CommonModule, RouterOutlet],
       providers: [PrimeNGConfig],
     }).compileComponents();
 

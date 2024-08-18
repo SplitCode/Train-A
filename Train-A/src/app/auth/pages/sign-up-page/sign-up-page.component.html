@@ -1,11 +1,11 @@
-<p-card class="flex justify-center">
+<p-card class="flex justify-center mx-auto mt-10" [style]="{ width: '360px' }">
   <ng-template pTemplate="header">
-    <h2 class="text-xxl font-bold text-center">Sign Up</h2>
+    <h2 class="text-center">Sign Up</h2>
   </ng-template>
 
   <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="email" class="block">Email</label>
+    <div class="form-group mb-4">
+      <label for="email" class="block mb-1">Email</label>
       <input
         type="text"
         pInputText
@@ -14,7 +14,7 @@
         name="email"
         placeholder="Enter your email"
       />
-      <app-custom-validation-info
+      <!-- <app-custom-validation-info
         [config]="{
           control: signUpForm.get('email'),
           validMessage: 'Email looks good',
@@ -23,11 +23,30 @@
             required: 'Email is required',
           },
         }"
-      ></app-custom-validation-info>
+      ></app-custom-validation-info> -->
+      <div
+        *ngIf="submitted && signUpForm.get('email')?.errors"
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small *ngIf="signUpForm.get('email')?.hasError('required')"
+          >Field is required.</small
+        >
+        <small *ngIf="signUpForm.get('email')?.hasError('email')"
+          >Invalid email format.</small
+        >
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="password" class="block">Password</label>
+    <!-- <small *ngIf="signUpForm.get('email')?.hasError('required')"
+        >Field is required.</small
+      >
+      <small *ngIf="signUpForm.get('email')?.hasError('email')"
+        >Invalid email format.</small
+      >
+    </div> -->
+
+    <div class="form-group mb-4">
+      <label for="password" class="block mb-1">Password</label>
       <input
         type="password"
         pInputText
@@ -36,7 +55,7 @@
         name="password"
         placeholder="Enter your password"
       />
-      <app-custom-validation-info
+      <!-- <app-custom-validation-info
         [config]="{
           control: signUpForm.get('password'),
           validMessage: 'Password looks good',
@@ -45,11 +64,22 @@
             required: 'Password is required',
           },
         }"
-      ></app-custom-validation-info>
+      ></app-custom-validation-info> -->
+      <div
+        *ngIf="submitted && signUpForm.get('password')?.errors"
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small *ngIf="signUpForm.get('password')?.hasError('required')"
+          >Field is required.</small
+        >
+        <small *ngIf="signUpForm.get('password')?.hasError('minlength')"
+          >Password must be at least 8 characters long.</small
+        >
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="repeatPassword" class="block">Repeat Password</label>
+    <div class="form-group mb-4">
+      <label for="repeatPassword" class="block mb-1">Repeat password</label>
       <input
         type="password"
         pInputText
@@ -58,14 +88,31 @@
         name="repeatPassword"
         placeholder="Repeat your password"
       />
-      <app-custom-validation-info
+      <!-- <app-custom-validation-info
         [config]="{
           control: signUpForm.get('repeatPassword'),
           customErrorMessages: {
             passwordsMismatch: 'Passwords do not match',
           },
         }"
-      ></app-custom-validation-info>
+      ></app-custom-validation-info> -->
+      <div
+        *ngIf="
+          submitted &&
+          (signUpForm.get('repeatPassword')?.errors ||
+            signUpForm.hasError('passwordsMismatch'))
+        "
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small
+          *ngIf="signUpForm.get('repeatPassword')?.hasError('required')"
+          class="block"
+          >Field is required.</small
+        >
+        <small *ngIf="signUpForm.hasError('passwordsMismatch')"
+          >Passwords do not match.</small
+        >
+      </div>
     </div>
 
     <div class="form-group">
@@ -75,7 +122,6 @@
           severity: 'primary',
           type: 'submit',
           styleClass: 'w-full',
-          disabled: signUpForm.invalid,
         }"
       ></app-custom-button>
     </div>
@@ -84,46 +130,7 @@
   <ng-template pTemplate="footer">
     <div>
       Already have an account?
-      <a routerLink="/signin" class="text-violet-400">Sign In</a>
+      <a routerLink="/signin" class="text-fuchsia-400">Sign In</a>
     </div>
   </ng-template>
 </p-card>
-
-<!-- <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('email'),
-          requiredMessage: 'Email is required',
-          validMessage: 'Email looks good',
-          customErrorMessages: { email: 'Invalid email format' },
-        }"
-      ></app-custom-validation-info>
-
-      <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('password'),
-          requiredMessage: 'Password is required',
-          validMessage: 'Password looks good',
-          customErrorMessages: {
-            minlength: 'Password must be at least 8 characters long',
-          },
-        }"
-      ></app-custom-validation-info>
-
-      <app-custom-validation-info
-        [config]="{
-          control: signUpForm.get('repeatPassword'),
-          requiredMessage: 'Please repeat your password',
-          customErrorMessages: { passwordsMismatch: 'Passwords do not match' },
-        }"
-      ></app-custom-validation-info> -->
-
-<!-- <form [formGroup]="signUpForm" class="w-full max-w-xs">
-  <div class="p-inputwrapper">
-    <p-password
-      formControlName="password"
-      [feedback]="false"
-      [toggleMask]="true"
-      class="inline-block w-full"
-    />
-  </div>
-</form> -->

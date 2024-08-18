@@ -2,17 +2,17 @@ import { Component, inject } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
+import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CustomValidationInfoComponent } from '../../../shared/components/custom-validation-info/custom-validation-info.component';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
+import { passwordsMatchValidator } from '../../../shared/directives/password-match.directive';
 
 @Component({
   selector: 'app-sign-up',
@@ -25,6 +25,7 @@ import { CustomButtonComponent } from '../../../shared/components/custom-button/
     CustomValidationInfoComponent,
     CustomButtonComponent,
     RouterModule,
+    CommonModule,
   ],
   templateUrl: './sign-up-page.component.html',
 })
@@ -44,20 +45,8 @@ export class SignUpPageComponent {
         password: ['', [Validators.required, Validators.minLength(8)]],
         repeatPassword: ['', [Validators.required]],
       },
-      { validators: this.passwordsMatchValidator },
+      { validators: passwordsMatchValidator },
     );
-  }
-
-  passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password');
-    const repeatPassword = control.get('repeatPassword');
-
-    if (!password || !repeatPassword) {
-      return null;
-    }
-    return password.value === repeatPassword.value
-      ? null
-      : { passwordsMismatch: true };
   }
 
   onSubmit() {

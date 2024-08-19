@@ -92,7 +92,7 @@
           severity: 'primary',
           type: 'submit',
           styleClass: 'w-full',
-          disabled: signUpForm.invalid,
+          disabled: signUpForm.invalid || isSubmitting,
         }"
       ></app-custom-button>
     </div>

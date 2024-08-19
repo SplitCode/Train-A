@@ -14,7 +14,7 @@ import { CustomButtonComponent } from '../../../shared/components/custom-button/
 import {
   noWhitespaceValidator,
   passwordsMatchValidator,
-} from '../../../shared/directives/password-match.directive';
+} from '../../../shared/directives/password-validation.directive';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { ServerError } from '../../interfaces/auth';
@@ -38,6 +38,8 @@ export class SignUpPageComponent {
   signUpForm: FormGroup;
 
   submitted = false;
+
+  isSubmitting = false;
 
   constructor(
     private router: Router,
@@ -71,6 +73,7 @@ export class SignUpPageComponent {
   onSubmit() {
     this.submitted = true;
     if (this.signUpForm.valid) {
+      this.isSubmitting = true;
       this.authService.signUp(this.signUpForm.value).subscribe({
         next: () => {
           this.messageService.add({
@@ -81,6 +84,7 @@ export class SignUpPageComponent {
           this.router.navigate(['/signin']);
         },
         error: (err: ServerError) => {
+          this.isSubmitting = false;
           Object.keys(err).forEach((key) => {
             if (key === 'general') {
               this.messageService.add({
@@ -94,6 +98,9 @@ export class SignUpPageComponent {
                 ?.setErrors({ serverError: err[key as keyof ServerError] });
             }
           });
+        },
+        complete: () => {
+          this.isSubmitting = false;
         },
       });
     }

@@ -1,24 +1,35 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { API_CONFIG } from '../../../config/api.config';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { CarriageItem } from '../../models/carriage-item.interface';
+import { loadCarriages } from '../../../redux/actions/carriage.actions';
+import { selectAllCarriages } from '../../../redux/selectors/carriage.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-carriage-list',
   templateUrl: './carriage-list.component.html',
   standalone: true,
 })
-export class CarriageListComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+export class CarriageListComponent implements OnInit, OnDestroy {
+  carriages$: Observable<CarriageItem[]>;
 
-  ngOnInit() {
-    this.getData().subscribe((data) => {
-      console.log(data);
-    });
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(private store: Store) {
+    this.carriages$ = this.store.select(selectAllCarriages);
   }
 
-  getData(): Observable<CarriageItem[]> {
-    return this.http.get<CarriageItem[]>(API_CONFIG.carriageUrl);
+  ngOnInit() {
+    this.store.dispatch(loadCarriages());
+
+    this.subscriptions.add(
+      this.carriages$.subscribe((carriages) => {
+        console.log('Carriages in component:', carriages);
+      }),
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }

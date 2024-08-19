@@ -8,8 +8,7 @@ import { provideStore, StoreModule } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { startServer } from '@planess/train-a-backend';
 import { indexReducer, metaReducers } from './app/redux/reducers/index.reducer';
-import { UserEffects } from './app/redux/effects/user.effects';
-import { provideEffects } from '@ngrx/effects';
+
 import { appConfig } from './app/app.config';
 
 startServer().then(() =>
@@ -30,7 +29,6 @@ startServer().then(() =>
         traceLimit: 25,
         connectInZone: true,
       }),
-      provideEffects([UserEffects]),
     ],
   }).catch((err) => console.error(err)),
 );

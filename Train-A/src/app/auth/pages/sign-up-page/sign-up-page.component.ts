@@ -11,7 +11,10 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { CustomValidationInfoComponent } from '../../../shared/components/custom-validation-info/custom-validation-info.component';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
-import { passwordsMatchValidator } from '../../../shared/directives/password-match.directive';
+import {
+  noWhitespaceValidator,
+  passwordsMatchValidator,
+} from '../../../shared/directives/password-match.directive';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { ServerError } from '../../interfaces/auth';
@@ -29,6 +32,7 @@ import { ServerError } from '../../interfaces/auth';
     CommonModule,
   ],
   templateUrl: './sign-up-page.component.html',
+  styleUrl: './sign-up-page.component.scss',
 })
 export class SignUpPageComponent {
   signUpForm: FormGroup;
@@ -43,8 +47,21 @@ export class SignUpPageComponent {
   ) {
     this.signUpForm = this.fb.group(
       {
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(8)]],
+        email: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
+          ],
+        ],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            noWhitespaceValidator(),
+          ],
+        ],
         repeatPassword: ['', [Validators.required]],
       },
       { validators: passwordsMatchValidator },

@@ -13,3 +13,10 @@ export const passwordsMatchValidator: ValidatorFn = (
     ? null
     : { passwordsMismatch: true };
 };
+
+export function noWhitespaceValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    return !isWhitespace ? null : { whitespace: true };
+  };
+}

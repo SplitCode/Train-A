@@ -35,7 +35,7 @@ export class AuthService {
           errors.password = 'Password is wrong';
           break;
         case 'invalidUniqueKey':
-          errors.email = 'User already exists';
+          errors.email = 'Account with this email already exists';
           break;
         default:
           errors.general = `Error: ${error.error.message}`;

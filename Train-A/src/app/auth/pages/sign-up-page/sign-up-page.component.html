@@ -19,10 +19,10 @@
         class="font-extralight text-red-500 mt-1"
       >
         <small *ngIf="signUpForm.get('email')?.hasError('required')"
-          >Field is required.</small
+          >Required</small
         >
-        <small *ngIf="signUpForm.get('email')?.hasError('email')"
-          >Invalid email format.</small
+        <small *ngIf="signUpForm.get('email')?.hasError('pattern')"
+          >Incorrect email</small
         >
         <small *ngIf="signUpForm.get('email')?.hasError('serverError')">
           {{ signUpForm.get("email")?.getError("serverError") }}
@@ -45,10 +45,10 @@
         class="font-extralight text-red-500 mt-1"
       >
         <small *ngIf="signUpForm.get('password')?.hasError('required')"
-          >Field is required.</small
+          >Required</small
         >
         <small *ngIf="signUpForm.get('password')?.hasError('minlength')"
-          >Password must be at least 8 characters long.</small
+          >Password must be at least 8 characters long</small
         >
         <small *ngIf="signUpForm.get('password')?.hasError('serverError')">
           {{ signUpForm.get("password")?.getError("serverError") }}
@@ -68,7 +68,7 @@
       />
       <div
         *ngIf="
-          submitted &&
+          (signUpForm.get('repeatPassword')?.dirty || submitted) &&
           (signUpForm.get('repeatPassword')?.errors ||
             signUpForm.hasError('passwordsMismatch'))
         "
@@ -77,10 +77,10 @@
         <small
           *ngIf="signUpForm.get('repeatPassword')?.hasError('required')"
           class="block"
-          >Field is required.</small
+          >Required</small
         >
         <small *ngIf="signUpForm.hasError('passwordsMismatch')"
-          >Passwords do not match.</small
+          >Passwords do not match</small
         >
       </div>
     </div>

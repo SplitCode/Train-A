@@ -24,7 +24,7 @@ export class CarriageListComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.carriages$.subscribe((carriages) => {
-        console.log('Carriages in component:', carriages);
+        console.log('items in CarriageListComponent:', carriages);
       }),
     );
   }

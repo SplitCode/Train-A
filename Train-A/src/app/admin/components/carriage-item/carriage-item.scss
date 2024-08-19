@@ -1,0 +1,28 @@
+.carriage {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  margin: auto;
+  max-width: min-content;
+}
+
+.row {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  background-color: #ccc;
+  border: 1px solid #000;
+  margin: 5px;
+}
+
+.aisle {
+  width: 20px;
+  height: 30px;
+  background-color: red;
+}

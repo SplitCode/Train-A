@@ -3,6 +3,31 @@
   <p>left {{ config.leftSeats }}</p>
   <p>right {{ config.rightSeats }}</p>
   <p>seats {{ (config.leftSeats + config.rightSeats) * config.rows }}</p>
+
+  <div class="carriage">
+    <div
+      class="row"
+      *ngFor="let col of createRange(config.rows); let rowIndex = index"
+    >
+      <app-custom-button
+        [config]="{ styleClass: 'seat' }"
+        class="right text-red-950"
+        *ngFor="
+          let seat of createRange(config.rightSeats);
+          let seatIndex = index
+        "
+      >
+        {{
+          (config.rows - rowIndex - 1) *
+            (config.leftSeats + config.rightSeats) +
+            config.leftSeats +
+            seatIndex +
+            1
+        }}
+      </app-custom-button>
+    </div>
+  </div>
+  <div class="aisle"></div>
   <div class="carriage">
     <div
       class="row"
@@ -19,23 +44,6 @@
         {{
           (config.rows - rowIndex - 1) *
             (config.leftSeats + config.rightSeats) +
-            seatIndex +
-            1
-        }}
-      </app-custom-button>
-      <div class="aisle"></div>
-      <app-custom-button
-        [config]="{ styleClass: 'seat' }"
-        class="right text-red-950"
-        *ngFor="
-          let seat of createRange(config.rightSeats);
-          let seatIndex = index
-        "
-      >
-        {{
-          (config.rows - rowIndex - 1) *
-            (config.leftSeats + config.rightSeats) +
-            config.leftSeats +
             seatIndex +
             1
         }}

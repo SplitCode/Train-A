@@ -1,16 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CarriageItem } from '../../models/carriage-item.interface';
 import { CommonModule } from '@angular/common';
+import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 
 @Component({
   selector: 'app-carriage-item',
   templateUrl: './carriage-item.component.html',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CustomButtonComponent],
   styleUrls: ['./carriage-item.scss'],
 })
 export class CarriageItemComponent implements OnInit {
-  @Input() public config?: CarriageItem;
+  @Input() public config!: CarriageItem;
 
   ngOnInit() {}
 

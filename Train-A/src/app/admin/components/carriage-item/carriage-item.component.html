@@ -8,8 +8,9 @@
       class="row"
       *ngFor="let col of createRange(config.rows); let rowIndex = index"
     >
-      <div
-        class="seat left text-red-950"
+      <app-custom-button
+        [config]="{ styleClass: 'seat' }"
+        class="left text-red-950"
         *ngFor="
           let seat of createRange(config.leftSeats);
           let seatIndex = index
@@ -21,10 +22,11 @@
             seatIndex +
             1
         }}
-      </div>
+      </app-custom-button>
       <div class="aisle"></div>
-      <div
-        class="seat right text-red-950"
+      <app-custom-button
+        [config]="{ styleClass: 'seat' }"
+        class="right text-red-950"
         *ngFor="
           let seat of createRange(config.rightSeats);
           let seatIndex = index
@@ -37,7 +39,7 @@
             seatIndex +
             1
         }}
-      </div>
+      </app-custom-button>
     </div>
   </div>
 </div>

@@ -3,22 +3,24 @@
   flex-direction: row-reverse;
   align-items: center;
   margin: auto;
-  max-width: min-content;
+  max-width: max-content;
+  gap: 0.5rem;
 }
 
 .row {
   display: flex;
+  gap: 0.5rem;
   flex-direction: column-reverse;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.seat {
-  width: 30px;
-  height: 30px;
-  background-color: #ccc;
-  border: 1px solid #000;
-  margin: 5px;
+:host ::ng-deep .seat {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .aisle {

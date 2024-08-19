@@ -9,11 +9,7 @@
     "es2021": true
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "import",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "import", "prettier"],
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module",
@@ -39,12 +35,8 @@
   },
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
-      "extends": [
-        "plugin:@ngrx/all"
-      ]
+      "files": ["*.ts"],
+      "extends": ["plugin:@ngrx/all"]
     }
   ]
 }

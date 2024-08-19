@@ -36,18 +36,18 @@
       <div *ngIf="isGuest(userRole)">
         <app-custom-button
           class="mx-1"
-          routerLink="/sign-in"
+          routerLink="/signin"
           [config]="{
             label: 'Sign In',
-            outlined: !isActiveRoute('/sign-in'),
+            outlined: !isActiveRoute('/signin'),
           }"
         />
         <app-custom-button
           class="mx-1"
-          routerLink="/sign-up"
+          routerLink="/signup"
           [config]="{
             label: 'Sign Up',
-            outlined: !isActiveRoute('/sign-up'),
+            outlined: !isActiveRoute('/signup'),
           }"
         />
       </div>

@@ -56,14 +56,7 @@ export class SignUpPageComponent {
             Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
           ],
         ],
-        password: [
-          '',
-          [
-            noWhitespaceValidator(),
-            // Validators.required,
-            Validators.minLength(8),
-          ],
-        ],
+        password: ['', [noWhitespaceValidator(), Validators.minLength(8)]],
         repeatPassword: ['', [Validators.required]],
       },
       { validators: passwordsMatchValidator },

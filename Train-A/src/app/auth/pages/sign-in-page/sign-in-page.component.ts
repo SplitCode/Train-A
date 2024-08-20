@@ -15,6 +15,7 @@ import { ServerError } from '../../interfaces/auth';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { noWhitespaceValidator } from '../../../shared/directives/password-validation.directive';
 import { PasswordModule } from 'primeng/password';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-sign-in',
@@ -23,6 +24,7 @@ import { PasswordModule } from 'primeng/password';
     CardModule,
     InputTextModule,
     PasswordModule,
+    TooltipModule,
     CustomButtonComponent,
     CommonModule,
     RouterModule,

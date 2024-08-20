@@ -1,30 +1,46 @@
-// import { CanActivateFn } from '@angular/router';
-
-// export const authGuard: CanActivateFn = (route, state) => {
-//   return true;
-// };
-
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
   constructor(
+    private authService: AuthService,
     private router: Router,
-    private messageService: MessageService,
   ) {}
 
-  canActivate(): Observable<boolean> {
-    const token = localStorage.getItem('Ateam-token');
-    if (!token) {
-      return of(true);
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Observable<boolean> {
+    const isAuth = this.authService.checkAuth();
+    console.log(
+      `Authorization status: ${isAuth ? 'Authorized' : 'Unauthorized'}`,
+    );
+    const targetUrl = state.url;
+
+    if (!isAuth) {
+      if (targetUrl === '/signin' || targetUrl === '/signup') {
+        return of(true);
+      } else {
+        this.router.navigate(['/home']);
+        return of(false);
+      }
     } else {
-      this.router.navigate(['/']);
-      return of(false);
+      if (targetUrl === '/signin' || targetUrl === '/signup') {
+        this.router.navigate(['/home']);
+        return of(false);
+      } else {
+        return of(true);
+      }
     }
   }
 }

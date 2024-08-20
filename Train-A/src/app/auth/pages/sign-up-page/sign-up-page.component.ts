@@ -18,6 +18,8 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { ServerError } from '../../interfaces/auth';
+import { PasswordModule } from 'primeng/password';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-sign-up',
@@ -25,6 +27,8 @@ import { ServerError } from '../../interfaces/auth';
   imports: [
     InputTextModule,
     CardModule,
+    PasswordModule,
+    TooltipModule,
     ReactiveFormsModule,
     CustomValidationInfoComponent,
     CustomButtonComponent,
@@ -35,11 +39,11 @@ import { ServerError } from '../../interfaces/auth';
   styleUrl: './sign-up-page.component.scss',
 })
 export class SignUpPageComponent {
-  signUpForm: FormGroup;
+  public signUpForm: FormGroup;
 
-  submitted = false;
+  public submitted = false;
 
-  isSubmitting = false;
+  public isSubmitting = false;
 
   constructor(
     private router: Router,
@@ -56,21 +60,14 @@ export class SignUpPageComponent {
             Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
           ],
         ],
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(8),
-            noWhitespaceValidator(),
-          ],
-        ],
+        password: ['', [noWhitespaceValidator(), Validators.minLength(8)]],
         repeatPassword: ['', [Validators.required]],
       },
       { validators: passwordsMatchValidator },
     );
   }
 
-  onSubmit() {
+  public onSubmit() {
     this.submitted = true;
     if (this.signUpForm.valid) {
       this.isSubmitting = true;

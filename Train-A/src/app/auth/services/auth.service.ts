@@ -15,7 +15,7 @@ export class AuthService {
 
   private isAuth$$ = new BehaviorSubject<boolean>(this.checkAuth());
 
-  isAuth$ = this.isAuth$$.asObservable();
+  public isAuth$ = this.isAuth$$.asObservable();
 
   constructor(
     private http: HttpClient,

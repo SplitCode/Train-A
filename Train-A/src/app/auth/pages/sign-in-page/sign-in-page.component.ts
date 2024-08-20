@@ -34,11 +34,11 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrl: './sign-in-page.component.scss',
 })
 export class SignInPageComponent {
-  signInForm: FormGroup;
+  public signInForm: FormGroup;
 
-  submitted = false;
+  public submitted = false;
 
-  isSubmitting = false;
+  public isSubmitting = false;
 
   constructor(
     private router: Router,
@@ -66,7 +66,7 @@ export class SignInPageComponent {
     });
   }
 
-  clearServerErrors() {
+  private clearServerErrors() {
     if (this.signInForm.get('email')?.hasError('serverError')) {
       this.signInForm.get('email')?.setErrors(null);
     }
@@ -75,7 +75,7 @@ export class SignInPageComponent {
     }
   }
 
-  onSubmit() {
+  public onSubmit() {
     this.submitted = true;
     if (this.signInForm.valid) {
       this.isSubmitting = true;

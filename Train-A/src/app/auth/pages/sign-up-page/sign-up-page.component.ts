@@ -39,11 +39,11 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrl: './sign-up-page.component.scss',
 })
 export class SignUpPageComponent {
-  signUpForm: FormGroup;
+  public signUpForm: FormGroup;
 
-  submitted = false;
+  public submitted = false;
 
-  isSubmitting = false;
+  public isSubmitting = false;
 
   constructor(
     private router: Router,
@@ -67,7 +67,7 @@ export class SignUpPageComponent {
     );
   }
 
-  onSubmit() {
+  public onSubmit() {
     this.submitted = true;
     if (this.signUpForm.valid) {
       this.isSubmitting = true;

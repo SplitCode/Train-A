@@ -22,6 +22,10 @@ export class AuthService {
     private store: Store,
   ) {}
 
+  public getUserRole(): UserRole {
+    return (localStorage.getItem('user-role') as UserRole) || UserRole.Guest;
+  }
+
   public signUp(user: AuthRequest): Observable<void> {
     return this.http.post<void>(API_CONFIG.signUpUrl, user).pipe(
       catchError((error: HttpErrorResponse) => {

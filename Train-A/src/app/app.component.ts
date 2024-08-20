@@ -5,6 +5,8 @@ import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
 import { HeaderComponent } from './core/components/header/header.component';
 import { FooterComponent } from './core/components/footer/footer.component';
+import { appInit } from './redux/actions/app.actions';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-root',
@@ -19,9 +21,13 @@ import { FooterComponent } from './core/components/footer/footer.component';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  constructor(private primengConfig: PrimeNGConfig) {}
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    private store: Store,
+  ) {}
 
   ngOnInit() {
     this.primengConfig.ripple = true;
+    this.store.dispatch(appInit());
   }
 }

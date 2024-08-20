@@ -56,14 +56,14 @@ export class SignInPageComponent {
   onSubmit() {
     this.submitted = true;
     if (this.signInForm.valid) {
-      this.authService.signUp(this.signInForm.value).subscribe({
+      this.authService.signIn(this.signInForm.value).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Register successfully!',
+            detail: 'Authorization successfully!',
           });
-          this.router.navigate(['/signup']);
+          this.router.navigate(['/home']);
         },
         error: (err: ServerError) => {
           this.isSubmitting = false;

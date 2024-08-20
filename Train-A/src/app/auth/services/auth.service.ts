@@ -1,14 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { AuthRequest, ServerError } from '../interfaces/auth';
-import { catchError, Observable, throwError } from 'rxjs';
+import { AuthRequest, AuthResponse, ServerError } from '../interfaces/auth';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { API_CONFIG } from '../../config/api.config';
+import { UserRole } from '../../redux/states/user.state';
+import { Store } from '@ngrx/store';
+import { setUserRole } from '../../redux/actions/user.actions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  private readonly token = 'Ateam-token';
+
+  private isAuth$$ = new BehaviorSubject<boolean>(this.checkAuth());
+
+  isAuth$ = this.isAuth$$.asObservable();
+
+  constructor(
+    private http: HttpClient,
+    private store: Store,
+  ) {}
 
   public signUp(user: AuthRequest): Observable<void> {
     return this.http.post<void>(API_CONFIG.signUpUrl, user).pipe(
@@ -16,6 +28,35 @@ export class AuthService {
         return throwError(() => this.handleError(error));
       }),
     );
+  }
+
+  public signIn(user: AuthRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(API_CONFIG.signInUrl, user).pipe(
+      tap((response) => {
+        localStorage.setItem(this.token, response.token);
+        const role =
+          user.email === 'admin@admin.com' && user.password === 'my-password'
+            ? UserRole.Manager
+            : UserRole.GeneralUser;
+        localStorage.setItem('user-role', role);
+        this.store.dispatch(setUserRole({ userRole: role }));
+        this.isAuth$$.next(true);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => this.handleError(error));
+      }),
+    );
+  }
+
+  public logout(): void {
+    localStorage.removeItem(this.token);
+    localStorage.setItem('user-role', UserRole.Guest);
+    this.store.dispatch(setUserRole({ userRole: UserRole.Guest }));
+    this.isAuth$$.next(false);
+  }
+
+  public checkAuth(): boolean {
+    return !!localStorage.getItem(this.token);
   }
 
   private handleError(error: HttpErrorResponse): ServerError {

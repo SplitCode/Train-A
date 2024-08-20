@@ -9,5 +9,5 @@ export interface UserState {
 }
 
 export const initialUserState: UserState = {
-  userRole: UserRole.Manager,
+  userRole: UserRole.Guest,
 };

@@ -38,6 +38,7 @@ export const routes: Routes = [
       import('./order/pages/order-page/order-page.routes').then(
         (m) => m.routes,
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'profile',
@@ -45,5 +46,6 @@ export const routes: Routes = [
       import('./profile/pages/profile-page/profile-page.routes').then(
         (m) => m.routes,
       ),
+    canActivate: [AuthGuard],
   },
 ];

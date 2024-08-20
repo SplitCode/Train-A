@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public isActiveRoute(route: string): boolean {
-    return this.router.url === route;
+    return this.router.url.includes(route);
   }
 
   public isGeneralUserOrManager(userRole: string): boolean {

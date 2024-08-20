@@ -25,7 +25,7 @@ export class AuthService {
   public signUp(user: AuthRequest): Observable<void> {
     return this.http.post<void>(API_CONFIG.signUpUrl, user).pipe(
       catchError((error: HttpErrorResponse) => {
-        return throwError(() => this.handleError(error));
+        return throwError(() => this.handleServerError(error));
       }),
     );
   }
@@ -43,7 +43,7 @@ export class AuthService {
         this.isAuth$$.next(true);
       }),
       catchError((error: HttpErrorResponse) => {
-        return throwError(() => this.handleError(error));
+        return throwError(() => this.handleServerError(error));
       }),
     );
   }
@@ -59,16 +59,13 @@ export class AuthService {
     return !!localStorage.getItem(this.token);
   }
 
-  private handleError(error: HttpErrorResponse): ServerError {
+  private handleServerError(error: HttpErrorResponse): ServerError {
     const errors: ServerError = {};
 
     if (error.error instanceof ErrorEvent) {
       errors.general = `Error: ${error.error.message}`;
     } else {
       switch (error.error.reason) {
-        case 'invalidFields':
-          errors.general = 'Fields are empty';
-          break;
         case 'invalidEmail':
           errors.email = 'Email is wrong';
           break;
@@ -82,8 +79,11 @@ export class AuthService {
           errors.email = 'Incorrect email or password';
           errors.password = 'Incorrect email or password';
           break;
-        case 'AlreadyLoggedIn':
+        case 'alreadyLoggedIn':
           errors.general = 'Already logged in';
+          break;
+        case 'invalidFields':
+          errors.general = 'Fields are empty';
           break;
         default:
           errors.general = `Error: ${error.error.message}`;

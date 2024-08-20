@@ -1,30 +1,30 @@
-.carriage {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  margin: auto;
-  max-width: min-content;
-  gap: 0.5rem;
-}
+:host ::ng-deep {
+  .carriage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
 
-.row {
-  display: flex;
-  gap: 0.5rem;
-  flex-direction: column-reverse;
-  align-items: center;
-}
+  .carriage-side {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    max-width: min-content;
+    gap: 0.5rem;
+  }
 
-:host ::ng-deep .seat {
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .row {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
 
-.aisle {
-  width: 100%;
-  height: 30px;
-  background-color: red;
-  margin: 1rem;
+  .seat {
+    width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

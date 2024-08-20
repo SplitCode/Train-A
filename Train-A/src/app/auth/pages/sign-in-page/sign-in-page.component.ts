@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import { ServerError } from '../../interfaces/auth';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { noWhitespaceValidator } from '../../../shared/directives/password-validation.directive';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-sign-in',
@@ -21,6 +22,7 @@ import { noWhitespaceValidator } from '../../../shared/directives/password-valid
   imports: [
     CardModule,
     InputTextModule,
+    PasswordModule,
     CustomButtonComponent,
     CommonModule,
     RouterModule,

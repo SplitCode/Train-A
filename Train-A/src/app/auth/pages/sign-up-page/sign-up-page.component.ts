@@ -18,6 +18,7 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { ServerError } from '../../interfaces/auth';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-sign-up',
@@ -25,6 +26,7 @@ import { ServerError } from '../../interfaces/auth';
   imports: [
     InputTextModule,
     CardModule,
+    PasswordModule,
     ReactiveFormsModule,
     CustomValidationInfoComponent,
     CustomButtonComponent,

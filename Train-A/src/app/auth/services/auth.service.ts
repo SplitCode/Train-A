@@ -78,6 +78,13 @@ export class AuthService {
         case 'invalidUniqueKey':
           errors.email = 'Account with this email already exists';
           break;
+        case 'userNotFound':
+          errors.email = 'Incorrect email or password';
+          errors.password = 'Incorrect email or password';
+          break;
+        case 'AlreadyLoggedIn':
+          errors.general = 'Already logged in';
+          break;
         default:
           errors.general = `Error: ${error.error.message}`;
       }

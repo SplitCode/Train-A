@@ -59,9 +59,9 @@ export class SignUpPageComponent {
         password: [
           '',
           [
-            Validators.required,
-            Validators.minLength(8),
             noWhitespaceValidator(),
+            // Validators.required,
+            Validators.minLength(8),
           ],
         ],
         repeatPassword: ['', [Validators.required]],

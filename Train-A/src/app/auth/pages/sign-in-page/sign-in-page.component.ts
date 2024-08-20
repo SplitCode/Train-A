@@ -27,6 +27,7 @@ import { noWhitespaceValidator } from '../../../shared/directives/password-valid
     ReactiveFormsModule,
   ],
   templateUrl: './sign-in-page.component.html',
+  styleUrl: './sign-in-page.component.scss',
 })
 export class SignInPageComponent {
   signInForm: FormGroup;
@@ -49,13 +50,31 @@ export class SignInPageComponent {
           Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
         ],
       ],
-      password: ['', [Validators.required, noWhitespaceValidator()]],
+      password: ['', [noWhitespaceValidator()]],
     });
+
+    this.signInForm.get('email')?.valueChanges.subscribe(() => {
+      this.clearServerErrors();
+    });
+
+    this.signInForm.get('password')?.valueChanges.subscribe(() => {
+      this.clearServerErrors();
+    });
+  }
+
+  clearServerErrors() {
+    if (this.signInForm.get('email')?.hasError('serverError')) {
+      this.signInForm.get('email')?.setErrors(null);
+    }
+    if (this.signInForm.get('password')?.hasError('serverError')) {
+      this.signInForm.get('password')?.setErrors(null);
+    }
   }
 
   onSubmit() {
     this.submitted = true;
     if (this.signInForm.valid) {
+      this.isSubmitting = true;
       this.authService.signIn(this.signInForm.value).subscribe({
         next: () => {
           this.messageService.add({

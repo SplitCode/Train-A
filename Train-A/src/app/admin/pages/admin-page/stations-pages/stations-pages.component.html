@@ -1,0 +1,84 @@
+<div class="w-100 max-w-[1600px] ml-auto mr-auto mt-3">
+  <div class="flex items-center gap-4">
+    <iframe
+      class="flex-grow max-w-[50%] h-96"
+      src="https://www.openstreetmap.org/export/embed.html?bbox=2.2412109375000004%2C44.35527821160296%2C38.935546875%2C56.78884524518923&amp;layer=mapnik&amp;marker=50.98609893339354%2C20.58837890625"
+      style="border: 1px solid black"
+    >
+    </iframe>
+    <div class="flex-grow h-96 max-w-[50%] border border-solid border-gray-500 rounded-md p-4">
+      <form [formGroup]="newStationForm" (ngSubmit)="onSubmit()" class="flex flex-col h-full">
+        <div class="form-group mb-4">
+          <label for="cityName" class="block mb-1">City Name</label>
+          <input
+            type="text"
+            pInputText
+            formControlName="cityName"
+            class="w-full"
+            name="cityName"
+            placeholder="Enter City Name"
+          />
+          <div
+            *ngIf="newStationForm.get('cityName')?.invalid && (newStationForm.get('cityName')?.dirty || newStationForm.get('cityName')?.touched)"
+            class="font-extralight text-red-500 mt-1"
+          >
+            <small *ngIf="newStationForm.get('cityName')?.hasError('required')">
+              Required
+            </small>
+            <small *ngIf="newStationForm.get('cityName')?.hasError('minlength')">
+              Minimal length is 3
+            </small>
+          </div>
+        </div>
+        <div class="form-group mb-4">
+          <label for="latitude" class="block mb-1">Latitude</label>
+          <input
+            type="number"
+            pInputText
+            formControlName="latitude"
+            class="w-full"
+            name="latitude"
+            placeholder="Enter Latitude"
+          />
+          <div
+            *ngIf="newStationForm.get('latitude')?.invalid && (newStationForm.get('latitude')?.dirty || newStationForm.get('latitude')?.touched)"
+            class="font-extralight text-red-500 mt-1"
+          >
+            <small *ngIf="newStationForm.get('latitude')?.hasError('required')">
+              Required
+            </small>
+          </div>
+        </div>
+        <div class="form-group mb-4">
+          <label for="longitude" class="block mb-1">Longitude</label>
+          <input
+            type="number"
+            pInputText
+            formControlName="longitude"
+            class="w-full"
+            name="longitude"
+            placeholder="Enter Longitude"
+          />
+          <div
+            *ngIf="newStationForm.get('longitude')?.invalid && (newStationForm.get('longitude')?.dirty || newStationForm.get('longitude')?.touched)"
+            class="font-extralight text-red-500 mt-1"
+          >
+            <small *ngIf="newStationForm.get('longitude')?.hasError('required')">
+              Required
+            </small>
+          </div>
+        </div>
+        <app-custom-button
+          class="mt-auto"
+          [config]="{
+            label: 'Save',
+            severity: 'primary',
+            type: 'submit',
+            styleClass: 'w-full',
+            disabled: newStationForm.invalid,
+          }"
+        ></app-custom-button>
+      </form>
+    </div>
+  </div>
+</div>

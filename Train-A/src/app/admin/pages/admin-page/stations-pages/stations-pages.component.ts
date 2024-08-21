@@ -20,8 +20,20 @@ export class StationsPagesComponent {
   constructor(private fb: FormBuilder) {
     this.newStationForm = this.fb.group({
       cityName: ['', [Validators.required, Validators.minLength(3)]],
-      latitude: [0, [Validators.required]],
-      longitude: [0, [Validators.required]],
+      latitude: [
+        0,
+        [
+          Validators.required,
+          Validators.pattern('^-?([0-8]?[0-9]|90)(.[0-9]{1,10})$'),
+        ],
+      ],
+      longitude: [
+        0,
+        [
+          Validators.required,
+          Validators.pattern('^-?([0-9]{1,2}|1[0-7][0-9]|180)(.[0-9]{1,10})$'),
+        ],
+      ],
     });
   }
 

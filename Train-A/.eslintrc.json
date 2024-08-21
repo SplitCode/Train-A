@@ -16,7 +16,10 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {"endOfLine": "auto"}
+    ],
     "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/no-explicit-any": "error",
     "import/extensions": [

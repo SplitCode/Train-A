@@ -11,6 +11,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
+import { CarriageItemComponent } from '../carriage-item/carriage-item.component';
+import ShortUniqueId from 'short-unique-id';
 
 @Component({
   selector: 'app-carriage-create-form',
@@ -21,13 +23,19 @@ import { CustomButtonComponent } from '../../../shared/components/custom-button/
     ReactiveFormsModule,
     CommonModule,
     PRIME_NG_MODULES.InputNumberModule,
-    PRIME_NG_MODULES.FieldsetModule,
+    PRIME_NG_MODULES.DialogModule,
+    PRIME_NG_MODULES.InputTextModule,
+    CarriageItemComponent,
   ],
 })
 export class CarriageCreateFormComponent implements OnInit {
   public formVisibleForCarriageCode$!: Observable<string | null>;
 
   public createCarriageForm: FormGroup;
+
+  public visible: boolean = false;
+
+  private shortUuid: ShortUniqueId = new ShortUniqueId({ length: 7 });
 
   constructor(
     private store: Store,
@@ -40,32 +48,24 @@ export class CarriageCreateFormComponent implements OnInit {
     this.formVisibleForCarriageCode$ = this.store.select(
       selectFormVisibleForCarriageCode,
     );
+    this.formVisibleForCarriageCode$.subscribe((code) => {
+      this.visible = code !== null;
+    });
   }
 
   private get launchCreateCarriageForm() {
     return this.fb.group({
-      rows: [
-        '',
-        [
-          Validators.required,
-          // Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
-        ],
-      ],
-      leftSeats: [
-        '',
-        [
-          Validators.required,
-          // Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
-        ],
-      ],
-      rightSeats: [
-        '',
-        [
-          Validators.required,
-          // Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
-        ],
-      ],
+      code: [this.shortUuid.rnd()],
+      rows: [0, [Validators.required]],
+      leftSeats: [0, [Validators.required]],
+      rightSeats: [0, [Validators.required]],
     });
+  }
+
+  public closeDialog(): void {
+    console.log(this.createCarriageForm.value);
+    this.createCarriageForm = this.launchCreateCarriageForm;
+    // this.store.dispatch(resetFormVisibleForCarriageCode());
   }
 
   public onSubmit(): void {

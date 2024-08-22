@@ -16,6 +16,15 @@ export const updateCarriage = createAction(
     updatedCarriage: CarriageItem;
   }>(),
 );
+export const updateCarriageSuccess = createAction(
+  '[Carriage List] Update Carriage Success',
+  props<{ updatedCarriage: CarriageItem }>(),
+);
+
+export const updateCarriageFailure = createAction(
+  '[Carriage List] Update Carriage Failure',
+  props<{ error: unknown }>(),
+);
 export const createCarriage = createAction(
   '[Carriage List] Create Carriage',
   props<{ createdCarriage: CarriageItem }>(),

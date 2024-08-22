@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
+  selectCarriageByCode,
   selectFormVisibleForCarriageCode,
   selectMode,
 } from '../../../redux/selectors/carriage.selectors';
@@ -20,6 +21,7 @@ import {
   createCarriage,
   updateCarriage,
 } from '../../../redux/actions/carriage.actions';
+import { CarriageItem } from '../../models/carriage-item.interface';
 
 @Component({
   selector: 'app-carriage-form',
@@ -40,13 +42,17 @@ export class CarriageFormComponent implements OnInit {
 
   private createCode: ShortUniqueId = new ShortUniqueId({ length: 7 });
 
-  public mode$!: Observable<'create' | 'update'>;
+  private mode$!: Observable<'create' | 'update'>;
 
   public carriageForm: FormGroup;
 
   public isVisible: boolean = false;
 
-  public currentMode: string = 'update';
+  private currentMode: string = 'update';
+
+  private foundedCarriage$?: Observable<CarriageItem | undefined>;
+
+  private foundedCarriage?: CarriageItem | undefined;
 
   constructor(
     private store: Store,
@@ -59,7 +65,15 @@ export class CarriageFormComponent implements OnInit {
     this.updateCode$ = this.store.select(selectFormVisibleForCarriageCode);
     this.updateCode$.subscribe((code) => {
       this.isVisible = code !== null;
+      if (code) {
+        this.foundedCarriage$ = this.store.select(selectCarriageByCode(code));
+      }
     });
+    if (this.foundedCarriage$) {
+      this.foundedCarriage$.subscribe((foundedCarriage) => {
+        this.foundedCarriage = foundedCarriage;
+      });
+    }
     this.mode$ = this.store.select(selectMode);
     this.mode$.subscribe((mode) => {
       this.currentMode = mode;

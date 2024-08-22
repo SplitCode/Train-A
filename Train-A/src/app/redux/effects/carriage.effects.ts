@@ -9,6 +9,9 @@ import {
   createCarriage,
   createCarriageFailure,
   createCarriageSuccess,
+  updateCarriage,
+  updateCarriageFailure,
+  updateCarriageSuccess,
 } from '../actions/carriage.actions';
 
 @Injectable()
@@ -36,6 +39,20 @@ export class CarriageEffects {
             createCarriageSuccess({ carriage: newCarriage }),
           ),
           catchError((error) => of(createCarriageFailure({ error }))),
+        ),
+      ),
+    );
+  });
+
+  updateCarriage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateCarriage),
+      mergeMap(({ updatedCarriage }) =>
+        this.carriageService.updateCarriage(updatedCarriage).pipe(
+          map((carriage) =>
+            updateCarriageSuccess({ updatedCarriage: carriage }),
+          ),
+          catchError((error) => of(updateCarriageFailure({ error }))),
         ),
       ),
     );

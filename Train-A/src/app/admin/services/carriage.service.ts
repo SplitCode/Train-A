@@ -19,4 +19,11 @@ export class CarriageService {
   public createCarriage(carriage: CarriageItem): Observable<CarriageItem> {
     return this.http.post<CarriageItem>(this.apiUrl, carriage);
   }
+
+  public updateCarriage(carriage: CarriageItem): Observable<CarriageItem> {
+    return this.http.put<CarriageItem>(
+      `${this.apiUrl}${carriage.code}`,
+      carriage,
+    );
+  }
 }

@@ -1,0 +1,9 @@
+::ng-deep .p-tabmenu .p-tabmenu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+::ng-deep .p-tabmenuitem:not(.p-hidden) {
+  display: block;
+}

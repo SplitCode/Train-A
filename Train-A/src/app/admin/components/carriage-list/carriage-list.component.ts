@@ -6,8 +6,8 @@ import { selectAllCarriages } from '../../../redux/selectors/carriage.selectors'
 import { Store } from '@ngrx/store';
 import { CarriageItemComponent } from '../carriage-item/carriage-item.component';
 import { CommonModule } from '@angular/common';
-import { CarriageCreateFormComponent } from '../carriage-create-form/carriage-create-form.component';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
+import { CarriageFormComponent } from '../carriage-create-form/carriage-form.component';
 
 @Component({
   selector: 'app-carriage-list',
@@ -16,7 +16,7 @@ import { CustomButtonComponent } from '../../../shared/components/custom-button/
   imports: [
     CarriageItemComponent,
     CommonModule,
-    CarriageCreateFormComponent,
+    CarriageFormComponent,
     CustomButtonComponent,
   ],
 })

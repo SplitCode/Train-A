@@ -12,7 +12,11 @@ export class CarriageService {
 
   constructor(private http: HttpClient) {}
 
-  getCarriages(): Observable<CarriageItem[]> {
+  public getCarriages(): Observable<CarriageItem[]> {
     return this.http.get<CarriageItem[]>(this.apiUrl);
+  }
+
+  public createCarriage(carriage: CarriageItem): Observable<CarriageItem> {
+    return this.http.post<CarriageItem>(this.apiUrl, carriage);
   }
 }

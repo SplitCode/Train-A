@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import {
+  createCarriage,
   loadCarriagesSuccess,
   showCarriageForm,
   updateCarriage,
@@ -17,14 +18,15 @@ export const carriageReducer = createReducer(
   ),
   on(
     showCarriageForm,
-    (state, { carriageCode }): CarriageState => ({
+    (state, { carriageCode, mode }): CarriageState => ({
       ...state,
       formVisibleForCarriageCode: carriageCode,
+      mode: mode,
     }),
   ),
-  on(updateCarriage, (state, { carriageCode, updatedCarriage }) => {
+  on(updateCarriage, (state, { updatedCarriage }) => {
     const carriageIndex = state.carriages.findIndex(
-      (carriage) => carriage.code === carriageCode,
+      (carriage) => carriage.code === updatedCarriage.code,
     );
     if (carriageIndex !== -1) {
       const updatedCarriages = [...state.carriages];
@@ -40,4 +42,11 @@ export const carriageReducer = createReducer(
     }
     return state;
   }),
+  on(
+    createCarriage,
+    (state, { createdCarriage }): CarriageState => ({
+      ...state,
+      carriages: [...state.carriages, createdCarriage],
+    }),
+  ),
 );

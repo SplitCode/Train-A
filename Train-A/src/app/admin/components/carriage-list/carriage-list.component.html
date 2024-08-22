@@ -1,7 +1,7 @@
 <app-custom-button
   [config]="{ styleClass: 'seat', label: 'Create' }"
 />
-<app-carriage-create-form />
+<app-carriage-form />
 <div class="" *ngFor="let carriage of carriages$ | async">
   <app-carriage-item [config]="carriage"></app-carriage-item>
 </div>

@@ -4,10 +4,7 @@ import { CarriageItem } from '../../models/carriage-item.interface';
 import { CommonModule } from '@angular/common';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { Store } from '@ngrx/store';
-import {
-  showCarriageForm,
-  updateCarriage,
-} from '../../../redux/actions/carriage.actions';
+import { showCarriageForm } from '../../../redux/actions/carriage.actions';
 
 @Component({
   selector: 'app-carriage-item',
@@ -33,12 +30,11 @@ export class CarriageItemComponent implements OnInit {
   }
 
   public triggerUpdate(): void {
-    this.store.dispatch(showCarriageForm({ carriageCode: this.config.code }));
-  }
-
-  public saveUpdate(updatedCarriage: Partial<CarriageItem>): void {
     this.store.dispatch(
-      updateCarriage({ carriageCode: this.config.code, updatedCarriage }),
+      showCarriageForm({
+        carriageCode: this.config.code,
+        mode: 'update',
+      }),
     );
   }
 }

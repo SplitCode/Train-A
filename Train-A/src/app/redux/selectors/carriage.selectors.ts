@@ -12,3 +12,7 @@ export const selectFormVisibleForCarriageCode = createSelector(
   selectCarriageState,
   (state: CarriageState) => state.formVisibleForCarriageCode,
 );
+export const selectMode = createSelector(
+  selectCarriageState,
+  (state: CarriageState) => state.mode,
+);

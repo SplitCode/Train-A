@@ -6,6 +6,9 @@ import {
   loadCarriages,
   loadCarriagesSuccess,
   loadCarriagesFailure,
+  createCarriage,
+  createCarriageFailure,
+  createCarriageSuccess,
 } from '../actions/carriage.actions';
 
 @Injectable()
@@ -19,6 +22,20 @@ export class CarriageEffects {
         this.carriageService.getCarriages().pipe(
           map((carriages) => loadCarriagesSuccess({ carriages })),
           catchError((error) => of(loadCarriagesFailure({ error }))),
+        ),
+      ),
+    );
+  });
+
+  createCarriage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createCarriage),
+      mergeMap(({ createdCarriage }) =>
+        this.carriageService.createCarriage(createdCarriage).pipe(
+          map((newCarriage) =>
+            createCarriageSuccess({ carriage: newCarriage }),
+          ),
+          catchError((error) => of(createCarriageFailure({ error }))),
         ),
       ),
     );

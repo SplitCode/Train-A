@@ -1,14 +1,14 @@
 <p-dialog
-  [header]="'Update Carriage: ' + (formVisibleForCarriageCode$ | async)"
+  [header]="'Update Carriage: ' + (updateCode$ | async)"
   [modal]="true"
-  [(visible)]="visible"
+  [(visible)]="isVisible"
   [style]="{ width: '70%' }"
   (onHide)="closeDialog()"
 >
   <div class="flex">
     <form
       class="flex flex-col gap-4 text-center"
-      [formGroup]="createCarriageForm"
+      [formGroup]="carriageForm"
       (ngSubmit)="onSubmit()"
     >
       <div class="text-center">
@@ -48,7 +48,7 @@
 
       <app-custom-button
         [config]="{
-          disabled: !createCarriageForm.valid,
+          disabled: !carriageForm.valid,
           label: 'Save',
           type: 'submit',
         }"
@@ -56,11 +56,11 @@
     </form>
     <app-carriage-item
       [config]="{
-        code: createCarriageForm.get('code')?.value,
-        rows: createCarriageForm.get('rows')?.value,
-        leftSeats: createCarriageForm.get('leftSeats')?.value,
-        rightSeats: createCarriageForm.get('rightSeats')?.value,
-        name: createCarriageForm.get('code')?.value,
+        code: carriageForm.get('code')?.value,
+        rows: carriageForm.get('rows')?.value,
+        leftSeats: carriageForm.get('leftSeats')?.value,
+        rightSeats: carriageForm.get('rightSeats')?.value,
+        name: carriageForm.get('code')?.value,
       }"
     ></app-carriage-item></div
 ></p-dialog>

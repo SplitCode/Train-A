@@ -1,1 +1,23 @@
-<p *ngIf="formVisibleForCarriageCode$ | async">carriage-create-form works!</p>
+<p-fieldset
+  [legend]="'Update Carriage ' + (formVisibleForCarriageCode$ | async)"
+  class="flex justify-center m-4"
+  *ngIf="formVisibleForCarriageCode$ | async"
+>
+  <form [formGroup]="createCarriageForm" (ngSubmit)="onSubmit()">
+    <div class="text-center">
+      <label class="mb-2 block" for="rows"> Rows </label>
+      <p-inputNumber
+        id="rows"
+        formControlName="rows"
+        [showButtons]="true"
+        buttonLayout="horizontal"
+        decrementButtonClass="p-button-secondary"
+        incrementButtonClass="p-button-secondary"
+        incrementButtonIcon="pi pi-plus"
+        decrementButtonIcon="pi pi-minus"
+      />
+    </div>
+
+    <app-custom-button [config]="{ label: 'Save', type: 'submit' }" />
+  </form>
+</p-fieldset>

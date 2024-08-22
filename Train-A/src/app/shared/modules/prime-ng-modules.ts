@@ -26,8 +26,10 @@ import { DialogModule } from 'primeng/dialog';
 import { ImageModule } from 'primeng/image';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 export const PRIME_NG_MODULES = {
+  InputNumberModule: [InputNumberModule],
   ToastModule: [ToastModule],
   MessageService: [MessageService],
   ImageModule: [ImageModule],

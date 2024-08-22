@@ -6,6 +6,11 @@
     <li>seats {{ (config.leftSeats + config.rightSeats) * config.rows }}</li>
   </ul>
   <p-fieldset [legend]="config.name">
+    <app-custom-button
+      (clickEmitter)="triggerUpdate()"
+      [id]="config.code + '-update'"
+      [config]="{ label: 'Update', styleClass: 'my-2' }"
+    />
     <div class="carriage-side">
       <div
         class="row"

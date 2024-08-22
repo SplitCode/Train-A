@@ -8,3 +8,7 @@ export const selectAllCarriages = createSelector(
   selectCarriageState,
   (state: CarriageState) => state.carriages,
 );
+export const selectFormVisibleForCarriageCode = createSelector(
+  selectCarriageState,
+  (state: CarriageState) => state.formVisibleForCarriageCode,
+);

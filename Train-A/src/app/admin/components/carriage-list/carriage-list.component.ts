@@ -6,12 +6,13 @@ import { selectAllCarriages } from '../../../redux/selectors/carriage.selectors'
 import { Store } from '@ngrx/store';
 import { CarriageItemComponent } from '../carriage-item/carriage-item.component';
 import { CommonModule } from '@angular/common';
+import { CarriageCreateFormComponent } from '../carriage-create-form/carriage-create-form.component';
 
 @Component({
   selector: 'app-carriage-list',
   templateUrl: './carriage-list.component.html',
   standalone: true,
-  imports: [CarriageItemComponent, CommonModule],
+  imports: [CarriageItemComponent, CommonModule, CarriageCreateFormComponent],
 })
 export class CarriageListComponent implements OnInit, OnDestroy {
   public carriages$: Observable<CarriageItem[]>;

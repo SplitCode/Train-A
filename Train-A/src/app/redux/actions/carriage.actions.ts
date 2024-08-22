@@ -10,3 +10,14 @@ export const loadCarriagesFailure = createAction(
   '[Carriage List] Load Carriages Failure',
   props<{ error: unknown }>(),
 );
+export const updateCarriage = createAction(
+  '[Carriage List] Update Carriage',
+  props<{
+    carriageCode: CarriageItem['code'];
+    updatedCarriage: Partial<CarriageItem>;
+  }>(),
+);
+export const showCarriageForm = createAction(
+  '[Carriage List] Show Carriage Form',
+  props<{ carriageCode: CarriageItem['code'] }>(),
+);

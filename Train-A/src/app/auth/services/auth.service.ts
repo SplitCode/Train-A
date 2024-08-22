@@ -22,6 +22,10 @@ export class AuthService {
     private store: Store,
   ) {}
 
+  public getUserRole(): UserRole {
+    return (localStorage.getItem('user-role') as UserRole) || UserRole.Guest;
+  }
+
   public signUp(user: AuthRequest): Observable<void> {
     return this.http.post<void>(API_CONFIG.signUpUrl, user).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -56,7 +60,21 @@ export class AuthService {
   }
 
   public checkAuth(): boolean {
-    return !!localStorage.getItem(this.token);
+    const token = localStorage.getItem(this.token);
+    const role = localStorage.getItem('user-role') as UserRole;
+
+    if (!token) {
+      localStorage.setItem('user-role', UserRole.Guest);
+      this.store?.dispatch(setUserRole({ userRole: UserRole.Guest }));
+      return false;
+    }
+
+    if (token && !role) {
+      localStorage.setItem('user-role', UserRole.GeneralUser);
+      this.store?.dispatch(setUserRole({ userRole: UserRole.GeneralUser }));
+    }
+
+    return !!token;
   }
 
   private handleServerError(error: HttpErrorResponse): ServerError {

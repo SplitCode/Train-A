@@ -33,10 +33,10 @@ export class CarriageEffects {
   createCarriage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(createCarriage),
-      mergeMap(({ createdCarriage }) =>
-        this.carriageService.createCarriage(createdCarriage).pipe(
-          map((newCarriage) =>
-            createCarriageSuccess({ carriage: newCarriage }),
+      mergeMap(({ carriage }) =>
+        this.carriageService.createCarriage(carriage).pipe(
+          map((code) =>
+            createCarriageSuccess({ carriage: { ...carriage, code } }),
           ),
           catchError((error) => of(createCarriageFailure({ error }))),
         ),
@@ -47,10 +47,12 @@ export class CarriageEffects {
   updateCarriage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updateCarriage),
-      mergeMap(({ updatedCarriage }) =>
-        this.carriageService.updateCarriage(updatedCarriage).pipe(
-          map((carriage) =>
-            updateCarriageSuccess({ updatedCarriage: carriage }),
+      mergeMap(({ carriage }) =>
+        this.carriageService.updateCarriage(carriage).pipe(
+          map((code) =>
+            updateCarriageSuccess({
+              carriage: { ...carriage, code },
+            }),
           ),
           catchError((error) => of(updateCarriageFailure({ error }))),
         ),

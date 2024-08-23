@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { API_CONFIG } from '../../config/api.config';
 import { CarriageItem } from '../models/carriage-item.interface';
 
@@ -16,14 +16,21 @@ export class CarriageService {
     return this.http.get<CarriageItem[]>(this.apiUrl);
   }
 
-  public createCarriage(carriage: CarriageItem): Observable<CarriageItem> {
-    return this.http.post<CarriageItem>(this.apiUrl, carriage);
+  public createCarriage(
+    carriage: CarriageItem,
+  ): Observable<CarriageItem['code']> {
+    return this.http
+      .post<{ code: CarriageItem['code'] }>(this.apiUrl, carriage)
+      .pipe(map((response) => response.code));
   }
 
-  public updateCarriage(carriage: CarriageItem): Observable<CarriageItem> {
-    return this.http.put<CarriageItem>(
-      `${this.apiUrl}${carriage.code}`,
-      carriage,
-    );
+  public updateCarriage(
+    carriage: CarriageItem,
+  ): Observable<CarriageItem['code']> {
+    return this.http
+      .put<{
+        code: CarriageItem['code'];
+      }>(`${this.apiUrl}${carriage.code}`, carriage)
+      .pipe(map((response) => response.code));
   }
 }

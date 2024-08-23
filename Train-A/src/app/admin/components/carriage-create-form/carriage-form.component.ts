@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import {
   selectCarriageByCode,
   selectFormVisibleForCarriageCode,
@@ -16,9 +16,9 @@ import {
 } from '@angular/forms';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { CarriageItemComponent } from '../carriage-item/carriage-item.component';
-import ShortUniqueId from 'short-unique-id';
 import {
   createCarriage,
+  showCarriageForm,
   updateCarriage,
 } from '../../../redux/actions/carriage.actions';
 import { CarriageItem } from '../../models/carriage-item.interface';
@@ -40,15 +40,13 @@ import { CarriageItem } from '../../models/carriage-item.interface';
 export class CarriageFormComponent implements OnInit {
   public updateCode$!: Observable<string | null>;
 
-  private createCode: ShortUniqueId = new ShortUniqueId({ length: 7 });
-
   private mode$!: Observable<'create' | 'update'>;
 
   public carriageForm: FormGroup;
 
   public isVisible: boolean = false;
 
-  private currentMode: string = 'update';
+  private currentMode: 'create' | 'update' = 'update';
 
   private foundedCarriage$?: Observable<CarriageItem | undefined>;
 
@@ -80,36 +78,50 @@ export class CarriageFormComponent implements OnInit {
     });
   }
 
+  public get title(): string {
+    return this.currentMode === 'create'
+      ? 'Create Carriage: '
+      : 'Update Carriage: ';
+  }
+
   private get launchCarriageForm() {
     return this.fb.group({
-      code: [this.createCode.rnd()],
+      code: [this.foundedCarriage?.code],
       rows: [0, [Validators.required]],
       leftSeats: [0, [Validators.required]],
       rightSeats: [0, [Validators.required]],
     });
   }
 
+  // Неудобно, что для закрытия надо в carriageCode: null, надо более наглядно сделать
   public closeDialog(): void {
     this.carriageForm.reset(this.launchCarriageForm.value);
-    this.isVisible = false;
+    this.store.dispatch(
+      showCarriageForm({
+        carriageCode: null,
+        mode: this.currentMode,
+      }),
+    );
   }
 
   private updateCarriage(): void {
-    this.store.dispatch(
-      updateCarriage({ updatedCarriage: this.carriageForm.value }),
-    );
+    this.store.dispatch(updateCarriage({ carriage: this.carriageForm.value }));
   }
 
   private createCarriage(): void {
-    this.store.dispatch(
-      createCarriage({ createdCarriage: this.carriageForm.value }),
-    );
+    this.store.dispatch(createCarriage({ carriage: this.carriageForm.value }));
   }
 
   private processCarriages(): void {
     if (this.currentMode === 'update') {
-      this.updateCarriage();
+      this.updateCode$.pipe(take(1)).subscribe((code) => {
+        if (code) {
+          this.carriageForm.patchValue({ code });
+          this.updateCarriage();
+        }
+      });
     } else {
+      this.carriageForm.patchValue({ code: this.foundedCarriage?.code });
       this.createCarriage();
     }
   }

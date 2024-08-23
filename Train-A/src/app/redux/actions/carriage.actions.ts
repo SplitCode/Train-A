@@ -13,12 +13,12 @@ export const loadCarriagesFailure = createAction(
 export const updateCarriage = createAction(
   '[Carriage List] Update Carriage',
   props<{
-    updatedCarriage: CarriageItem;
+    carriage: CarriageItem;
   }>(),
 );
 export const updateCarriageSuccess = createAction(
   '[Carriage List] Update Carriage Success',
-  props<{ updatedCarriage: CarriageItem }>(),
+  props<{ carriage: CarriageItem }>(),
 );
 
 export const updateCarriageFailure = createAction(
@@ -27,7 +27,7 @@ export const updateCarriageFailure = createAction(
 );
 export const createCarriage = createAction(
   '[Carriage List] Create Carriage',
-  props<{ createdCarriage: CarriageItem }>(),
+  props<{ carriage: CarriageItem }>(),
 );
 export const createCarriageSuccess = createAction(
   '[Carriage List] Create Carriage Success',
@@ -45,3 +45,4 @@ export const showCarriageForm = createAction(
     mode: 'create' | 'update';
   }>(),
 );
+export const hideCarriageForm = createAction('[Carriage] Hide Carriage Form');

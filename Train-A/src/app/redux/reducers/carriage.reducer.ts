@@ -1,9 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 import {
-  createCarriage,
+  createCarriageSuccess,
+  hideCarriageForm,
   loadCarriagesSuccess,
   showCarriageForm,
-  updateCarriage,
+  updateCarriageSuccess,
 } from '../actions/carriage.actions';
 import { CarriageState, initialCarriageState } from '../states/carriage.state';
 
@@ -24,15 +25,22 @@ export const carriageReducer = createReducer(
       mode: mode,
     }),
   ),
-  on(updateCarriage, (state, { updatedCarriage }) => {
+  on(
+    hideCarriageForm,
+    (state): CarriageState => ({
+      ...state,
+      formVisibleForCarriageCode: null,
+    }),
+  ),
+  on(updateCarriageSuccess, (state, { carriage }) => {
     const carriageIndex = state.carriages.findIndex(
-      (carriage) => carriage.code === updatedCarriage.code,
+      (c) => c.code === carriage.code,
     );
     if (carriageIndex !== -1) {
       const updatedCarriages = [...state.carriages];
       updatedCarriages[carriageIndex] = {
         ...updatedCarriages[carriageIndex],
-        ...updatedCarriage,
+        ...carriage,
       };
       return {
         ...state,
@@ -43,10 +51,10 @@ export const carriageReducer = createReducer(
     return state;
   }),
   on(
-    createCarriage,
-    (state, { createdCarriage }): CarriageState => ({
+    createCarriageSuccess,
+    (state, { carriage }): CarriageState => ({
       ...state,
-      carriages: [...state.carriages, createdCarriage],
+      carriages: [...state.carriages, carriage],
     }),
   ),
 );

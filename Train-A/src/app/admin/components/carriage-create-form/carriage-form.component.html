@@ -1,5 +1,5 @@
 <p-dialog
-  [header]="'Update Carriage: ' + (updateCode$ | async)"
+  [header]="title + (updateCode$ | async)"
   [modal]="true"
   [(visible)]="isVisible"
   [style]="{ width: '70%' }"

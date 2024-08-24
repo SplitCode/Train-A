@@ -15,6 +15,7 @@ import { showCarriageForm } from '../../../redux/actions/carriage.actions';
     CustomButtonComponent,
     PRIME_NG_MODULES.FieldsetModule,
     PRIME_NG_MODULES.DividerModule,
+    PRIME_NG_MODULES.InputIconModule,
   ],
   styleUrls: ['./carriage-item.scss'],
 })

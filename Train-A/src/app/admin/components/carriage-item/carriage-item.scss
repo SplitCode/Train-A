@@ -6,6 +6,11 @@
     flex-direction: column;
   }
 
+  .p-fieldset {
+    border-radius: 2rem;
+
+  }
+
   .carriage-side {
     display: flex;
     flex-direction: row-reverse;

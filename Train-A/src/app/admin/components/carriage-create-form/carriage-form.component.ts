@@ -8,12 +8,7 @@ import {
 } from '../../../redux/selectors/carriage.selectors';
 import { CommonModule } from '@angular/common';
 import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { CarriageItemComponent } from '../carriage-item/carriage-item.component';
 import {
@@ -22,7 +17,7 @@ import {
   updateCarriage,
 } from '../../../redux/actions/carriage.actions';
 import { CarriageItem } from '../../models/carriage-item.interface';
-import { uniqueCarriageNameValidator } from '../../utilits/carriage-name.validator';
+import { createCarriageForm } from './create.carriage.form';
 
 @Component({
   selector: 'app-carriage-form',
@@ -59,31 +54,47 @@ export class CarriageFormComponent implements OnInit, OnDestroy {
     private store: Store,
     private fb: FormBuilder,
   ) {
-    this.form = this.createCarriageForm();
+    this.form = createCarriageForm(this.fb, this.store, this.currentMode);
   }
 
   public ngOnInit() {
+    this.turnObservables();
+    this.turnubscriptions();
+  }
+
+  private turnObservables(): void {
     this.currentCode$ = this.store.select(selectFormVisibleForCarriageCode);
     this.mode$ = this.store.select(selectMode);
+  }
 
+  private turnubscriptions(): void {
     const subscriptions = combineLatest([
       this.currentCode$,
       this.mode$,
     ]).subscribe(([code, mode]) => {
-      console.log('code', code, 'mode', mode);
-      this.isVisible = code !== null;
-      this.currentMode = mode;
-      if (code) {
-        this.currentCode = code;
-        console.log('[currentCode]', this.currentCode);
-        this.foundedCarriage$ = this.store.select(selectCarriageByCode(code));
-        this.foundedCarriage$.subscribe((foundedCarriage) => {
-          this.form = this.createCarriageForm(foundedCarriage);
-          console.log(this.form.value);
-        });
-      }
+      this.handleCodeAndModeChange(code, mode);
     });
     this.subscriptions.add(subscriptions);
+  }
+
+  private handleCodeAndModeChange(
+    code: string | null,
+    mode: 'create' | 'update',
+  ): void {
+    this.isVisible = code !== null;
+    this.currentMode = mode;
+    if (code) {
+      this.currentCode = code;
+      this.foundedCarriage$ = this.store.select(selectCarriageByCode(code));
+      this.foundedCarriage$.subscribe((foundedCarriage) => {
+        this.form = createCarriageForm(
+          this.fb,
+          this.store,
+          this.currentMode,
+          foundedCarriage,
+        );
+      });
+    }
   }
 
   public ngOnDestroy() {
@@ -94,26 +105,6 @@ export class CarriageFormComponent implements OnInit, OnDestroy {
     return this.currentMode === 'create'
       ? 'Create Carriage: '
       : 'Update Carriage: ';
-  }
-
-  private createCarriageForm(foundedCarriage?: CarriageItem): FormGroup {
-    return this.fb.group({
-      name: [
-        foundedCarriage?.name,
-        [
-          Validators.required,
-          ,
-          uniqueCarriageNameValidator(
-            this.store,
-            this.currentMode,
-            foundedCarriage?.name || '',
-          ),
-        ],
-      ],
-      rows: [foundedCarriage?.rows, [Validators.required]],
-      leftSeats: [foundedCarriage?.leftSeats, [Validators.required]],
-      rightSeats: [foundedCarriage?.rightSeats, [Validators.required]],
-    });
   }
 
   public closeDialog(): void {
@@ -149,6 +140,7 @@ export class CarriageFormComponent implements OnInit, OnDestroy {
   public onSubmit(): void {
     if (this.form.valid) {
       this.processCarriages();
+      this.closeDialog();
     }
   }
 }

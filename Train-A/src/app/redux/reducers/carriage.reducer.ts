@@ -54,7 +54,7 @@ export const carriageReducer = createReducer(
     createCarriageSuccess,
     (state, { carriage }): CarriageState => ({
       ...state,
-      carriages: [...state.carriages, carriage],
+      carriages: [carriage, ...state.carriages],
     }),
   ),
 );

@@ -102,9 +102,10 @@ export class CarriageFormComponent implements OnInit, OnDestroy {
   }
 
   public get title(): string {
+    const name = this.form.get('name')?.value || '';
     return this.currentMode === 'create'
-      ? 'Create Carriage: '
-      : 'Update Carriage: ';
+      ? `Create Carriage: ${name}`
+      : `Update Carriage: ${name}`;
   }
 
   public closeDialog(): void {

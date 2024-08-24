@@ -31,7 +31,6 @@ export class CarriageItemComponent implements OnInit {
   }
 
   public triggerUpdate(): void {
-    console.log('triggerUpdate', this.config);
     this.store.dispatch(
       showCarriageForm({
         carriageCode: this.config.code,

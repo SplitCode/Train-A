@@ -49,7 +49,6 @@ export class CarriageListComponent implements OnInit, OnDestroy {
 
   public triggerCreate(): void {
     const code = this.createCode.rnd();
-    console.log('triggerCreate', code);
     this.store.dispatch(
       showCarriageForm({
         carriageCode: `${code}`,

@@ -116,13 +116,11 @@ export class CarriageFormComponent implements OnInit, OnDestroy {
         mode: this.currentMode,
       }),
     );
-    console.log(this.form.value);
   }
 
   private updateCarriage(): void {
     const carriage = { ...this.form.value, code: this.currentCode };
     this.store.dispatch(updateCarriage({ carriage }));
-    console.log(carriage);
   }
 
   private createCarriage(): void {
@@ -130,7 +128,6 @@ export class CarriageFormComponent implements OnInit, OnDestroy {
   }
 
   private processCarriages(): void {
-    console.log(this.currentMode);
     if (this.currentMode === 'update') {
       this.updateCarriage();
     } else {

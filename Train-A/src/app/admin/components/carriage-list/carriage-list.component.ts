@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { CarriageFormComponent } from '../carriage-create-form/carriage-form.component';
 import ShortUniqueId from 'short-unique-id';
+import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
 
 @Component({
   selector: 'app-carriage-list',
@@ -22,6 +23,8 @@ import ShortUniqueId from 'short-unique-id';
     CommonModule,
     CarriageFormComponent,
     CustomButtonComponent,
+    PRIME_NG_MODULES.PanelModule,
+    PRIME_NG_MODULES.DividerModule,
   ],
 })
 export class CarriageListComponent implements OnInit, OnDestroy {

@@ -1,66 +1,72 @@
-<div class="carriage">
-  <app-custom-button
-    *ngIf="config.mode !== 'interActive'"
-    (clickEmitter)="triggerUpdate()"
-    [id]="config.code + '-update'"
-    [config]="{ label: 'Update', styleClass: 'my-2', icon: 'pi pi-file-edit' }"
-  />
+<div class="carriage-container">
+  <div class="carriage">
+    <app-custom-button
+      *ngIf="config.mode !== 'interActive'"
+      (clickEmitter)="triggerUpdate()"
+      [id]="config.code + '-update'"
+      [config]="{
+        label: 'Update',
+        styleClass: 'my-2',
+        icon: 'pi pi-file-edit',
+      }"
+    />
 
-  <p-fieldset [legend]="config.name">
-    <div class="flex gap-4">
-      <p-divider layout="vertical" />
-      <div>
-        <div class="carriage-side">
-          <div
-            class="row"
-            *ngFor="let col of createRange(config.rows); let rowIndex = index"
-          >
-            <app-custom-button
-              [config]="{ styleClass: 'seat' }"
-              class="right text-red-950"
-              *ngFor="
-                let seat of createRange(config.rightSeats);
-                let seatIndex = index
-              "
+    <p-fieldset [legend]="config.name">
+      <div class="flex gap-4">
+        <p-divider layout="vertical" />
+        <div>
+          <div class="carriage-side">
+            <div
+              class="row"
+              *ngFor="let col of createRange(config.rows); let rowIndex = index"
             >
-              {{
-                (config.rows - rowIndex - 1) *
-                  (config.leftSeats + config.rightSeats) +
-                  config.leftSeats +
-                  seatIndex +
-                  1
-              }}
-            </app-custom-button>
+              <app-custom-button
+                [config]="{ styleClass: 'seat' }"
+                class="right text-red-950"
+                *ngFor="
+                  let seat of createRange(config.rightSeats);
+                  let seatIndex = index
+                "
+              >
+                {{
+                  (config.rows - rowIndex - 1) *
+                    (config.leftSeats + config.rightSeats) +
+                    config.leftSeats +
+                    seatIndex +
+                    1
+                }}
+              </app-custom-button>
+            </div>
+          </div>
+
+          <p-divider class="m-8"></p-divider>
+
+          <div class="carriage-side">
+            <div
+              class="row"
+              *ngFor="let col of createRange(config.rows); let rowIndex = index"
+            >
+              <app-custom-button
+                [config]="{ styleClass: 'seat' }"
+                class="left text-red-950"
+                *ngFor="
+                  let seat of createRange(config.leftSeats);
+                  let seatIndex = index
+                "
+              >
+                {{
+                  (config.rows - rowIndex - 1) *
+                    (config.leftSeats + config.rightSeats) +
+                    seatIndex +
+                    1
+                }}
+              </app-custom-button>
+            </div>
           </div>
         </div>
 
-        <p-divider class="m-8"></p-divider>
-
-        <div class="carriage-side">
-          <div
-            class="row"
-            *ngFor="let col of createRange(config.rows); let rowIndex = index"
-          >
-            <app-custom-button
-              [config]="{ styleClass: 'seat' }"
-              class="left text-red-950"
-              *ngFor="
-                let seat of createRange(config.leftSeats);
-                let seatIndex = index
-              "
-            >
-              {{
-                (config.rows - rowIndex - 1) *
-                  (config.leftSeats + config.rightSeats) +
-                  seatIndex +
-                  1
-              }}
-            </app-custom-button>
-          </div>
-        </div>
+        <p-divider layout="vertical" />
       </div>
-
-      <p-divider layout="vertical" />
-    </div>
-  </p-fieldset>
+    </p-fieldset>
+  </div>
 </div>

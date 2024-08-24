@@ -1,14 +1,20 @@
 :host ::ng-deep {
+  .carriage-container {
+    display: flex;
+    justify-content: center;
+    
+  }
+
   .carriage {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     flex-direction: column;
+    overflow-x: auto;
   }
 
   .p-fieldset {
     border-radius: 2rem;
-
   }
 
   .carriage-side {

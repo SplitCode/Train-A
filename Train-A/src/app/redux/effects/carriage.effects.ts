@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of } from 'rxjs';
+import { mergeMap, map, catchError, of, tap } from 'rxjs';
 import { CarriageService } from '../../admin/services/carriage.service';
 import {
   loadCarriages,
@@ -47,14 +47,17 @@ export class CarriageEffects {
   updateCarriage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updateCarriage),
+      tap(() => console.log('Action: updateCarriage')),
       mergeMap(({ carriage }) =>
         this.carriageService.updateCarriage(carriage).pipe(
-          map((code) =>
-            updateCarriageSuccess({
-              carriage: { ...carriage, code },
-            }),
-          ),
-          catchError((error) => of(updateCarriageFailure({ error }))),
+          map((code) => {
+            console.log('Effect: updateCarriageSuccess', code);
+            return updateCarriageSuccess({ carriage: { ...carriage, code } });
+          }),
+          catchError((error) => {
+            console.error('Effect: updateCarriageFailure', error);
+            return of(updateCarriageFailure({ error }));
+          }),
         ),
       ),
     );

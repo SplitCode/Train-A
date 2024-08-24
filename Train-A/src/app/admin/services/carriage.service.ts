@@ -30,7 +30,7 @@ export class CarriageService {
     return this.http
       .put<{
         code: CarriageItem['code'];
-      }>(`${this.apiUrl}${carriage.code}`, carriage)
+      }>(`${this.apiUrl}/${carriage.code}`, carriage)
       .pipe(map((response) => response.code));
   }
 }

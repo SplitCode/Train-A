@@ -30,7 +30,7 @@
           Name is valid.
         </small>
       </div>
-      <div class="text-center">
+      <div class="text-center flex flex-col">
         <label class="mb-2 block" for="rows"> Rows </label>
         <p-inputNumber
           id="rows"
@@ -41,8 +41,17 @@
           decrementButtonIcon="pi pi-minus"
           [min]="1"
         />
+        <small
+          class="text-red-500"
+          *ngIf="form.get('rows')?.hasError('required')"
+        >
+          Rows is required.
+        </small>
+        <small class="text-green-500" *ngIf="form.get('rows')?.valid">
+          Rows is valid.
+        </small>
       </div>
-      <div class="text-center">
+      <div class="text-center flex flex-col">
         <label class="mb-2 block" for="rows"> Left Seats Cols </label>
         <p-inputNumber
           id="leftSeats"
@@ -52,8 +61,17 @@
           incrementButtonIcon="pi pi-plus"
           decrementButtonIcon="pi pi-minus"
         />
+        <small
+          class="text-red-500"
+          *ngIf="form.get('leftSeats')?.hasError('required')"
+        >
+          Left Seats is required.
+        </small>
+        <small class="text-green-500" *ngIf="form.get('leftSeats')?.valid">
+          Left Seats is valid.
+        </small>
       </div>
-      <div class="text-center">
+      <div class="text-center flex flex-col">
         <label class="mb-2 block" for="rows"> Right Seats Cols </label>
         <p-inputNumber
           id="rightSeats"
@@ -63,6 +81,15 @@
           incrementButtonIcon="pi pi-plus"
           decrementButtonIcon="pi pi-minus"
         />
+        <small
+          class="text-red-500"
+          *ngIf="form.get('rightSeats')?.hasError('required')"
+        >
+          Right Seats is required.
+        </small>
+        <small class="text-green-500" *ngIf="form.get('rightSeats')?.valid">
+          Right Seats is valid.
+        </small>
       </div>
 
       <app-custom-button

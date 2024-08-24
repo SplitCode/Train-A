@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import {
   selectCarriageByCode,
   selectFormVisibleForCarriageCode,
@@ -38,7 +38,9 @@ import { uniqueCarriageNameValidator } from '../../utilits/carriage-name.validat
     CarriageItemComponent,
   ],
 })
-export class CarriageFormComponent implements OnInit {
+export class CarriageFormComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription = new Subscription();
+
   private currentCode$!: Observable<string | null>;
 
   public currentCode: string = '';
@@ -64,7 +66,11 @@ export class CarriageFormComponent implements OnInit {
     this.currentCode$ = this.store.select(selectFormVisibleForCarriageCode);
     this.mode$ = this.store.select(selectMode);
 
-    combineLatest([this.currentCode$, this.mode$]).subscribe(([code, mode]) => {
+    const subscriptions = combineLatest([
+      this.currentCode$,
+      this.mode$,
+    ]).subscribe(([code, mode]) => {
+      console.log('code', code, 'mode', mode);
       this.isVisible = code !== null;
       this.currentMode = mode;
       if (code) {
@@ -73,9 +79,15 @@ export class CarriageFormComponent implements OnInit {
         this.foundedCarriage$ = this.store.select(selectCarriageByCode(code));
         this.foundedCarriage$.subscribe((foundedCarriage) => {
           this.form = this.createCarriageForm(foundedCarriage);
+          console.log(this.form.value);
         });
       }
     });
+    this.subscriptions.add(subscriptions);
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   public get title(): string {
@@ -107,13 +119,18 @@ export class CarriageFormComponent implements OnInit {
   public closeDialog(): void {
     this.form.reset();
     this.store.dispatch(
-      showCarriageForm({ carriageCode: null, mode: this.currentMode }),
+      showCarriageForm({
+        carriageCode: null,
+        mode: this.currentMode,
+      }),
     );
     console.log(this.form.value);
   }
 
   private updateCarriage(): void {
-    this.store.dispatch(updateCarriage({ carriage: this.form.value }));
+    const carriage = { ...this.form.value, code: this.currentCode };
+    this.store.dispatch(updateCarriage({ carriage }));
+    console.log(carriage);
   }
 
   private createCarriage(): void {
@@ -121,6 +138,7 @@ export class CarriageFormComponent implements OnInit {
   }
 
   private processCarriages(): void {
+    console.log(this.currentMode);
     if (this.currentMode === 'update') {
       this.updateCarriage();
     } else {
@@ -131,9 +149,6 @@ export class CarriageFormComponent implements OnInit {
   public onSubmit(): void {
     if (this.form.valid) {
       this.processCarriages();
-      this.closeDialog();
-    } else {
-      console.log('Form is invalid');
     }
   }
 }

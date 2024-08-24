@@ -42,7 +42,7 @@ export class CarriageFormComponent implements OnInit, OnDestroy {
 
   private mode$!: Observable<'create' | 'update'>;
 
-  private currentMode: 'create' | 'update' = 'update';
+  public currentMode: 'create' | 'update' = 'update';
 
   public form: FormGroup;
 

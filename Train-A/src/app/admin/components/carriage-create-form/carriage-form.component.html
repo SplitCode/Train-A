@@ -1,5 +1,5 @@
 <p-dialog
-  [header]="title + form.get('name')?.value"
+  [header]="title + (form.get('name')?.value || '')"
   [modal]="true"
   [(visible)]="isVisible"
   [style]="{ width: '70%' }"
@@ -95,7 +95,7 @@
       <app-custom-button
         [config]="{
           disabled: !form.valid,
-          label: 'Save',
+          label: currentMode === 'update' ? 'Update' : 'Save',
           type: 'submit',
         }"
       />

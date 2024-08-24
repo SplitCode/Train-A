@@ -5,7 +5,7 @@
     <li>right {{ config.rightSeats }}</li>
     <li>seats {{ (config.leftSeats + config.rightSeats) * config.rows }}</li>
   </ul>
-  <p-fieldset [legend]="config.name">
+  <p-fieldset [legend]="config.code">
     <app-custom-button
       (clickEmitter)="triggerUpdate()"
       [id]="config.code + '-update'"

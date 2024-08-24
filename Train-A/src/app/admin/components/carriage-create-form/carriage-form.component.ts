@@ -48,6 +48,8 @@ export class CarriageFormComponent implements OnInit {
 
   private currentMode: 'create' | 'update' = 'update';
 
+  private currentCode: string;
+
   private foundedCarriage$?: Observable<CarriageItem | undefined>;
 
   private foundedCarriage?: CarriageItem | undefined;
@@ -57,6 +59,7 @@ export class CarriageFormComponent implements OnInit {
     private fb: FormBuilder,
   ) {
     this.carriageForm = this.launchCarriageForm;
+    this.currentCode = '';
   }
 
   public ngOnInit() {
@@ -64,18 +67,23 @@ export class CarriageFormComponent implements OnInit {
     this.updateCode$.subscribe((code) => {
       this.isVisible = code !== null;
       if (code) {
+        console.log('[ngOnInit]', code);
+        this.currentCode = code;
         this.foundedCarriage$ = this.store.select(selectCarriageByCode(code));
+        this.foundedCarriage$.subscribe((foundedCarriage) => {
+          this.foundedCarriage = foundedCarriage;
+          // Находит верно
+          console.log('[foundedCarriage]', this.foundedCarriage);
+          this.carriageForm = this.launchCarriageForm;
+        });
       }
     });
-    if (this.foundedCarriage$) {
-      this.foundedCarriage$.subscribe((foundedCarriage) => {
-        this.foundedCarriage = foundedCarriage;
-      });
-    }
+
     this.mode$ = this.store.select(selectMode);
     this.mode$.subscribe((mode) => {
       this.currentMode = mode;
     });
+    this.carriageForm = this.launchCarriageForm;
   }
 
   public get title(): string {
@@ -85,11 +93,12 @@ export class CarriageFormComponent implements OnInit {
   }
 
   private get launchCarriageForm() {
+    console.log('[launchCarriageForm]', this.foundedCarriage);
     return this.fb.group({
-      code: [this.foundedCarriage?.code],
-      rows: [0, [Validators.required]],
-      leftSeats: [0, [Validators.required]],
-      rightSeats: [0, [Validators.required]],
+      code: [this.currentCode],
+      rows: [this.foundedCarriage?.rows, [Validators.required]],
+      leftSeats: [this.foundedCarriage?.leftSeats, [Validators.required]],
+      rightSeats: [this.foundedCarriage?.rightSeats, [Validators.required]],
     });
   }
 

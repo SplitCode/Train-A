@@ -45,10 +45,11 @@ export class CarriageListComponent implements OnInit, OnDestroy {
   }
 
   public triggerCreate(): void {
-    console.log('triggerCreate', this.createCode.rnd());
+    const code = this.createCode.rnd();
+    console.log('triggerCreate', code);
     this.store.dispatch(
       showCarriageForm({
-        carriageCode: `${this.createCode.rnd()}`,
+        carriageCode: `${code}`,
         mode: 'create',
       }),
     );

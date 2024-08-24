@@ -18,6 +18,10 @@ export const selectMode = createSelector(
   (state: CarriageState) => state.mode,
 );
 export const selectCarriageByCode = (carriageCode: string) =>
-  createSelector(selectAllCarriages, (carriages: CarriageItem[]) =>
-    carriages.find((carriage) => carriage.code === carriageCode),
-  );
+  createSelector(selectAllCarriages, (carriages: CarriageItem[]) => {
+    const foundCarriage = carriages.find(
+      (carriage) => carriage.code === carriageCode,
+    );
+    console.log('[selectCarriageByCode]', foundCarriage);
+    return foundCarriage;
+  });

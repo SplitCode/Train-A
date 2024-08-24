@@ -1,5 +1,5 @@
 <p-dialog
-  [header]="title + (updateCode$ | async)"
+  [header]="title + form.get('name')?.value"
   [modal]="true"
   [(visible)]="isVisible"
   [style]="{ width: '70%' }"
@@ -8,9 +8,13 @@
   <div class="flex">
     <form
       class="flex flex-col gap-4 text-center"
-      [formGroup]="carriageForm"
+      [formGroup]="form"
       (ngSubmit)="onSubmit()"
     >
+      <div class="text-center">
+        <label class="mb-2 block" for="name"> Name </label>
+        <input formControlName="name" pInputText id="name" />
+      </div>
       <div class="text-center">
         <label class="mb-2 block" for="rows"> Rows </label>
         <p-inputNumber
@@ -48,7 +52,7 @@
 
       <app-custom-button
         [config]="{
-          disabled: !carriageForm.valid,
+          disabled: !form.valid,
           label: 'Save',
           type: 'submit',
         }"
@@ -56,11 +60,11 @@
     </form>
     <app-carriage-item
       [config]="{
-        code: carriageForm.get('code')?.value,
-        rows: carriageForm.get('rows')?.value,
-        leftSeats: carriageForm.get('leftSeats')?.value,
-        rightSeats: carriageForm.get('rightSeats')?.value,
-        name: carriageForm.get('code')?.value,
+        code: form.get('code')?.value,
+        rows: form.get('rows')?.value,
+        leftSeats: form.get('leftSeats')?.value,
+        rightSeats: form.get('rightSeats')?.value,
+        name: form.get('name')?.value,
       }"
     ></app-carriage-item></div
 ></p-dialog>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, take } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import {
   selectCarriageByCode,
   selectFormVisibleForCarriageCode,
@@ -38,52 +38,43 @@ import { CarriageItem } from '../../models/carriage-item.interface';
   ],
 })
 export class CarriageFormComponent implements OnInit {
-  public updateCode$!: Observable<string | null>;
+  private currentCode$!: Observable<string | null>;
+
+  public currentCode: string = '';
 
   private mode$!: Observable<'create' | 'update'>;
 
-  public carriageForm: FormGroup;
+  private currentMode: 'create' | 'update' = 'update';
+
+  public form: FormGroup;
 
   public isVisible: boolean = false;
 
-  private currentMode: 'create' | 'update' = 'update';
-
-  private currentCode: string;
-
   private foundedCarriage$?: Observable<CarriageItem | undefined>;
-
-  private foundedCarriage?: CarriageItem | undefined;
 
   constructor(
     private store: Store,
     private fb: FormBuilder,
   ) {
-    this.carriageForm = this.launchCarriageForm;
-    this.currentCode = '';
+    this.form = this.createCarriageForm();
   }
 
   public ngOnInit() {
-    this.updateCode$ = this.store.select(selectFormVisibleForCarriageCode);
-    this.updateCode$.subscribe((code) => {
+    this.currentCode$ = this.store.select(selectFormVisibleForCarriageCode);
+    this.mode$ = this.store.select(selectMode);
+
+    combineLatest([this.currentCode$, this.mode$]).subscribe(([code, mode]) => {
       this.isVisible = code !== null;
+      this.currentMode = mode;
       if (code) {
-        console.log('[ngOnInit]', code);
         this.currentCode = code;
+        console.log('[currentCode]', this.currentCode);
         this.foundedCarriage$ = this.store.select(selectCarriageByCode(code));
         this.foundedCarriage$.subscribe((foundedCarriage) => {
-          this.foundedCarriage = foundedCarriage;
-          // Находит верно
-          console.log('[foundedCarriage]', this.foundedCarriage);
-          this.carriageForm = this.launchCarriageForm;
+          this.form = this.createCarriageForm(foundedCarriage);
         });
       }
     });
-
-    this.mode$ = this.store.select(selectMode);
-    this.mode$.subscribe((mode) => {
-      this.currentMode = mode;
-    });
-    this.carriageForm = this.launchCarriageForm;
   }
 
   public get title(): string {
@@ -92,51 +83,43 @@ export class CarriageFormComponent implements OnInit {
       : 'Update Carriage: ';
   }
 
-  private get launchCarriageForm() {
-    console.log('[launchCarriageForm]', this.foundedCarriage);
+  private createCarriageForm(foundedCarriage?: CarriageItem): FormGroup {
     return this.fb.group({
-      code: [this.currentCode],
-      rows: [this.foundedCarriage?.rows, [Validators.required]],
-      leftSeats: [this.foundedCarriage?.leftSeats, [Validators.required]],
-      rightSeats: [this.foundedCarriage?.rightSeats, [Validators.required]],
+      name: [foundedCarriage?.name, [Validators.required]],
+      rows: [foundedCarriage?.rows, [Validators.required]],
+      leftSeats: [foundedCarriage?.leftSeats, [Validators.required]],
+      rightSeats: [foundedCarriage?.rightSeats, [Validators.required]],
     });
   }
 
   // Неудобно, что для закрытия надо в carriageCode: null, надо более наглядно сделать
   public closeDialog(): void {
-    this.carriageForm.reset(this.launchCarriageForm.value);
+    console.log(this.form.value);
+    this.form.reset();
     this.store.dispatch(
-      showCarriageForm({
-        carriageCode: null,
-        mode: this.currentMode,
-      }),
+      showCarriageForm({ carriageCode: null, mode: this.currentMode }),
     );
+    console.log(this.form.value);
   }
 
   private updateCarriage(): void {
-    this.store.dispatch(updateCarriage({ carriage: this.carriageForm.value }));
+    this.store.dispatch(updateCarriage({ carriage: this.form.value }));
   }
 
   private createCarriage(): void {
-    this.store.dispatch(createCarriage({ carriage: this.carriageForm.value }));
+    this.store.dispatch(createCarriage({ carriage: this.form.value }));
   }
 
   private processCarriages(): void {
     if (this.currentMode === 'update') {
-      this.updateCode$.pipe(take(1)).subscribe((code) => {
-        if (code) {
-          this.carriageForm.patchValue({ code });
-          this.updateCarriage();
-        }
-      });
+      this.updateCarriage();
     } else {
-      this.carriageForm.patchValue({ code: this.foundedCarriage?.code });
       this.createCarriage();
     }
   }
 
   public onSubmit(): void {
-    if (this.carriageForm.valid) {
+    if (this.form.valid) {
       this.processCarriages();
       this.closeDialog();
     } else {

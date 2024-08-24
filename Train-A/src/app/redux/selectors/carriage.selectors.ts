@@ -25,3 +25,7 @@ export const selectCarriageByCode = (carriageCode: string) =>
     console.log('[selectCarriageByCode]', foundCarriage);
     return foundCarriage;
   });
+export const selectCarriageByName = (name: string) =>
+  createSelector(selectAllCarriages, (carriages: CarriageItem[]) => {
+    return carriages.find((carriage) => carriage.name === name);
+  });

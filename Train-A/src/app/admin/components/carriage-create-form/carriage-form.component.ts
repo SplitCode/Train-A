@@ -22,6 +22,7 @@ import {
   updateCarriage,
 } from '../../../redux/actions/carriage.actions';
 import { CarriageItem } from '../../models/carriage-item.interface';
+import { uniqueCarriageNameValidator } from '../../utilits/carriage-name.validator';
 
 @Component({
   selector: 'app-carriage-form',
@@ -85,16 +86,25 @@ export class CarriageFormComponent implements OnInit {
 
   private createCarriageForm(foundedCarriage?: CarriageItem): FormGroup {
     return this.fb.group({
-      name: [foundedCarriage?.name, [Validators.required]],
+      name: [
+        foundedCarriage?.name,
+        [
+          Validators.required,
+          ,
+          uniqueCarriageNameValidator(
+            this.store,
+            this.currentMode,
+            foundedCarriage?.name || '',
+          ),
+        ],
+      ],
       rows: [foundedCarriage?.rows, [Validators.required]],
       leftSeats: [foundedCarriage?.leftSeats, [Validators.required]],
       rightSeats: [foundedCarriage?.rightSeats, [Validators.required]],
     });
   }
 
-  // Неудобно, что для закрытия надо в carriageCode: null, надо более наглядно сделать
   public closeDialog(): void {
-    console.log(this.form.value);
     this.form.reset();
     this.store.dispatch(
       showCarriageForm({ carriageCode: null, mode: this.currentMode }),

@@ -1,10 +1,4 @@
 <div class="carriage">
-  <ul>
-    <li>cols {{ config.rows }}</li>
-    <li>left {{ config.leftSeats }}</li>
-    <li>right {{ config.rightSeats }}</li>
-    <li>seats {{ (config.leftSeats + config.rightSeats) * config.rows }}</li>
-  </ul>
   <p-fieldset [legend]="config.name">
     <app-custom-button
       (clickEmitter)="triggerUpdate()"

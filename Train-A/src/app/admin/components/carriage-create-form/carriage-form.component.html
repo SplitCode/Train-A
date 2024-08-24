@@ -11,9 +11,24 @@
       [formGroup]="form"
       (ngSubmit)="onSubmit()"
     >
-      <div class="text-center">
+      <div class="text-center flex flex-col">
         <label class="mb-2 block" for="name"> Name </label>
         <input formControlName="name" pInputText id="name" />
+        <small
+          class="text-red-500"
+          *ngIf="form.get('name')?.hasError('required')"
+        >
+          Name is required.
+        </small>
+        <small
+          class="text-red-500"
+          *ngIf="form.get('name')?.hasError('nameTaken')"
+        >
+          This name is already taken.
+        </small>
+        <small class="text-green-500" *ngIf="form.get('name')?.valid">
+          Name is valid.
+        </small>
       </div>
       <div class="text-center">
         <label class="mb-2 block" for="rows"> Rows </label>

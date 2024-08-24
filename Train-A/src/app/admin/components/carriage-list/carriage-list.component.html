@@ -3,6 +3,9 @@
   [config]="{ styleClass: 'seat', label: 'Create' }"
 />
 <app-carriage-form />
-<div class="" *ngFor="let carriage of carriages$ | async">
-  <app-carriage-item [config]="carriage"></app-carriage-item>
-</div>
+
+<ul class="list-none">
+  <li *ngFor="let carriage of carriages$ | async" class="mb-8">
+    <app-carriage-item [config]="carriage"></app-carriage-item>
+  </li>
+</ul>

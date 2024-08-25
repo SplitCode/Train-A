@@ -1,2 +1,105 @@
-<p>profile-page works!</p>
+<p-card
+  class="flex justify-center mx-auto mt-10"
+  [style]="{ maxWidth: '520px', width: '100%' }"
+>
+  <ng-template pTemplate="header">
+    <h2 class="text-center">Profile</h2>
+  </ng-template>
+
+  <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+    <app-input
+      type="email"
+      label="Email"
+      formControlName="email"
+      tooltip="user@example.com"
+      placeholder="Enter your email"
+    >
+      <div
+        *ngIf="submitted && signUpForm.get('email')?.errors"
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small *ngIf="signUpForm.get('email')?.hasError('required')"
+          >Required</small
+        >
+        <small *ngIf="signUpForm.get('email')?.hasError('pattern')"
+          >Incorrect email</small
+        >
+        <small *ngIf="signUpForm.get('email')?.hasError('serverError')">
+          {{ signUpForm.get("email")?.getError("serverError") }}
+        </small>
+      </div>
+    </app-input>
+
+    <app-input
+      type="password"
+      label="Password"
+      formControlName="passwordField"
+      tooltip="user@example.com"
+      placeholder="Enter your password"
+    >
+      <div
+        *ngIf="submitted && signUpForm.get('password')?.errors"
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small
+          *ngIf="signUpForm.get('password')?.hasError('whitespace')"
+          class="block"
+          >Required</small
+        >
+        <small *ngIf="signUpForm.get('password')?.hasError('minlength')"
+          >Password must be at least 8 characters long</small
+        >
+        <small *ngIf="signUpForm.get('password')?.hasError('serverError')">
+          {{ signUpForm.get("password")?.getError("serverError") }}
+        </small>
+      </div>
+    </app-input>
+
+    <app-input
+      type="password"
+      label="Repeat password"
+      formControlName="repeatPassword"
+      tooltip="user@example.com"
+      placeholder="Repeat your password"
+    >
+      <div
+        *ngIf="
+          (signUpForm.get('repeatPassword')?.dirty || submitted) &&
+          (signUpForm.get('repeatPassword')?.errors ||
+            signUpForm.hasError('passwordsMismatch'))
+        "
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small
+          *ngIf="signUpForm.get('repeatPassword')?.hasError('required')"
+          class="block"
+          >Required</small
+        >
+        <small *ngIf="signUpForm.hasError('passwordsMismatch')"
+          >Passwords do not match</small
+        >
+      </div>
+    </app-input>
+
+    <div class="form-group">
+      <app-custom-button
+        [config]="{
+          label: 'Register',
+          severity: 'primary',
+          type: 'submit',
+          styleClass: 'w-full',
+          disabled: signUpForm.invalid || isSubmitting,
+        }"
+      ></app-custom-button>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div>
+      Already have an account?
+      <a routerLink="/signin" class="text-fuchsia-400">Sign In</a>
+    </div>
+  </ng-template>
+</p-card>
+
 <button (click)="logout()">Logout</button>

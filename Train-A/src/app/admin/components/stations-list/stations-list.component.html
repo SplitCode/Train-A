@@ -1,0 +1,11 @@
+<p-carousel
+  [value]="(stations$ | async) || []"
+  [numVisible]="3"
+  [numScroll]="3"
+  indicatorsContentClass="hidden"
+  [responsiveOptions]="responsiveOptions"
+>
+  <ng-template let-station pTemplate="item">
+    <app-stations-item [station]="station"/>
+  </ng-template>
+</p-carousel>

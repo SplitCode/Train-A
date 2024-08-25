@@ -66,7 +66,7 @@ export class StationsFormComponent implements OnInit {
           city: station.city,
           latitude: station.latitude,
           longitude: station.longitude,
-          relations: station.relations || [],
+          relations: station.connectedTo || [],
         });
       } else {
         this.resetForm();
@@ -85,7 +85,6 @@ export class StationsFormComponent implements OnInit {
 
   onSubmit() {
     const stationData = this.newStationForm.value;
-    console.log(this.newStationForm.value);
 
     this.store.dispatch(createStation({ station: stationData }));
   }

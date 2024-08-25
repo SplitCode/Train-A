@@ -1,6 +1,6 @@
 export interface ConnectedStations {
-  id?: number;
-  distance?: number;
+  id: number;
+  distance: number;
 }
 
 export interface StationsItem {
@@ -8,7 +8,7 @@ export interface StationsItem {
   city: string;
   latitude: number;
   longitude: number;
-  relations: ConnectedStations[];
+  connectedTo?: ConnectedStations[];
 }
 
 export interface StationsState {

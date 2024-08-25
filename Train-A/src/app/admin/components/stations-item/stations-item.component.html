@@ -1,0 +1,10 @@
+<div class="bg-zinc-700 border-md p-4 md:mx-2 h-full flex flex-col">
+  <h3 class="mt-0 mb-4 capitalize">{{station.city}}</h3>
+  <p class="mb-2 mt-0">{{station.latitude}}, {{station.longitude}}</p>
+  <span class="mt-auto mb-1">Connected to:</span>
+  <ul class="list-none pl-0 flex flex-wrap gap-y-[2px] gap-x-1 mt-0 mb-0">
+    <li class="capitalize" *ngFor="let connectedTo of station.connectedTo">
+      {{ getCityName(connectedTo.id) | async }} |
+    </li>
+  </ul>
+</div>

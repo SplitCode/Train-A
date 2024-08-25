@@ -1,0 +1,7 @@
+.ng-dirty.ng-invalid {
+  border-color: transparent;
+}
+
+::ng-deep p-password.ng-invalid.ng-dirty > .p-password > .p-inputtext {
+  border-color: transparent;
+}

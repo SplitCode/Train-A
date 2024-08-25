@@ -1,3 +1,18 @@
-<div class="" *ngFor="let carriage of carriages$ | async">
-  <app-carriage-item [config]="carriage"></app-carriage-item>
-</div>
+<app-custom-button
+  (clickEmitter)="triggerCreate()"
+  [config]="{
+    styleClass: 'seat my-3',
+    label: 'Create',
+    icon: 'pi pi-file-plus',
+  }"
+/>
+<app-carriage-form />
+
+<p-panel class="mt-3 p-4 max-w-fit" header="Carriage List">
+  <ul class="list-none p-0">
+    <li *ngFor="let carriage of carriages$ | async" class="mb-8 p-0">
+      <app-carriage-item [config]="carriage"></app-carriage-item>
+      <p-divider />
+    </li>
+  </ul>
+</p-panel>

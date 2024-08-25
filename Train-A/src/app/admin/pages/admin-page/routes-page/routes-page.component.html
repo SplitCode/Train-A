@@ -1,9 +1,9 @@
-<section class="flex p-6">
   <app-custom-button
-    [config]="{
-      label: 'Create',
-      severity: 'primary',
-      type: 'button',
-    }"
-  ></app-custom-button>
-</section>
+  (clickEmitter)="triggerCreate()"
+  [config]="{
+    styleClass: 'seat my-3',
+    label: 'Create',
+    icon: 'pi pi-file-plus',
+  }"
+></app-custom-button>
+

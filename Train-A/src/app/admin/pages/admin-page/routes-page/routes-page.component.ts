@@ -8,4 +8,8 @@ import { CustomButtonComponent } from '../../../../shared/components/custom-butt
   templateUrl: './routes-page.component.html',
   styleUrl: './routes-page.component.scss',
 })
-export class RoutesPageComponent {}
+export class RoutesPageComponent {
+  public triggerCreate(): void {
+    console.log('click');
+  }
+}

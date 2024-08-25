@@ -3,6 +3,10 @@ export interface AuthRequest {
   password: string;
 }
 
+export type AuthResponse = {
+  token: string;
+};
+
 export interface ServerError {
   email?: string;
   password?: string;

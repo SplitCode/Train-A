@@ -4,4 +4,5 @@ export interface CarriageItem {
   name: string;
   rightSeats: number;
   rows: number;
+  mode?: string;
 }

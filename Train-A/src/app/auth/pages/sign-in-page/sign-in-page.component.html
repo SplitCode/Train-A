@@ -1,1 +1,83 @@
-<p>sign-in-page works!</p>
+<p-card class="flex justify-center mx-auto mt-10" [style]="{ width: '360px' }">
+  <ng-template pTemplate="header">
+    <h2 class="text-center">Sign In</h2>
+  </ng-template>
+
+  <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+    <div class="form-group mb-4">
+      <label for="email" class="block mb-1">Email</label>
+      <input
+        type="text"
+        pInputText
+        formControlName="email"
+        class="w-full"
+        name="email"
+        pTooltip="user@example.com"
+        tooltipPosition="top"
+        placeholder="Enter your email"
+      />
+      <div
+        *ngIf="submitted && signInForm.get('email')?.errors"
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small *ngIf="signInForm.get('email')?.hasError('required')"
+          >Required</small
+        >
+        <small *ngIf="signInForm.get('email')?.hasError('pattern')"
+          >Incorrect email</small
+        >
+        <small *ngIf="signInForm.get('email')?.hasError('serverError')">
+          {{ signInForm.get("email")?.getError("serverError") }}
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group mb-4">
+      <label for="password" class="block mb-1">Password</label>
+      <p-password
+        formControlName="password"
+        class="w-full block"
+        [feedback]="false"
+        [toggleMask]="true"
+        [inputStyle]="{ width: '100%' }"
+        [style]="{ width: '100%' }"
+        pTooltip="at least 8 characters"
+        tooltipPosition="top"
+        placeholder="Enter your password"
+      />
+      <div
+        *ngIf="submitted && signInForm.get('password')?.errors"
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small *ngIf="signInForm.get('password')?.hasError('whitespace')"
+          >Required</small
+        >
+        <small *ngIf="signInForm.get('password')?.hasError('minlength')"
+          >Password must be at least 8 characters long</small
+        >
+        <small *ngIf="signInForm.get('password')?.hasError('serverError')">
+          {{ signInForm.get("password")?.getError("serverError") }}
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <app-custom-button
+        [config]="{
+          label: 'Sign In',
+          severity: 'primary',
+          type: 'submit',
+          styleClass: 'w-full',
+          disabled: signInForm.invalid || isSubmitting,
+        }"
+      ></app-custom-button>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div>
+      Don&apos;t have an account?
+      <a routerLink="/signup" class="text-fuchsia-400">Sign Up</a>
+    </div>
+  </ng-template>
+</p-card>

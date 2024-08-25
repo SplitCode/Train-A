@@ -23,3 +23,8 @@ export const createStationFailure = createAction(
   '[Stations] Create Station Failure',
   props<{ error: string }>(),
 );
+
+export const createSelectStation = createAction(
+  '[Selected Stations] Selecected Station',
+  props<{ id: number | null }>(),
+);

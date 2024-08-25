@@ -15,16 +15,9 @@ export class StationsService {
     return this.http.get<StationsItem[]>(this.apiUrl);
   }
 
-  public postStation(form: StationsItem) {
-    const headers = { 'Content-Type': 'application/json' };
-    const body = { ...form };
-
-    console.log('get it');
-
+  public postStation(form: StationsItem): Observable<StationsItem['id']> {
     return this.http
-      .post<{ id: number }>(`${this.apiUrl}`, body, {
-        headers: headers,
-      })
+      .post<{ id: number }>(`${this.apiUrl}`, form)
       .pipe(map((response) => response.id));
   }
 }

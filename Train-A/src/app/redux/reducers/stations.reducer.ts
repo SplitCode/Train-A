@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { StationsState, initialStationsState } from '../states/stations.state';
 import {
+  createSelectStation,
   createStation,
   createStationFailure,
   createStationSuccess,
@@ -49,6 +50,14 @@ export const stationsReducer = createReducer(
     (state, { error }): StationsState => ({
       ...state,
       error,
+    }),
+  ),
+
+  on(
+    createSelectStation,
+    (state, { id }): StationsState => ({
+      ...state,
+      selectedStationID: id,
     }),
   ),
 );

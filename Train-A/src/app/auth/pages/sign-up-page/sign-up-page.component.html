@@ -12,6 +12,8 @@
         formControlName="email"
         class="w-full"
         name="email"
+        pTooltip="user@example.com"
+        tooltipPosition="top"
         placeholder="Enter your email"
       />
       <div
@@ -32,19 +34,24 @@
 
     <div class="form-group mb-4">
       <label for="password" class="block mb-1">Password</label>
-      <input
-        type="password"
-        pInputText
+      <p-password
         formControlName="password"
         class="w-full"
-        name="password"
+        [feedback]="false"
+        [toggleMask]="true"
+        [inputStyle]="{ width: '100%' }"
+        [style]="{ width: '100%' }"
+        pTooltip="at least 8 characters"
+        tooltipPosition="top"
         placeholder="Enter your password"
       />
       <div
         *ngIf="submitted && signUpForm.get('password')?.errors"
         class="font-extralight text-red-500 mt-1"
       >
-        <small *ngIf="signUpForm.get('password')?.hasError('required')"
+        <small
+          *ngIf="signUpForm.get('password')?.hasError('whitespace')"
+          class="block"
           >Required</small
         >
         <small *ngIf="signUpForm.get('password')?.hasError('minlength')"
@@ -58,12 +65,13 @@
 
     <div class="form-group mb-4">
       <label for="repeatPassword" class="block mb-1">Repeat password</label>
-      <input
-        type="password"
-        pInputText
+      <p-password
         formControlName="repeatPassword"
         class="w-full"
-        name="repeatPassword"
+        [feedback]="false"
+        [toggleMask]="true"
+        [inputStyle]="{ width: '100%' }"
+        [style]="{ width: '100%' }"
         placeholder="Repeat your password"
       />
       <div

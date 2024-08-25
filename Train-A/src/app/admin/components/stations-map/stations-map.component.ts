@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 import { StationsItem } from '../../../redux/states/stations.state';
 import { selectAllStations } from '../../../redux/selectors/stations.selectors';
 import { Observable, Subscription } from 'rxjs';
+import { createSelectStation } from '../../../redux/actions/stations.actions';
 
 @Component({
   selector: 'app-stations-map',
@@ -47,13 +48,21 @@ export class StationsMapComponent implements AfterViewInit, OnDestroy {
 
     this.markers = [];
 
-    // Add new markers to the map
     stations.forEach((station) => {
       const marker = L.marker([station.latitude, station.longitude])
         .addTo(this.map)
         .bindPopup(`Station: ${station.city}`);
 
       this.markers.push(marker);
+
+      marker.on('click', () => {
+        console.log(`Clicked on station: ${station.id}`);
+        this.store.dispatch(createSelectStation({ id: station.id }));
+      });
+
+      marker.on('popupclose', () => {
+        this.store.dispatch(createSelectStation({ id: null }));
+      });
     });
 
     this.centerMap();

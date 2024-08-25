@@ -8,15 +8,17 @@ export interface StationsItem {
   city: string;
   latitude: number;
   longitude: number;
-  connectedTo: ConnectedStations[];
+  relations: ConnectedStations[];
 }
 
 export interface StationsState {
   stations: StationsItem[];
   error: string;
+  selectedStationID: number | null;
 }
 
 export const initialStationsState: StationsState = {
   stations: [],
   error: '',
+  selectedStationID: null,
 };

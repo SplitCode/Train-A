@@ -1,0 +1,113 @@
+<p-dialog
+  [header]="title"
+  [modal]="true"
+  [(visible)]="isVisible"
+  [style]="{ width: '70%' }"
+  (onHide)="closeDialog()"
+>
+  <div class="flex gap-4 items-center">
+    <form
+      class="flex flex-col gap-4 text-center"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="text-center flex flex-col">
+        <label class="mb-2 block" for="name"> Name </label>
+        <input formControlName="name" pInputText id="name" />
+        <small
+          class="text-red-500"
+          *ngIf="form.get('name')?.hasError('required')"
+        >
+          Name is required.
+        </small>
+        <small
+          class="text-red-500"
+          *ngIf="form.get('name')?.hasError('nameTaken')"
+        >
+          This name is already taken.
+        </small>
+        <small class="text-green-500" *ngIf="form.get('name')?.valid">
+          Name is valid.
+        </small>
+      </div>
+      <div class="text-center flex flex-col">
+        <label class="mb-2 block" for="rows"> Rows </label>
+        <p-inputNumber
+          id="rows"
+          formControlName="rows"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+          [min]="1"
+        />
+        <small
+          class="text-red-500"
+          *ngIf="form.get('rows')?.hasError('required')"
+        >
+          Rows is required.
+        </small>
+        <small class="text-green-500" *ngIf="form.get('rows')?.valid">
+          Rows is valid.
+        </small>
+      </div>
+      <div class="text-center flex flex-col">
+        <label class="mb-2 block" for="rows"> Left Seats Cols </label>
+        <p-inputNumber
+          id="leftSeats"
+          formControlName="leftSeats"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+        <small
+          class="text-red-500"
+          *ngIf="form.get('leftSeats')?.hasError('required')"
+        >
+          Left Seats is required.
+        </small>
+        <small class="text-green-500" *ngIf="form.get('leftSeats')?.valid">
+          Left Seats is valid.
+        </small>
+      </div>
+      <div class="text-center flex flex-col">
+        <label class="mb-2 block" for="rows"> Right Seats Cols </label>
+        <p-inputNumber
+          id="rightSeats"
+          formControlName="rightSeats"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+        />
+        <small
+          class="text-red-500"
+          *ngIf="form.get('rightSeats')?.hasError('required')"
+        >
+          Right Seats is required.
+        </small>
+        <small class="text-green-500" *ngIf="form.get('rightSeats')?.valid">
+          Right Seats is valid.
+        </small>
+      </div>
+
+      <app-custom-button
+        [config]="{
+          disabled: !form.valid,
+          label: currentMode === 'update' ? 'Update' : 'Save',
+          type: 'submit',
+        }"
+      />
+    </form>
+    <app-carriage-item
+      [config]="{
+        code: form.get('code')?.value,
+        rows: form.get('rows')?.value,
+        leftSeats: form.get('leftSeats')?.value,
+        rightSeats: form.get('rightSeats')?.value,
+        name: form.get('name')?.value,
+        mode: 'interActive',
+      }"
+    ></app-carriage-item></div
+></p-dialog>

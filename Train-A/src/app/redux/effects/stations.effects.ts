@@ -6,10 +6,13 @@ import {
   loadStations,
   loadStationsSuccess,
   loadStationsFailure,
+  createStationFailure,
+  createStationSuccess,
+  createStation,
 } from '../actions/stations.actions';
 
 @Injectable()
-export class CarriageEffects {
+export class StationsEffects {
   private actions$ = inject(Actions);
 
   loadStations$ = createEffect(() => {
@@ -19,6 +22,28 @@ export class CarriageEffects {
         this.stationsService.getStations().pipe(
           map((stations) => loadStationsSuccess({ stations })),
           catchError((error) => of(loadStationsFailure({ error }))),
+        ),
+      ),
+    );
+  });
+
+  createStation$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createStation),
+      mergeMap(({ station }) =>
+        this.stationsService.postStation(station).pipe(
+          map((id) => {
+            if (id === undefined || id === null) {
+              throw new Error('Invalid ID received');
+            }
+            return createStationSuccess({ station: { ...station, id: id } });
+          }),
+          catchError((error) => {
+            console.error('Error creating station:', error);
+            return of(
+              createStationFailure({ error: error.message || 'Unknown error' }),
+            );
+          }),
         ),
       ),
     );

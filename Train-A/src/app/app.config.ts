@@ -17,6 +17,7 @@ import { StoreModule, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { indexReducer, metaReducers } from './redux/reducers/index.reducer';
 import { PRIME_NG_MODULES } from './shared/modules/prime-ng-modules';
+import { StationsEffects } from './redux/effects/stations.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,7 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     CarriageService,
-    provideEffects([UserEffects, CarriageEffects]),
+    provideEffects([UserEffects, CarriageEffects, StationsEffects]),
     PRIME_NG_MODULES.MessageService,
     importProvidersFrom(
       BrowserAnimationsModule,

@@ -4,28 +4,28 @@
   class="flex flex-col h-full"
 >
   <div class="form-group mb-4">
-    <label for="cityName" class="block mb-1">City Name</label>
+    <label for="city" class="block mb-1">City Name</label>
     <input
       type="text"
       pInputText
-      formControlName="cityName"
+      formControlName="city"
       class="w-full"
-      name="cityName"
+      name="city"
       placeholder="Enter City Name"
     />
     <div
       *ngIf="
-        newStationForm.get('cityName')?.invalid &&
-        (newStationForm.get('cityName')?.dirty ||
-          newStationForm.get('cityName')?.touched)
+        newStationForm.get('city')?.invalid &&
+        (newStationForm.get('city')?.dirty ||
+          newStationForm.get('city')?.touched)
       "
       class="font-extralight text-red-500 mt-1"
     >
-      <small *ngIf="newStationForm.get('cityName')?.hasError('required')">
+      <small *ngIf="newStationForm.get('city')?.hasError('required')">
         Required
       </small>
       <small
-        *ngIf="newStationForm.get('cityName')?.hasError('minlength')"
+        *ngIf="newStationForm.get('city')?.hasError('minlength')"
       >
         Minimal length is 3
       </small>

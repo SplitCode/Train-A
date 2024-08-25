@@ -4,7 +4,7 @@ import { StationsState } from './../states/stations.state';
 export const selectStationsState =
   createFeatureSelector<StationsState>('stationsState');
 
-export const selectAllCarriages = createSelector(
+export const selectAllStations = createSelector(
   selectStationsState,
   (state: StationsState) => state.stations,
 );

@@ -1,5 +1,9 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { Store } from '@ngrx/store';
 import * as L from 'leaflet';
+import { StationsItem } from '../../../redux/states/stations.state';
+import { selectAllStations } from '../../../redux/selectors/stations.selectors';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-stations-map',
@@ -8,22 +12,28 @@ import * as L from 'leaflet';
   templateUrl: './stations-map.component.html',
   styleUrl: './stations-map.component.scss',
 })
-export class StationsMapComponent implements AfterViewInit {
+export class StationsMapComponent implements AfterViewInit, OnDestroy {
   private map!: L.Map;
 
-  markers: L.Marker[] = [L.marker([55.678, 24.34]), L.marker([57.678, 26.34])];
+  private subscriptions: Subscription = new Subscription();
+
+  stations$: Observable<StationsItem[]>;
+
+  markers: L.Marker[] = [];
+
+  constructor(private store: Store) {
+    this.stations$ = this.store.select(selectAllStations);
+  }
 
   private initializeMap() {
     this.map = L.map('map', {
       center: [39.8282, -98.5795],
       zoom: 3,
-    });
+    }).setView([0, 0], 2);
 
     const tiles = L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       {
-        maxZoom: 18,
-        minZoom: 3,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       },
@@ -32,20 +42,49 @@ export class StationsMapComponent implements AfterViewInit {
     tiles.addTo(this.map);
   }
 
-  private addMarkers() {
-    this.markers.forEach((marker) => marker.addTo(this.map));
+  private addMarkers(stations: StationsItem[]): void {
+    this.markers.forEach((marker) => marker.remove());
+
+    this.markers = [];
+
+    // Add new markers to the map
+    stations.forEach((station) => {
+      const marker = L.marker([station.latitude, station.longitude])
+        .addTo(this.map)
+        .bindPopup(`Station: ${station.city}`);
+
+      this.markers.push(marker);
+    });
+
+    this.centerMap();
   }
 
   private centerMap() {
-    const bounds = L.latLngBounds(
-      this.markers.map((marker) => marker.getLatLng()),
-    );
-    this.map.fitBounds(bounds);
+    if (this.markers.length > 0) {
+      const group = new L.FeatureGroup(this.markers);
+      const bounds = group.getBounds();
+
+      if (bounds.isValid()) {
+        this.map.fitBounds(bounds);
+      } else {
+        console.warn('Bounds are not valid, skipping fitBounds.');
+      }
+    } else {
+      console.warn('No markers available to center the map.');
+    }
   }
 
   ngAfterViewInit() {
     this.initializeMap();
-    this.addMarkers();
     this.centerMap();
+
+    this.stations$.subscribe((stations) => {
+      this.addMarkers(stations);
+    });
+    this.subscriptions.add(this.stations$.subscribe());
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

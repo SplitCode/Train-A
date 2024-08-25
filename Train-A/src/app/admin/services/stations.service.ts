@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { API_CONFIG } from '../../config/api.config';
 import { StationsItem } from '../../redux/states/stations.state';
 @Injectable({
@@ -11,7 +11,20 @@ export class StationsService {
 
   constructor(private http: HttpClient) {}
 
-  getStations(): Observable<StationsItem[]> {
+  public getStations(): Observable<StationsItem[]> {
     return this.http.get<StationsItem[]>(this.apiUrl);
+  }
+
+  public postStation(form: StationsItem) {
+    const headers = { 'Content-Type': 'application/json' };
+    const body = { ...form };
+
+    console.log('get it');
+
+    return this.http
+      .post<{ id: number }>(`${this.apiUrl}`, body, {
+        headers: headers,
+      })
+      .pipe(map((response) => response.id));
   }
 }

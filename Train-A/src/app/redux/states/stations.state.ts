@@ -1,6 +1,6 @@
 export interface ConnectedStations {
-  id: number;
-  distance: number;
+  id?: number;
+  distance?: number;
 }
 
 export interface StationsItem {
@@ -13,8 +13,10 @@ export interface StationsItem {
 
 export interface StationsState {
   stations: StationsItem[];
+  error: string;
 }
 
 export const initialStationsState: StationsState = {
   stations: [],
+  error: '',
 };

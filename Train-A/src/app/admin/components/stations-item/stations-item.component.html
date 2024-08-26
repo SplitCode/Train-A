@@ -1,4 +1,13 @@
-<div class="bg-zinc-700 border-md p-4 md:mx-2 h-full flex flex-col">
+<div class="relative bg-zinc-700 border-md p-4 md:mx-2 h-full flex flex-col">
+  <app-custom-button
+    [config]="{
+      type: 'button',
+      icon: 'pi pi-trash',
+      styleClass: 'hover:text-red-600 bg-transparent border-none border-0'
+    }"
+    class="absolute top-2 right-2"
+    (click)="visible = true"
+  />
   <h3 class="mt-0 mb-4 capitalize">{{station.city}}</h3>
   <p class="mb-2 mt-0">{{station.latitude}}, {{station.longitude}}</p>
   <span class="mt-auto mb-1">Connected to:</span>
@@ -8,3 +17,9 @@
     </li>
   </ul>
 </div>
+<p-dialog draggable="false" header="Are you sure to delete {{station.city}} station?" [modal]="true" [(visible)]="visible">
+  <div class="flex justify-between">
+    <app-custom-button [config]="{label: 'Cancel', outlined:true}" (click)="visible = false"/>
+    <app-custom-button [config]="{label: 'Confrim'}" (click)="visible = false; deleteStation(station.id)"/>
+  </div>
+</p-dialog>

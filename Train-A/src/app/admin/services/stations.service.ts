@@ -20,4 +20,10 @@ export class StationsService {
       .post<{ id: number }>(`${this.apiUrl}`, form)
       .pipe(map((response) => response.id));
   }
+
+  public deleteStation(id: number) {
+    return this.http
+      .delete<{ id: number }>(`${this.apiUrl}/${id}`)
+      .pipe(map((response) => response));
+  }
 }

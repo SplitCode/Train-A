@@ -6,11 +6,12 @@ import { StationsItem } from '../../../redux/states/stations.state';
 import { selectAllStations } from '../../../redux/selectors/stations.selectors';
 import { CommonModule } from '@angular/common';
 import { StationsItemComponent } from '../stations-item/stations-item.component';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-stations-list',
   standalone: true,
-  imports: [CommonModule, CarouselModule, StationsItemComponent],
+  imports: [CommonModule, CarouselModule, StationsItemComponent, DialogModule],
   templateUrl: './stations-list.component.html',
   styleUrl: './stations-list.component.scss',
 })

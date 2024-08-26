@@ -9,6 +9,9 @@ import {
   createStationFailure,
   createStationSuccess,
   createStation,
+  deletedStation,
+  deletedStationSuccess,
+  deletedStationFailure,
 } from '../actions/stations.actions';
 
 @Injectable()
@@ -42,6 +45,25 @@ export class StationsEffects {
             console.error('Error creating station:', error);
             return of(
               createStationFailure({ error: error.message || 'Unknown error' }),
+            );
+          }),
+        ),
+      ),
+    );
+  });
+
+  deleteStation$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(deletedStation),
+      mergeMap(({ id }) =>
+        this.stationsService.deleteStation(id).pipe(
+          map(() => deletedStationSuccess({ stationId: id })),
+          catchError((error) => {
+            console.error('Error deleting station:', error);
+            return of(
+              deletedStationFailure({
+                error: error.message || 'Unknown error',
+              }),
             );
           }),
         ),

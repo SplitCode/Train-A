@@ -28,3 +28,16 @@ export const createSelectStation = createAction(
   '[Selected Stations] Selecected Station',
   props<{ id: number | null }>(),
 );
+
+export const deletedStation = createAction(
+  '[Deleted Stations] Deleted Station',
+  props<{ id: number }>(),
+);
+export const deletedStationSuccess = createAction(
+  '[Deleted Stations] Deleted Station Success',
+  props<{ stationId: number }>(),
+);
+export const deletedStationFailure = createAction(
+  '[Deleted Stations] Deleted Station Failure',
+  props<{ error: string }>(),
+);

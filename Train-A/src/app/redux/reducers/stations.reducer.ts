@@ -5,6 +5,9 @@ import {
   createStation,
   createStationFailure,
   createStationSuccess,
+  deletedStation,
+  deletedStationFailure,
+  deletedStationSuccess,
   loadStations,
   loadStationsFailure,
   loadStationsSuccess,
@@ -58,6 +61,26 @@ export const stationsReducer = createReducer(
     (state, { id }): StationsState => ({
       ...state,
       selectedStationID: id,
+    }),
+  ),
+
+  on(deletedStation, (state): StationsState => {
+    return {
+      ...state,
+    };
+  }),
+  on(
+    deletedStationSuccess,
+    (state, { stationId }): StationsState => ({
+      ...state,
+      stations: state.stations.filter((station) => station.id !== stationId),
+    }),
+  ),
+  on(
+    deletedStationFailure,
+    (state, { error }): StationsState => ({
+      ...state,
+      error,
     }),
   ),
 );

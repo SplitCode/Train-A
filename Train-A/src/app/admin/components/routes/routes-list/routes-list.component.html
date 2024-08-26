@@ -1,5 +1,5 @@
 <app-custom-button
-  (clickEmitter)="triggerCreate()"
+  (clickEmitter)="createRoute()"
   [config]="{
     styleClass: 'seat my-3',
     label: 'Create',
@@ -7,19 +7,11 @@
   }"
 ></app-custom-button>
 
-<!-- <p-panel class="mt-3 p-4 max-w-fit" header="Route List">
+<p-panel class="mt-3 p-4 max-w-fit" header="Routes">
   <ul class="list-none p-0">
     <li *ngFor="let route of routes$ | async" class="mb-8 p-0">
-      <app-route-item [config]="route"></app-route-item>
+      <app-routes-item [config]="route"></app-routes-item>
       <p-divider />
     </li>
   </ul>
-</p-panel> -->
-
-<!-- <div *ngFor="let route of routes" class="route-card">
-  <h3>{{ route.path.join(' -> ') }}</h3>
-  <p>Carriages: {{ route.carriages.join(', ') }}</p>
-  <button (click)="deleteRoute(route.id)">Delete</button>
-  <button routerLink="/assign-ride/{{ route.id }}">Assign Ride</button>
-  <button routerLink="/update-route/{{ route.id }}">Update</button>
-</div> -->
+</p-panel>

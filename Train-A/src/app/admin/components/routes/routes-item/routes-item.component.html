@@ -1,0 +1,43 @@
+<div class="route-container">
+  <div class="route">
+    <div class="flex justify-end gap-2">
+      <app-custom-button
+        (clickEmitter)="updateRoute()"
+        [config]="{
+          label: 'Update',
+          styleClass: 'my-2',
+          icon: 'pi pi-file-edit',
+        }"
+      />
+      <app-custom-button
+        (clickEmitter)="deleteRoute()"
+        [config]="{
+          label: 'Delete',
+          styleClass: 'my-2',
+          icon: 'pi pi-trash',
+        }"
+      />
+      <app-custom-button
+        (clickEmitter)="assignRide()"
+        [config]="{
+          label: 'Assign Ride',
+          styleClass: 'my-2',
+          icon: 'pi pi-calendar',
+        }"
+      />
+    </div>
+
+    <p-fieldset [legend]="'Route ' + config.id.toString()">
+      <div class="flex flex-col gap-4">
+        <div>
+          <div>Cities:</div>
+          <div>{{ config.path.join(" - ") }}</div>
+        </div>
+        <div>
+          <div>Carriage Types:</div>
+          <div>{{ config.carriages.join(" - ") }}</div>
+        </div>
+      </div>
+    </p-fieldset>
+  </div>
+</div>

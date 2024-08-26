@@ -18,6 +18,7 @@ export class OrderService {
     return this.http.get<OrderItem[]>(this.orderUrl);
   }
 
+  // (must be only for manager)
   public getUsers(): Observable<OrderItem[]> {
     return this.http.get<OrderItem[]>(this.userUrl);
   }

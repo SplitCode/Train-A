@@ -1,15 +1,10 @@
 import { Component } from '@angular/core';
-import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
+import { RoutesListComponent } from '../../../components/routes/routes-list/routes-list.component';
 
 @Component({
   selector: 'app-routes-page',
   standalone: true,
-  imports: [CustomButtonComponent],
+  imports: [RoutesListComponent],
   templateUrl: './routes-page.component.html',
-  styleUrl: './routes-page.component.scss',
 })
-export class RoutesPageComponent {
-  public triggerCreate(): void {
-    console.log('click');
-  }
-}
+export class RoutesPageComponent {}

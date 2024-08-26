@@ -1,6 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { RoutesItem } from '../../admin/models/routes-item.interface';
 
+export const loadRoutesPage = createAction(
+  '[Routes Page] Load Routes and Carriages',
+);
+
 export const loadRoutes = createAction('[Routes List] Load Routes');
 
 export const loadRoutesSuccess = createAction(

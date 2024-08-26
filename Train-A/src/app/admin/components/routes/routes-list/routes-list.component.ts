@@ -1,3 +1,4 @@
+/* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { CommonModule } from '@angular/common';
@@ -9,6 +10,7 @@ import { loadRoutes } from '../../../../redux/actions/routes.actions';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { RoutesItemComponent } from '../routes-item/routes-item.component';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
+import { loadCarriages } from '../../../../redux/actions/carriage.actions';
 
 @Component({
   selector: 'app-routes-list',
@@ -34,8 +36,9 @@ export class RoutesListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // TODO: find solution to avoid dispatch many actions
+    this.store.dispatch(loadCarriages());
     this.store.dispatch(loadRoutes());
-    // this.subscription.add(this.routes$.subscribe());
 
     const allCarriages$ = this.store.select(selectAllCarriages);
 
@@ -52,28 +55,11 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     this.subscription.add(this.routes$.subscribe());
   }
 
-  // public ngOnInit() {
-  //   this.store.dispatch(loadRoutes());
-  //   this.subscription.add(
-  //     this.routes$.subscribe((routes) => {
-  //       console.log('Routes from store:', routes);
-  //     }),
-  //   );
-  // }
-
   public ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
   public createRoute(): void {
-    console.log('click');
-    // this.service.getRoutes().subscribe({
-    //   next: (data) => {
-    //     console.log('Routes:', data);
-    //   },
-    //   error: (error) => {
-    //     console.error('Ошибка при получении маршрутов:', error);
-    //   },
-    // });
+    console.log('create');
   }
 }

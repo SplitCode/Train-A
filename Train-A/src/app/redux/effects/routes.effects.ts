@@ -7,6 +7,7 @@ import {
   loadRoutesSuccess,
   loadRoutesFailure,
 } from '../actions/routes.actions';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class RoutesEffects {
@@ -24,5 +25,8 @@ export class RoutesEffects {
     );
   });
 
-  constructor(private routesService: RoutesService) {}
+  constructor(
+    private routesService: RoutesService,
+    private store: Store,
+  ) {}
 }

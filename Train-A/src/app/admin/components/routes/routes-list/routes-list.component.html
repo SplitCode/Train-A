@@ -9,8 +9,11 @@
 
 <p-panel class="mt-3 p-4 max-w-fit" header="Routes">
   <ul class="list-none p-0">
-    <li *ngFor="let route of routes$ | async" class="mb-8 p-0">
-      <app-routes-item [config]="route"></app-routes-item>
+    <li *ngFor="let route of routes$ | async; let i = index" class="mb-8 p-0">
+      <app-routes-item
+        [config]="route"
+        [carriageNames]="(carriageNames$ | async)?.[i] || []"
+      ></app-routes-item>
       <p-divider />
     </li>
   </ul>

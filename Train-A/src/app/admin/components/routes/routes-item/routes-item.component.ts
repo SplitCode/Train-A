@@ -15,6 +15,8 @@ import { CommonModule } from '@angular/common';
 export class RoutesItemComponent {
   @Input() public config!: RoutesItem;
 
+  @Input() public carriageNames!: string[];
+
   constructor(private store: Store) {}
 
   public updateRoute(): void {

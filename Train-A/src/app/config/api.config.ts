@@ -5,4 +5,5 @@ export const API_CONFIG = {
   ordersUrl: '/api/order',
   usersUrl: '/api/users',
   searchUrl: '/api/search',
+  stationsUrl: '/api/station',
 };

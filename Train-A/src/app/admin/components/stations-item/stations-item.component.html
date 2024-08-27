@@ -13,7 +13,8 @@
   <span class="mt-auto mb-1">Connected to:</span>
   <ul class="list-none pl-0 flex flex-wrap gap-y-[2px] gap-x-1 mt-0 mb-0">
     <li class="capitalize" *ngFor="let connectedTo of station.connectedTo">
-      {{ getCityName(connectedTo.id) | async }} |
+      {{ connectedTo.id }} |
+      <!-- {{ getCityName(connectedTo.id) | async }} | -->
     </li>
   </ul>
 </div>

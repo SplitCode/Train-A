@@ -68,18 +68,20 @@ export class StationsFormComponent implements OnInit {
           Validators.pattern('^-?([0-9]{1,2}|1[0-7][0-9]|180)(.[0-9]{1,30})$'),
         ],
       ],
-      relations: [null, Validators.required],
+      relations: [this.connectedStations$, Validators.required],
     });
   }
 
   ngOnInit(): void {
     this.selectedStation$.subscribe((station) => {
       if (station) {
+        const selectedIds = station.connectedTo?.map((item) => item.id) || [];
+
         this.newStationForm.patchValue({
           city: station.city,
           latitude: station.latitude,
           longitude: station.longitude,
-          relations: station.connectedTo?.map((item) => item.id) || [],
+          relations: selectedIds,
         });
         console.log('Selected Pin: ', this.newStationForm.value);
       } else {
@@ -112,6 +114,8 @@ export class StationsFormComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.newStationForm.value);
+
     const stationData = {
       ...this.newStationForm.value,
       relations: this.newStationForm.value.relations.map(

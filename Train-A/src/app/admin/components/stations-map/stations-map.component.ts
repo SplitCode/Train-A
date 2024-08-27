@@ -49,17 +49,7 @@ export class StationsMapComponent implements AfterViewInit, OnDestroy {
     this.markers = [];
 
     stations.forEach((station) => {
-      const myIcon = L.icon({
-        iconUrl: '/assets/leaflet/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [25, 41],
-        // popupAnchor: [-3, -76],
-        shadowUrl: '',
-      });
-
-      const marker = L.marker([station.latitude, station.longitude], {
-        icon: myIcon,
-      })
+      const marker = L.marker([station.latitude, station.longitude])
         .addTo(this.map)
         .bindPopup(`Station: ${station.city}`);
 

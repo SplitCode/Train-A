@@ -6,8 +6,10 @@ import {
   loadRoutes,
   loadRoutesSuccess,
   loadRoutesFailure,
+  deleteRoute,
+  deleteRouteSuccess,
+  deleteRouteFailure,
 } from '../actions/routes.actions';
-import { Store } from '@ngrx/store';
 
 @Injectable()
 export class RoutesEffects {
@@ -25,8 +27,17 @@ export class RoutesEffects {
     );
   });
 
-  constructor(
-    private routesService: RoutesService,
-    private store: Store,
-  ) {}
+  deleteRoute$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(deleteRoute),
+      mergeMap((action) =>
+        this.routesService.deleteRoute(action.routeId).pipe(
+          map(() => deleteRouteSuccess({ routeId: action.routeId })),
+          catchError((error) => of(deleteRouteFailure({ error }))),
+        ),
+      ),
+    );
+  });
+
+  constructor(private routesService: RoutesService) {}
 }

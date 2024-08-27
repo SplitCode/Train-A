@@ -16,6 +16,10 @@ export class RoutesService {
     return this.http.get<RoutesItem[]>(this.apiUrl);
   }
 
+  public deleteRoute(routeId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${routeId}`);
+  }
+
   // public createRoute(route: RoutesItem): Observable<RoutesItem['code']> {
   //   return this.http
   //     .post<{ code: RoutesItem['code'] }>(this.apiUrl, route)
@@ -26,9 +30,5 @@ export class RoutesService {
   //   return this.http
   //     .put<{ code: RoutesItem['code'] }>(`${this.apiUrl}/${route.id}`, route)
   //     .pipe(map((response) => response.code));
-  // }
-
-  // public deleteRoute(routeId: number): Observable<void> {
-  //   return this.http.delete<void>(`${this.apiUrl}/${routeId}`);
   // }
 }

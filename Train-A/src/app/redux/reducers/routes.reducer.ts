@@ -1,9 +1,12 @@
-import { createReducer, on } from '@ngrx/store';
-import { loadRoutesSuccess } from '../actions/routes.actions';
+import { Action, createReducer, on } from '@ngrx/store';
+import {
+  deleteRouteSuccess,
+  loadRoutesSuccess,
+} from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
 
-export const routesReducer = createReducer(
+export const reducer = createReducer(
   initialRoutesState,
   on(
     loadRoutesSuccess,
@@ -12,8 +15,12 @@ export const routesReducer = createReducer(
       routes,
     }),
   ),
+  on(deleteRouteSuccess, (state, { routeId }) => ({
+    ...state,
+    routes: state.routes.filter((route) => route.id !== routeId),
+  })),
 );
 
-// export function routesReducer(state: RoutesState | undefined, action: Action) {
-//   return reducer(state, action);
-// }
+export function routesReducer(state: RoutesState | undefined, action: Action) {
+  return reducer(state, action);
+}

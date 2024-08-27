@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService } from '../../services/order.service';
+// import { OrderService } from '../../services/order.service';
 import { OrderItem } from '../../models/order-item.interface';
 import { Observable } from 'rxjs';
 
@@ -12,12 +12,12 @@ import { Observable } from 'rxjs';
 export class OrdersListComponent implements OnInit {
   public orders$!: Observable<OrderItem[]>;
 
-  constructor(private orderService: OrderService) {}
+  // constructor(private orderService: OrderService) {}
 
   ngOnInit() {
-    this.orders$ = this.orderService.getOrders();
-    this.orders$.subscribe((orders) => {
-      console.log(orders);
-    });
+    // this.orders$ = this.orderService.getOrders();
+    // this.orders$.subscribe((orders) => {
+    //   console.log(orders);
+    // });
   }
 }

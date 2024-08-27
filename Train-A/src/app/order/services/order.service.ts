@@ -3,24 +3,8 @@ import { Injectable } from '@angular/core';
 import { API_CONFIG } from '../../config/api.config';
 import { Observable } from 'rxjs';
 import { OrderItem } from '../models/order-item.interface';
-interface Schedule {}
+import { RideResponse } from '../models/ride-response.interface';
 
-interface Segment {}
-
-interface Price {
-  [key: string]: number;
-}
-
-interface RideResponse {
-  rideId: number;
-  path: number[];
-  carriages: string[];
-  schedule: Schedule;
-  segments: Segment[];
-  time: string[];
-  price: Price;
-  occupiedSeats: number[];
-}
 @Injectable({
   providedIn: 'root',
 })

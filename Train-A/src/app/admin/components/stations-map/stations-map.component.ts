@@ -56,7 +56,6 @@ export class StationsMapComponent implements AfterViewInit, OnDestroy {
       this.markers.push(marker);
 
       marker.on('click', () => {
-        console.log(`Clicked on station: ${station.id}`);
         this.store.dispatch(createSelectStation({ id: station.id }));
       });
 

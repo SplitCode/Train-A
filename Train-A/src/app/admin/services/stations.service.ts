@@ -22,6 +22,8 @@ export class StationsService {
   }
 
   public deleteStation(id: number) {
+    // TODO: Check if station do not have active routes
+
     return this.http
       .delete<{ id: number }>(`${this.apiUrl}/${id}`)
       .pipe(map((response) => response));

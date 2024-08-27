@@ -52,6 +52,13 @@ export class StationsEffects {
     );
   });
 
+  createStationSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createStationSuccess),
+      map(() => loadStations()),
+    );
+  });
+
   deleteStation$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(deletedStation),

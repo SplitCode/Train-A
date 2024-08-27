@@ -1,0 +1,22 @@
+::ng-deep {
+  @media screen and (max-width: 768px) {
+    .p-carousel-content {
+      position: relative;
+      overflow: visible;
+    }
+
+    .p-carousel .p-carousel-content .p-carousel-prev,
+    .p-carousel .p-carousel-content .p-carousel-next {
+      position: absolute;
+      z-index: 10;
+      bottom: 100%;
+    }
+
+    .p-carousel .p-carousel-content .p-carousel-prev {
+      left: 4px;
+    }
+    .p-carousel .p-carousel-content .p-carousel-next {
+      right: 4px;
+    }
+  }
+}

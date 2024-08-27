@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { StationsItem } from '../states/stations.state';
+import { ModalInfo, StationsItem } from '../states/stations.state';
 
 export const loadStations = createAction('[Stations List] Load Stations');
 export const loadStationsSuccess = createAction(
@@ -40,4 +40,9 @@ export const deletedStationSuccess = createAction(
 export const deletedStationFailure = createAction(
   '[Deleted Stations] Deleted Station Failure',
   props<{ error: string }>(),
+);
+
+export const stationModal = createAction(
+  '[StationModal] Station Modal',
+  props<{ modalInfo: ModalInfo }>(),
 );

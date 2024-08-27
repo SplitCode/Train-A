@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { CommonModule, NgIf } from '@angular/common';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { DialogModule } from 'primeng/dialog';
-import { deletedStation } from '../../../redux/actions/stations.actions';
+import { stationModal } from '../../../redux/actions/stations.actions';
 
 @Component({
   selector: 'app-stations-item',
@@ -20,8 +20,6 @@ export class StationsItemComponent {
 
   cityNames$: Observable<(string | undefined)[]> | undefined;
 
-  visible: boolean = false;
-
   constructor(
     private getCityByIDService: GetCityByIDService,
     private store: Store,
@@ -31,7 +29,17 @@ export class StationsItemComponent {
     return this.getCityByIDService.getCityByID(cityID);
   }
 
-  public deleteStation(id: number) {
-    this.store.dispatch(deletedStation({ id: id }));
+  public setModalInfo(visible: boolean, station: StationsItem) {
+    this.store.dispatch(
+      stationModal({
+        modalInfo: {
+          visibleModal: visible,
+          stationInfo: {
+            id: station.id,
+            city: station.city,
+          },
+        },
+      }),
+    );
   }
 }

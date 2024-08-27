@@ -8,3 +8,10 @@
     <app-stations-item [station]="station"/>
   </ng-template>
 </p-carousel>
+<p-dialog draggable="false" header="Are you sure to delete {{localModalInfo.stationInfo.city}} station?" [modal]="true" [(visible)]="localModalInfo.visibleModal">
+  <div class="flex justify-between">
+    {{localModalInfo.stationInfo.id}}
+    <app-custom-button [config]="{label: 'Cancel', outlined:true}" (click)="closeModal()"/>
+    <app-custom-button [config]="{label: 'Confrim'}" (click)="deleteStation(); closeModal();"/>
+  </div>
+</p-dialog>

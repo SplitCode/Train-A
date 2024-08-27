@@ -20,3 +20,8 @@ export const selectSelectedStation = createSelector(
     return stations.find((station) => station.id === selectedStationID) || null;
   },
 );
+
+export const selectModalInfo = createSelector(
+  selectStationsState,
+  (state: StationsState) => state.modalInfo,
+);

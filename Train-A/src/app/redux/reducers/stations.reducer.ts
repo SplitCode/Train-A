@@ -11,6 +11,7 @@ import {
   loadStations,
   loadStationsFailure,
   loadStationsSuccess,
+  stationModal,
 } from '../actions/stations.actions';
 
 export const stationsReducer = createReducer(
@@ -43,9 +44,9 @@ export const stationsReducer = createReducer(
   }),
   on(
     createStationSuccess,
-    (state, { station }): StationsState => ({
+    (state, {}): StationsState => ({
       ...state,
-      stations: [station, ...state.stations],
+      // stations: [station, ...state.stations],
     }),
   ),
   on(
@@ -81,6 +82,13 @@ export const stationsReducer = createReducer(
     (state, { error }): StationsState => ({
       ...state,
       error,
+    }),
+  ),
+  on(
+    stationModal,
+    (state, { modalInfo }): StationsState => ({
+      ...state,
+      modalInfo: modalInfo,
     }),
   ),
 );

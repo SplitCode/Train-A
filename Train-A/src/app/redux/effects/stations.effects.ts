@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of } from 'rxjs';
+import { mergeMap, map, catchError, of, concatMap } from 'rxjs';
 import { StationsService } from '../../admin/services/stations.service';
 import {
   loadStations,
@@ -33,12 +33,9 @@ export class StationsEffects {
   createStation$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(createStation),
-      mergeMap(({ station }) =>
+      concatMap(({ station }) =>
         this.stationsService.postStation(station).pipe(
           map((id) => {
-            if (id === undefined || id === null) {
-              throw new Error('Invalid ID received');
-            }
             return createStationSuccess({ station: { ...station, id: id } });
           }),
           catchError((error) => {

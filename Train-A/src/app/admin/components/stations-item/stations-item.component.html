@@ -6,7 +6,7 @@
       styleClass: 'hover:text-red-600 bg-transparent border-none border-0'
     }"
     class="absolute top-2 right-2"
-    (click)="visible = true"
+    (click)="setModalInfo(true, station) "
   />
   <h3 class="mt-0 mb-4 capitalize">{{station.city}}</h3>
   <p class="mb-2 mt-0">{{station.latitude}}, {{station.longitude}}</p>
@@ -17,9 +17,3 @@
     </li>
   </ul>
 </div>
-<p-dialog draggable="false" header="Are you sure to delete {{station.city}} station?" [modal]="true" [(visible)]="visible">
-  <div class="flex justify-between">
-    <app-custom-button [config]="{label: 'Cancel', outlined:true}" (click)="visible = false"/>
-    <app-custom-button [config]="{label: 'Confrim'}" (click)="visible = false; deleteStation(station.id)"/>
-  </div>
-</p-dialog>

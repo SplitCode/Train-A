@@ -5,23 +5,20 @@ import { CustomButtonComponent } from '../../../../shared/components/custom-butt
 import { FieldsetModule } from 'primeng/fieldset';
 import { CommonModule } from '@angular/common';
 import { deleteRoute } from '../../../../redux/actions/routes.actions';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-routes-item',
   standalone: true,
-  imports: [
-    CustomButtonComponent,
-    FieldsetModule,
-    CommonModule,
-    ConfirmDialogModule,
-  ],
+  imports: [CustomButtonComponent, FieldsetModule, CommonModule, DialogModule],
   templateUrl: './routes-item.component.html',
 })
 export class RoutesItemComponent {
   @Input() public config!: RoutesItem;
 
   @Input() public carriageNames!: string[];
+
+  visible: boolean = false;
 
   constructor(private store: Store) {}
 
@@ -35,8 +32,8 @@ export class RoutesItemComponent {
     console.log('update');
   }
 
-  public deleteRoute(): void {
-    this.store.dispatch(deleteRoute({ routeId: this.config.id }));
+  public deleteRoute(routeId: number): void {
+    this.store.dispatch(deleteRoute({ routeId: routeId }));
     console.log('delete');
   }
 

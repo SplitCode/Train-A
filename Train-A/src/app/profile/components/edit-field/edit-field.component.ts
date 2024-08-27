@@ -3,39 +3,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-
-import { PasswordModule } from 'primeng/password';
-import { TooltipModule } from 'primeng/tooltip';
 import {
   ControlValueAccessor,
   FormGroup,
   FormGroupDirective,
   NG_VALUE_ACCESSOR,
-  ReactiveFormsModule,
 } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
+import {
+  CustomButtonComponent,
+  InputComponent,
+} from '../../../shared/components';
 
 @Component({
-  selector: 'app-input',
-  templateUrl: './input.component.html',
-  imports: [
-    CommonModule,
-    InputTextModule,
-    ReactiveFormsModule,
-    PasswordModule,
-    TooltipModule,
-  ],
+  selector: 'app-edit-field',
+  standalone: true,
+  imports: [CustomButtonComponent, InputComponent, CommonModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => EditFieldComponent),
       multi: true,
     },
   ],
-  standalone: true,
-  styleUrl: './input.component.scss',
+  templateUrl: './edit-field.component.html',
+  styleUrl: './edit-field.component.scss',
 })
-export class InputComponent implements OnInit, ControlValueAccessor {
+export class EditFieldComponent implements OnInit, ControlValueAccessor {
   @Input() type: string = 'text';
 
   @Input() placeholder!: string;
@@ -56,7 +49,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   @Input() value: string = '';
 
-  @Input() formGroup!: FormGroup;
+  formGroup!: FormGroup;
+
+  editMode = false;
 
   onChange: any = () => {};
   onTouched: any = () => {};
@@ -83,6 +78,10 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-    if (!this.formGroup) this.formGroup = this.formGroupDirective.control;
+    this.formGroup = this.formGroupDirective.control;
+  }
+
+  toggleEditMode() {
+    this.editMode = !this.editMode;
   }
 }

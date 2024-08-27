@@ -1,27 +1,35 @@
-<ng-container [formGroup]="formGroup">
-  <div class="form-group mb-4" [pTooltip]="tooltip" tooltipPosition="top">
-    <label [for]="formControlName" class="block mb-1">{{ label }}</label>
-    <p-password
-      *ngIf="type === 'password'"
-      [formControlName]="formControlName"
-      class="w-full"
-      [feedback]="false"
-      [toggleMask]="true"
-      [inputStyle]="{ width: '100%' }"
-      [style]="{ width: '100%' }"
-      [placeholder]="placeholder"
-    />
-    <input
-      *ngIf="type !== 'password'"
-      [type]="type"
-      pInputText
-      [id]="formControlName"
-      [formControlName]="formControlName"
-      class="w-full"
-      [required]="required"
-      [placeholder]="placeholder"
-      [value]="value"
-    />
-  </div>
+<div
+  [formGroup]="formGroup"
+  class="form-group mb-4"
+  [pTooltip]="tooltip"
+  tooltipPosition="top"
+>
+  <label *ngIf="label" [for]="formControlName" class="block mb-1">{{
+    label
+  }}</label>
+  <p-password
+    *ngIf="type === 'password'"
+    [formControlName]="formControlName"
+    class="w-full"
+    [feedback]="false"
+    [toggleMask]="true"
+    [inputStyle]="{ width: '100%' }"
+    [style]="{ width: '100%' }"
+    [placeholder]="placeholder"
+  />
+  <!-- [value]="input" -->
+
+  <input
+    *ngIf="type !== 'password'"
+    [type]="type"
+    [required]="required"
+    [value]="value"
+    pInputText
+    [id]="formControlName"
+    [formControlName]="formControlName"
+    class="w-full"
+    [placeholder]="placeholder"
+    [value]="value"
+  />
   <ng-content #name></ng-content>
-</ng-container>
+</div>

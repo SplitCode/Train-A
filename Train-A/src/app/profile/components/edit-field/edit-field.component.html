@@ -1,0 +1,31 @@
+<label [for]="formControlName" class="block mb-1">{{ label }}</label>
+<div *ngIf="editMode" class="flex">
+  <app-input
+    [formGroup]="formGroup"
+    [type]="type"
+    [formControlName]="formControlName"
+    [tooltip]="tooltip"
+    [placeholder]="placeholder"
+    [value]="value"
+    class="grow"
+  >
+    <ng-content #name></ng-content>
+  </app-input>
+  <app-custom-button
+    [config]="{
+      icon: 'pi pi-save',
+    }"
+    (clickEmitter)="toggleEditMode()"
+  />
+</div>
+<div *ngIf="!editMode" class="flex mb-4">
+  <div class="p-inputtext p-inputtext--div p-component p-element grow">
+    {{ value }}
+  </div>
+  <app-custom-button
+    [config]="{
+      icon: 'pi pi-pencil',
+    }"
+    (clickEmitter)="toggleEditMode()"
+  />
+</div>

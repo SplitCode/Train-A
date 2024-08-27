@@ -16,15 +16,16 @@ import {
   CustomButtonComponent,
   InputComponent,
 } from '../../../shared/components';
+import {
+  noWhitespaceValidator,
+  passwordsMatchValidator,
+} from '../../../shared/directives/password-validation.directive';
 import { ServerError } from '../../../auth/interfaces/auth';
 import { MessageService } from 'primeng/api';
-
-import { EditFieldComponent } from '../../components/edit-field/edit-field.component';
-import { ChangePasswordComponent } from '../../components/change-password/change-password.component';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: 'app-profile-page',
-  templateUrl: './profile-page.component.html',
+  selector: 'app-change-password',
   standalone: true,
   imports: [
     InputTextModule,
@@ -34,34 +35,26 @@ import { ChangePasswordComponent } from '../../components/change-password/change
     CustomButtonComponent,
     RouterModule,
     CommonModule,
-    EditFieldComponent,
     InputComponent,
-    ChangePasswordComponent,
+    DialogModule,
   ],
+  templateUrl: './change-password.component.html',
+  styleUrl: './change-password.component.scss',
 })
-export class ProfilePageComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit {
   public signUpForm: FormGroup;
 
   public submitted = false;
 
   public isSubmitting = false;
 
-  public user = {
-    email: 'email@em.ru ',
-    name: 'Natalia',
-  };
-
   ngOnInit() {
-    this.signUpForm = this.fb.group({
-      name: [this.user.name, [Validators.required, Validators.minLength(3)]],
-      email: [
-        this.user.email,
-        [
-          Validators.required,
-          Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
-        ],
-      ],
-    });
+    this.signUpForm = this.fb.group(
+      {
+        password: ['', [noWhitespaceValidator(), Validators.minLength(8)]],
+      },
+      { validators: passwordsMatchValidator },
+    );
   }
 
   constructor(
@@ -70,15 +63,12 @@ export class ProfilePageComponent implements OnInit {
     private messageService: MessageService,
     private fb: FormBuilder,
   ) {
-    this.signUpForm = this.fb.group({
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
-        ],
-      ],
-    });
+    this.signUpForm = this.fb.group(
+      {
+        password: ['', [noWhitespaceValidator(), Validators.minLength(8)]],
+      },
+      { validators: passwordsMatchValidator },
+    );
   }
 
   public onSubmit() {
@@ -117,8 +107,9 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
-  public logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/home']);
+  visible: boolean = false;
+
+  showDialog() {
+    this.visible = true;
   }
 }

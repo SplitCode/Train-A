@@ -14,6 +14,7 @@
   <ul class="list-none pl-0 flex flex-wrap gap-y-[2px] gap-x-1 mt-0 mb-0">
     <li class="capitalize" *ngFor="let connectedTo of station.connectedTo">
       {{ connectedTo.id }} |
+      <!-- TODO: Find right solution to show station names -->
       <!-- {{ getCityName(connectedTo.id) | async }} | -->
     </li>
   </ul>

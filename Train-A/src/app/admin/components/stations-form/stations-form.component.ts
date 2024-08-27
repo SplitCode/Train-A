@@ -68,7 +68,7 @@ export class StationsFormComponent implements OnInit {
           Validators.pattern('^-?([0-9]{1,2}|1[0-7][0-9]|180)(.[0-9]{1,30})$'),
         ],
       ],
-      relations: [this.connectedStations$, Validators.required],
+      relations: [[], Validators.required],
     });
   }
 

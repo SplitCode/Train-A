@@ -4,4 +4,5 @@ export const API_CONFIG = {
   carriageUrl: '/api/carriage',
   ordersUrl: '/api/order',
   usersUrl: '/api/users',
+  searchUrl: '/api/search',
 };

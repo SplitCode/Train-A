@@ -3,13 +3,13 @@
     [config]="{
       type: 'button',
       icon: 'pi pi-trash',
-      styleClass: 'hover:text-red-600 bg-transparent border-none border-0'
+      styleClass: 'hover:text-red-600 bg-transparent border-none border-0',
     }"
     class="absolute top-2 right-2"
-    (click)="setModalInfo(true, station) "
+    (click)="setModalInfo(true, station)"
   />
-  <h3 class="mt-0 mb-4 capitalize">{{station.city}}</h3>
-  <p class="mb-2 mt-0">{{station.latitude}}, {{station.longitude}}</p>
+  <h3 class="mt-0 mb-4 capitalize">{{ station.city }}</h3>
+  <p class="mb-2 mt-0">{{ station.latitude }}, {{ station.longitude }}</p>
   <span class="mt-auto mb-1">Connected to:</span>
   <ul class="list-none pl-0 flex flex-wrap gap-y-[2px] gap-x-1 mt-0 mb-0">
     <li class="capitalize" *ngFor="let connectedTo of station.connectedTo">

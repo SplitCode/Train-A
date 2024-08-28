@@ -50,7 +50,7 @@ export class UserEffects {
       return this.actions$.pipe(
         ofType(setUserData),
         tap((action) => {
-          console.log('User data:', action.name, action.email);
+          return setUserData({ name: action.name, email: action.email });
         }),
       );
     },

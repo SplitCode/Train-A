@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../auth/services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
@@ -23,6 +22,7 @@ import {
 import { ServerError } from '../../../auth/interfaces/auth';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-change-password',
@@ -42,30 +42,26 @@ import { DialogModule } from 'primeng/dialog';
   styleUrl: './change-password.component.scss',
 })
 export class ChangePasswordComponent implements OnInit {
-  public signUpForm: FormGroup;
+  public passwordForm: FormGroup;
 
   public submitted = false;
 
   public isSubmitting = false;
 
-  ngOnInit() {
-    this.signUpForm = this.fb.group(
-      {
-        password: ['', [noWhitespaceValidator(), Validators.minLength(8)]],
-      },
-      { validators: passwordsMatchValidator },
-    );
-  }
+  ngOnInit() {}
 
   constructor(
-    private authService: AuthService,
+    private profileService: ProfileService,
     private router: Router,
     private messageService: MessageService,
     private fb: FormBuilder,
   ) {
-    this.signUpForm = this.fb.group(
+    this.passwordForm = this.fb.group(
       {
-        password: ['', [noWhitespaceValidator(), Validators.minLength(8)]],
+        password: [
+          'qwerty123',
+          [noWhitespaceValidator(), Validators.minLength(8)],
+        ],
       },
       { validators: passwordsMatchValidator },
     );
@@ -73,37 +69,39 @@ export class ChangePasswordComponent implements OnInit {
 
   public onSubmit() {
     this.submitted = true;
-    if (this.signUpForm.valid) {
+    if (this.passwordForm.valid) {
       this.isSubmitting = true;
-      this.authService.signUp(this.signUpForm.value).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Register successfully!',
-          });
-          this.router.navigate(['/signin']);
-        },
-        error: (err: ServerError) => {
-          this.isSubmitting = false;
-          Object.keys(err).forEach((key) => {
-            if (key === 'general') {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: err[key],
-              });
-            } else {
-              this.signUpForm
-                .get(key)
-                ?.setErrors({ serverError: err[key as keyof ServerError] });
-            }
-          });
-        },
-        complete: () => {
-          this.isSubmitting = false;
-        },
-      });
+      this.profileService
+        .updatePassword(this.passwordForm.value.password)
+        .subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Password updated!',
+            });
+            this.router.navigate(['/signin']);
+          },
+          error: (err: ServerError) => {
+            this.isSubmitting = false;
+            Object.keys(err).forEach((key) => {
+              if (key === 'general') {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: err[key],
+                });
+              } else {
+                this.passwordForm
+                  .get(key)
+                  ?.setErrors({ serverError: err[key as keyof ServerError] });
+              }
+            });
+          },
+          complete: () => {
+            this.isSubmitting = false;
+          },
+        });
     }
   }
 

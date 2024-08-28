@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { API_CONFIG } from '../../config/api.config';
 import { Store } from '@ngrx/store';
 import { UserState } from '../../redux/states/user.state';
@@ -9,9 +9,10 @@ import { UserState } from '../../redux/states/user.state';
   providedIn: 'root',
 })
 export class ProfileService {
-  private $$userDataSource = new BehaviorSubject<UserState | null>(null);
-
-  $userDataSource = this.$$userDataSource.asObservable();
+  userDataSource$ = signal<Partial<UserState>>({
+    name: '',
+    email: '',
+  });
 
   constructor(
     private http: HttpClient,
@@ -25,9 +26,39 @@ export class ProfileService {
   public getProfileData(): Observable<UserState> {
     return this.http.get<UserState>(API_CONFIG.profileUrl).pipe(
       tap((response) => {
-        this.$$userDataSource.next(response);
+        this.userDataSource$.set(response);
         this.setUserDataInLocalStorage(response);
       }),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => console.log('Error:', error));
+      }),
+    );
+  }
+
+  public updateProfileData(
+    userData: Partial<UserState>,
+  ): Observable<UserState> {
+    return this.http.put<UserState>(API_CONFIG.profileUrl, userData).pipe(
+      tap((response) => {
+        this.userDataSource$.set(response);
+        this.setUserDataInLocalStorage(response);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => console.log('Error:', error));
+      }),
+    );
+  }
+
+  public resetUserData(): void {
+    this.userDataSource$.set({
+      name: '',
+      email: '',
+    });
+    localStorage.removeItem('user-data');
+  }
+
+  public updatePassword(password: string): Observable<void> {
+    return this.http.put<void>(API_CONFIG.passwordUrl, { password }).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => console.log('Error:', error));
       }),

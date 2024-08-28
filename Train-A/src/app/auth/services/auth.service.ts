@@ -6,6 +6,7 @@ import { API_CONFIG } from '../../config/api.config';
 import { UserRole } from '../../redux/states/user.state';
 import { Store } from '@ngrx/store';
 import { setUserRole } from '../../redux/actions/user.actions';
+import { ProfileService } from '../../profile/services/profile.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private store: Store,
+    private profileService: ProfileService,
   ) {}
 
   public getUserRole(): UserRole {
@@ -56,7 +58,10 @@ export class AuthService {
     localStorage.removeItem(this.token);
     localStorage.setItem('user-role', UserRole.Guest);
     this.store.dispatch(setUserRole({ userRole: UserRole.Guest }));
+
     this.isAuth$$.next(false);
+
+    this.profileService.resetUserData();
   }
 
   public checkAuth(): boolean {

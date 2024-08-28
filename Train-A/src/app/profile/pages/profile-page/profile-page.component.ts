@@ -27,7 +27,7 @@ import { selectUserData } from '../../../redux/selectors/user.selectors';
 import { UserState } from '../../../redux/states/user.state';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ProfileService } from '../../services/profile.service';
-import { getUserData } from '../../../redux/actions/user.actions';
+import { getUserData, setUserData } from '../../../redux/actions/user.actions';
 // import { getUserData } from '../../../redux/actions/user.actions';
 
 @Component({
@@ -48,7 +48,7 @@ import { getUserData } from '../../../redux/actions/user.actions';
   ],
 })
 export class ProfilePageComponent implements OnInit {
-  signUpForm!: FormGroup;
+  UpdateUserDataForm!: FormGroup;
 
   public submitted = false;
 
@@ -62,36 +62,44 @@ export class ProfilePageComponent implements OnInit {
 
   public onSubmit() {
     this.submitted = true;
-    if (this.signUpForm.valid) {
+    if (this.UpdateUserDataForm.valid) {
       this.isSubmitting = true;
-      this.authService.signUp(this.signUpForm.value).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'User data updated!',
-          });
-        },
-        error: (err: ServerError) => {
-          this.isSubmitting = false;
-          Object.keys(err).forEach((key) => {
-            if (key === 'general') {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: err[key],
-              });
-            } else {
-              this.signUpForm
-                .get(key)
-                ?.setErrors({ serverError: err[key as keyof ServerError] });
-            }
-          });
-        },
-        complete: () => {
-          this.isSubmitting = false;
-        },
-      });
+      this.profileService
+        .updateProfileData(this.UpdateUserDataForm.value)
+        .subscribe({
+          next: (response) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'User data updated!',
+            });
+            this.store.dispatch(
+              setUserData({
+                name: response.name,
+                email: response.email,
+              }),
+            );
+          },
+          error: (err: ServerError) => {
+            this.isSubmitting = false;
+            Object.keys(err).forEach((key) => {
+              if (key === 'general') {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: err[key],
+                });
+              } else {
+                this.UpdateUserDataForm.get(key)?.setErrors({
+                  serverError: err[key as keyof ServerError],
+                });
+              }
+            });
+          },
+          complete: () => {
+            this.isSubmitting = false;
+          },
+        });
     }
   }
 
@@ -112,7 +120,7 @@ export class ProfilePageComponent implements OnInit {
       this.store.select(selectUserData),
     ) as Signal<UserState>;
 
-    this.signUpForm = this.fb.group({
+    this.UpdateUserDataForm = this.fb.group({
       name: ['', [(Validators.required, Validators.minLength(3))]],
       email: [
         '',
@@ -125,7 +133,7 @@ export class ProfilePageComponent implements OnInit {
 
     toObservable(this.user$).subscribe((user: UserState) => {
       if (user) {
-        this.signUpForm.patchValue({
+        this.UpdateUserDataForm.patchValue({
           name: user.name,
           email: user.email,
         });

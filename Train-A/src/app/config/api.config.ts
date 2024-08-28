@@ -3,4 +3,5 @@ export const API_CONFIG = {
   signInUrl: '/api/signin',
   carriageUrl: '/api/carriage',
   profileUrl: '/api/profile',
+  passwordUrl: '/api/profile/password',
 };

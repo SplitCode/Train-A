@@ -6,7 +6,7 @@
     <h2 class="text-center">Profile</h2>
   </ng-template>
 
-  <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="UpdateUserDataForm" (ngSubmit)="onSubmit()">
     <app-change-password />
     <app-edit-field
       type="text"
@@ -16,17 +16,17 @@
       placeholder="Enter your name"
     >
       <div
-        *ngIf="submitted && signUpForm.get('name')?.errors"
+        *ngIf="submitted && UpdateUserDataForm.get('name')?.errors"
         class="font-extralight text-red-500 mt-1"
       >
-        <small *ngIf="signUpForm.get('name')?.hasError('required')"
+        <small *ngIf="UpdateUserDataForm.get('name')?.hasError('required')"
           >Required</small
         >
-        <small *ngIf="signUpForm.get('name')?.hasError('minlength')"
+        <small *ngIf="UpdateUserDataForm.get('name')?.hasError('minlength')"
           >Name must be at least 3 characters long</small
         >
-        <small *ngIf="signUpForm.get('name')?.hasError('serverError')">
-          {{ signUpForm.get("name")?.getError("serverError") }}
+        <small *ngIf="UpdateUserDataForm.get('name')?.hasError('serverError')">
+          {{ UpdateUserDataForm.get("name")?.getError("serverError") }}
         </small>
       </div>
     </app-edit-field>
@@ -38,17 +38,17 @@
       placeholder="Enter your email"
     >
       <div
-        *ngIf="submitted && signUpForm.get('email')?.errors"
+        *ngIf="submitted && UpdateUserDataForm.get('email')?.errors"
         class="font-extralight text-red-500 mt-1"
       >
-        <small *ngIf="signUpForm.get('email')?.hasError('required')"
+        <small *ngIf="UpdateUserDataForm.get('email')?.hasError('required')"
           >Required</small
         >
-        <small *ngIf="signUpForm.get('email')?.hasError('pattern')"
+        <small *ngIf="UpdateUserDataForm.get('email')?.hasError('pattern')"
           >Incorrect email</small
         >
-        <small *ngIf="signUpForm.get('email')?.hasError('serverError')">
-          {{ signUpForm.get("email")?.getError("serverError") }}
+        <small *ngIf="UpdateUserDataForm.get('email')?.hasError('serverError')">
+          {{ UpdateUserDataForm.get("email")?.getError("serverError") }}
         </small>
       </div>
     </app-edit-field>

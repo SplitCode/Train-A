@@ -18,6 +18,8 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { indexReducer, metaReducers } from './redux/reducers/index.reducer';
 import { PRIME_NG_MODULES } from './shared/modules/prime-ng-modules';
 import { StationsEffects } from './redux/effects/stations.effects';
+import { OrderService } from './order/services/order.service';
+import { RideEffects } from './redux/effects/ride.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +27,13 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     CarriageService,
-    provideEffects([UserEffects, CarriageEffects, StationsEffects]),
+    OrderService,
+    provideEffects([
+      UserEffects,
+      CarriageEffects,
+      StationsEffects,
+      RideEffects,
+    ]),
     PRIME_NG_MODULES.MessageService,
     importProvidersFrom(
       BrowserAnimationsModule,

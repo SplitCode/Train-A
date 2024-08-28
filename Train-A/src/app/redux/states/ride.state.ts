@@ -1,17 +1,14 @@
 import { CarriageItem } from '../../admin/models/carriage-item.interface';
 import { RideResponse } from '../../order/models/ride-response.interface';
-import { StationsItem } from './stations.state';
 
 export interface RideState {
   rideInfo: RideResponse | null;
-  carriages: CarriageItem[];
-  stations: StationsItem[];
+  filteredCarriages: CarriageItem[];
   error: unknown;
 }
 
 export const initialState: RideState = {
   rideInfo: null,
-  carriages: [],
-  stations: [],
+  filteredCarriages: [],
   error: null,
 };

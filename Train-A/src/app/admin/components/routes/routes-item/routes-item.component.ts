@@ -6,6 +6,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { CommonModule } from '@angular/common';
 import { deleteRoute } from '../../../../redux/actions/routes.actions';
 import { DialogModule } from 'primeng/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-routes-item',
@@ -20,7 +21,10 @@ export class RoutesItemComponent {
 
   visible: boolean = false;
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {}
 
   public updateRoute(): void {
     // this.store.dispatch(
@@ -34,10 +38,9 @@ export class RoutesItemComponent {
 
   public deleteRoute(routeId: number): void {
     this.store.dispatch(deleteRoute({ routeId: routeId }));
-    console.log('delete');
   }
 
   public assignRide(): void {
-    console.log('ride');
+    this.router.navigate(['/admin/routes', this.config.id]);
   }
 }

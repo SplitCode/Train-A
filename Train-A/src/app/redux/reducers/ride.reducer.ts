@@ -2,8 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import {
   loadRideInfoSuccess,
   loadRideInfoFailure,
-  loadCarriagesAndStationsFailure,
-  loadCarriagesAndStationsSuccess,
+  updateFilteredCarriages,
 } from '../actions/ride.actions';
 import { initialState, RideState } from '../states/ride.state';
 
@@ -25,19 +24,10 @@ export const rideReducer = createReducer(
     }),
   ),
   on(
-    loadCarriagesAndStationsSuccess,
-    (state, { carriages, stations }): RideState => ({
+    updateFilteredCarriages,
+    (state, { filteredCarriages }): RideState => ({
       ...state,
-      carriages,
-      stations,
-      error: null,
-    }),
-  ),
-  on(
-    loadCarriagesAndStationsFailure,
-    (state, { error }): RideState => ({
-      ...state,
-      error,
+      filteredCarriages,
     }),
   ),
 );

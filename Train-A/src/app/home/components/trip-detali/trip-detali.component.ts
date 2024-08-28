@@ -10,8 +10,8 @@ import {
   tap,
 } from 'rxjs';
 import {
-  loadCarriagesAndStations,
   loadRideInfo,
+  updateFilteredCarriages,
 } from '../../../redux/actions/ride.actions';
 import {
   selectCarriageTypes,
@@ -50,10 +50,6 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     this.carriageTypes$ = this.store.select(selectCarriageTypes);
   }
 
-  private loadCarriagesFromApiToStore(): void {
-    this.store.dispatch(loadCarriagesAndStations());
-  }
-
   private writeParamsFromRouter(): void {
     this.rideId = this.route.snapshot.paramMap.get('rideId');
     const queryParamsSubscription = this.route.queryParamMap.subscribe(
@@ -74,6 +70,9 @@ export class TripDetailComponent implements OnInit, OnDestroy {
   private updateCarriagesByTypes(carriagesByTypeItems: CarriageItem[]): void {
     this.carriagesByTypes.update(() => carriagesByTypeItems);
     console.log('Updated carriagesByTypes:', this.carriagesByTypes());
+    this.store.dispatch(
+      updateFilteredCarriages({ filteredCarriages: carriagesByTypeItems }),
+    );
   }
 
   private processCarriagesByTypes(): void {
@@ -106,7 +105,6 @@ export class TripDetailComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.writeParamsFromRouter();
     this.loadRideInfo();
-    this.loadCarriagesFromApiToStore();
     this.processCarriagesByTypes();
   }
 

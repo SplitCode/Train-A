@@ -1,10 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { CarriageItem } from '../../models/carriage-item.interface';
-import {
-  loadCarriages,
-  showCarriageForm,
-} from '../../../redux/actions/carriage.actions';
+import { showCarriageForm } from '../../../redux/actions/carriage.actions';
 import { selectAllCarriages } from '../../../redux/selectors/carriage.selectors';
 import { Store } from '@ngrx/store';
 import { CarriageItemComponent } from '../carriage-item/carriage-item.component';
@@ -39,7 +36,7 @@ export class CarriageListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(loadCarriages());
+    // this.store.dispatch(loadCarriages());
     this.subscriptions.add(this.carriages$.subscribe());
   }
 

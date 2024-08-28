@@ -7,6 +7,8 @@ import { HeaderComponent } from './core/components/header/header.component';
 import { FooterComponent } from './core/components/footer/footer.component';
 import { appInit } from './redux/actions/app.actions';
 import { Store } from '@ngrx/store';
+import { loadCarriages } from './redux/actions/carriage.actions';
+import { loadStations } from './redux/actions/stations.actions';
 
 @Component({
   selector: 'app-root',
@@ -26,8 +28,18 @@ export class AppComponent implements OnInit {
     private store: Store,
   ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this.primengConfig.ripple = true;
     this.store.dispatch(appInit());
+    this.dispatchCarriages();
+    this.dispatchStations();
+  }
+
+  private dispatchCarriages(): void {
+    this.store.dispatch(loadCarriages());
+  }
+
+  private dispatchStations(): void {
+    this.store.dispatch(loadStations());
   }
 }

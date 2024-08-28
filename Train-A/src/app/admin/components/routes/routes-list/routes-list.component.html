@@ -12,6 +12,7 @@
     <li *ngFor="let route of routes$ | async; let i = index" class="mb-8 p-0">
       <app-routes-item
         [config]="route"
+        [cityNames]="(cityNames$ | async)?.[i] || []"
         [carriageNames]="(carriageNames$ | async)?.[i] || []"
       ></app-routes-item>
       <p-divider />

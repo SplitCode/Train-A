@@ -19,6 +19,8 @@ export class RoutesItemComponent {
 
   @Input() public carriageNames!: string[];
 
+  @Input() public cityNames!: string[];
+
   visible: boolean = false;
 
   constructor(

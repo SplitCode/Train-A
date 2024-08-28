@@ -10,6 +10,8 @@ import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { RoutesItemComponent } from '../routes-item/routes-item.component';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
 import { loadCarriages } from '../../../../redux/actions/carriage.actions';
+import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
+import { loadStations } from '../../../../redux/actions/stations.actions';
 
 @Component({
   selector: 'app-routes-list',
@@ -28,6 +30,8 @@ export class RoutesListComponent implements OnInit, OnDestroy {
 
   public carriageNames$!: Observable<string[][]>;
 
+  public cityNames$!: Observable<string[][]>;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private store: Store) {
@@ -35,14 +39,19 @@ export class RoutesListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // const loadStations$ = this.store.select(selectAllStations).pipe(
-    //   take(1),
-    //   tap((stations) => {
-    //     if (stations.length === 0) {
-    //       this.store.dispatch(loadStations());
-    //     }
-    //   }),
-    // );
+    this.subscriptions.add(
+      this.store
+        .select(selectAllStations)
+        .pipe(
+          take(1),
+          tap((stations) => {
+            if (stations.length === 0) {
+              this.store.dispatch(loadStations());
+            }
+          }),
+        )
+        .subscribe(),
+    );
 
     this.subscriptions.add(
       this.store
@@ -72,7 +81,7 @@ export class RoutesListComponent implements OnInit, OnDestroy {
         .subscribe(),
     );
 
-    this.subscriptions.add(this.routes$.subscribe());
+    // this.subscriptions.add(this.routes$.subscribe());
 
     this.carriageNames$ = combineLatest([
       this.store.select(selectAllCarriages),
@@ -82,7 +91,21 @@ export class RoutesListComponent implements OnInit, OnDestroy {
         routes.map((route) =>
           route.carriages.map((code) => {
             const carriage = allCarriages.find((c) => c.code === code);
-            return carriage ? carriage.name : 'Type';
+            return carriage ? carriage.name : 'Unknown type';
+          }),
+        ),
+      ),
+    );
+
+    this.cityNames$ = combineLatest([
+      this.store.select(selectAllStations),
+      this.routes$,
+    ]).pipe(
+      map(([allStations, routes]) =>
+        routes.map((route) =>
+          route.path.map((stationId) => {
+            const station = allStations.find((s) => s.id === stationId);
+            return station ? station.city : 'Unknown city';
           }),
         ),
       ),
@@ -97,21 +120,3 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     console.log('create');
   }
 }
-
-// this.subscription.add(
-//   combineLatest([loadCarriages$, loadRoutes$])
-//     .pipe(
-//       switchMap(() =>
-//         combineLatest([
-//           this.store.select(selectAllCarriages),
-//           this.routes$,
-//         ]),
-//       ),
-//       tap(([carriages, routes]) => {
-//         if (carriages.length > 0 && routes.length > 0) {
-//           this.loading = false;
-//         }
-//       }),
-//     )
-//     .subscribe(),
-// );

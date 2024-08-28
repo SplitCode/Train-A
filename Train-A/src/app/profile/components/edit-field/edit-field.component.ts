@@ -2,7 +2,14 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormGroup,
@@ -48,6 +55,12 @@ export class EditFieldComponent implements OnInit, ControlValueAccessor {
   @Input() tooltip!: string;
 
   @Input() value: string = '';
+
+  @Output() clickEmitter = new EventEmitter<void>();
+
+  onClick() {
+    this.clickEmitter.emit();
+  }
 
   formGroup!: FormGroup;
 

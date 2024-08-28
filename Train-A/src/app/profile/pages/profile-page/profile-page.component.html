@@ -14,7 +14,6 @@
       formControlName="name"
       tooltip="Natalia"
       placeholder="Enter your name"
-      [value]="user.name"
     >
       <div
         *ngIf="submitted && signUpForm.get('name')?.errors"
@@ -37,7 +36,6 @@
       formControlName="email"
       tooltip="user@example.com"
       placeholder="Enter your email"
-      [value]="user.email"
     >
       <div
         *ngIf="submitted && signUpForm.get('email')?.errors"

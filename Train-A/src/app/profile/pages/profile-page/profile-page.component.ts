@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import {
+  FormsModule,
   FormBuilder,
   FormGroup,
   Validators,
@@ -21,13 +21,21 @@ import { MessageService } from 'primeng/api';
 
 import { EditFieldComponent } from '../../components/edit-field/edit-field.component';
 import { ChangePasswordComponent } from '../../components/change-password/change-password.component';
+import { Store } from '@ngrx/store';
+// import { Observable } from 'rxjs';
+import { selectUserData } from '../../../redux/selectors/user.selectors';
+import { UserState } from '../../../redux/states/user.state';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ProfileService } from '../../services/profile.service';
+import { getUserData } from '../../../redux/actions/user.actions';
+// import { getUserData } from '../../../redux/actions/user.actions';
 
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
   standalone: true,
   imports: [
-    InputTextModule,
+    FormsModule,
     CardModule,
     ReactiveFormsModule,
     CustomValidationInfoComponent,
@@ -40,45 +48,16 @@ import { ChangePasswordComponent } from '../../components/change-password/change
   ],
 })
 export class ProfilePageComponent implements OnInit {
-  public signUpForm: FormGroup;
+  signUpForm!: FormGroup;
 
   public submitted = false;
 
   public isSubmitting = false;
 
-  public user = {
-    email: 'email@em.ru ',
-    name: 'Natalia',
-  };
+  public user$: Signal<UserState>;
 
   ngOnInit() {
-    this.signUpForm = this.fb.group({
-      name: [this.user.name, [Validators.required, Validators.minLength(3)]],
-      email: [
-        this.user.email,
-        [
-          Validators.required,
-          Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
-        ],
-      ],
-    });
-  }
-
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private messageService: MessageService,
-    private fb: FormBuilder,
-  ) {
-    this.signUpForm = this.fb.group({
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
-        ],
-      ],
-    });
+    this.store.dispatch(getUserData());
   }
 
   public onSubmit() {
@@ -90,9 +69,8 @@ export class ProfilePageComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Register successfully!',
+            detail: 'User data updated!',
           });
-          this.router.navigate(['/signin']);
         },
         error: (err: ServerError) => {
           this.isSubmitting = false;
@@ -120,5 +98,38 @@ export class ProfilePageComponent implements OnInit {
   public logout(): void {
     this.authService.logout();
     this.router.navigate(['/home']);
+  }
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private fb: FormBuilder,
+    private store: Store,
+    private messageService: MessageService,
+    private profileService: ProfileService,
+  ) {
+    this.user$ = toSignal(
+      this.store.select(selectUserData),
+    ) as Signal<UserState>;
+
+    this.signUpForm = this.fb.group({
+      name: ['', [(Validators.required, Validators.minLength(3))]],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
+        ],
+      ],
+    });
+
+    toObservable(this.user$).subscribe((user: UserState) => {
+      if (user) {
+        this.signUpForm.patchValue({
+          name: user.name,
+          email: user.email,
+        });
+      }
+    });
   }
 }

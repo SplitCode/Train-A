@@ -16,3 +16,8 @@ export const selectIsManager = createSelector(
     return isManager;
   },
 );
+
+export const selectUserData = createSelector(
+  selectUserState,
+  (state: UserState) => state,
+);

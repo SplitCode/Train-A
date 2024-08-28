@@ -7,3 +7,7 @@ export const selectRideInfo = createSelector(
   selectRideState,
   (state: RideState) => state.rideInfo,
 );
+export const selectCarriageTypes = createSelector(
+  selectRideState,
+  (state: RideState) => state.rideInfo?.carriages,
+);

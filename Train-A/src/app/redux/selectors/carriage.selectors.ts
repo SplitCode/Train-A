@@ -8,7 +8,7 @@ export const selectCarriageState =
 export const selectAllCarriages = createSelector(
   selectCarriageState,
   (state: CarriageState) => {
-    console.log('[selectCarriageState]', state.carriages);
+    // console.log('[selectCarriageState]', state.carriages);
     return state.carriages;
   },
 );
@@ -26,7 +26,7 @@ export const selectCarriageByCode = (carriageCode: string) =>
     const foundCarriage = carriages.find(
       (carriage) => carriage.code === carriageCode,
     );
-    console.log('[selectCarriageByCode]', foundCarriage);
+    // console.log('[selectCarriageByCode]', foundCarriage);
     return foundCarriage;
   });
 export const selectCarriageByName = (name: string) =>

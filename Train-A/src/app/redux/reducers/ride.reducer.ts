@@ -2,18 +2,10 @@ import { createReducer, on } from '@ngrx/store';
 import {
   loadRideInfoSuccess,
   loadRideInfoFailure,
+  loadCarriagesAndStationsFailure,
+  loadCarriagesAndStationsSuccess,
 } from '../actions/ride.actions';
-import { RideResponse } from '../../order/models/ride-response.interface';
-
-export interface RideState {
-  rideInfo: RideResponse | null;
-  error: unknown;
-}
-
-export const initialState: RideState = {
-  rideInfo: null,
-  error: null,
-};
+import { initialState, RideState } from '../states/ride.state';
 
 export const rideReducer = createReducer(
   initialState,
@@ -27,6 +19,22 @@ export const rideReducer = createReducer(
   ),
   on(
     loadRideInfoFailure,
+    (state, { error }): RideState => ({
+      ...state,
+      error,
+    }),
+  ),
+  on(
+    loadCarriagesAndStationsSuccess,
+    (state, { carriages, stations }): RideState => ({
+      ...state,
+      carriages,
+      stations,
+      error: null,
+    }),
+  ),
+  on(
+    loadCarriagesAndStationsFailure,
     (state, { error }): RideState => ({
       ...state,
       error,

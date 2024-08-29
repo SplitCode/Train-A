@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   catchError,
@@ -29,6 +29,8 @@ import { CarriageItem } from '../../../admin/models/carriage-item.interface';
 import { CommonModule } from '@angular/common';
 import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
 import { selectStationCityByID } from '../../../redux/selectors/stations.selectors';
+import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
+import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
 interface TimelineEvent {
   status: string;
   date: string;
@@ -44,10 +46,21 @@ interface TimelineEvent {
   selector: 'app-trip-detali',
   templateUrl: './trip-detali.component.html',
   styleUrls: ['./trip-detali.component.scss'],
-  imports: [CommonModule, PRIME_NG_MODULES.TimelineModule],
+  imports: [
+    CommonModule,
+    PRIME_NG_MODULES.TimelineModule,
+    PRIME_NG_MODULES.PanelModule,
+    CustomButtonComponent,
+    RouterModule,
+    PRIME_NG_MODULES.DialogModule,
+    PRIME_NG_MODULES.TagModule,
+    StationCityByIdPipe,
+  ],
   standalone: true,
 })
 export class TripDetailComponent implements OnInit, OnDestroy {
+  public isVisiblePath: boolean = false;
+
   public carriagesByTypes = signal<CarriageItem[]>([]);
 
   private carriageTypes$: Observable<string[] | undefined>;
@@ -115,8 +128,8 @@ export class TripDetailComponent implements OnInit, OnDestroy {
           const prevSegment =
             rideInfo.schedule.segments[startIndex + index - 1];
           const timeDifference =
-            index === 0
-              ? 'First Station'
+            index === 0 || index === filteredPath.length - 1
+              ? ''
               : prevSegment
                 ? this.calculateTimeDifference(
                     prevSegment.time[1],
@@ -126,7 +139,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
 
           console.log(
             `Station ID: ${stationId}, Arrival Time: ${segment.time[0]}, Departure Time: ${segment.time[1]}, Time Difference: ${timeDifference}`,
-          ); // Логирование
+          );
 
           timelineEvents.push({
             status:
@@ -137,8 +150,12 @@ export class TripDetailComponent implements OnInit, OnDestroy {
                   : '',
             date: stationCities[index],
             arrivalTime: index === 0 ? '' : segment.time[0],
-            departureTime: segment.time[1],
-            timeDifference: timeDifference,
+            departureTime:
+              index === filteredPath.length - 1 ? '' : segment.time[1],
+            timeDifference:
+              index === 0 || index === filteredPath.length - 1
+                ? ''
+                : timeDifference,
             color:
               index === 0
                 ? '#4CAF50'
@@ -218,6 +235,10 @@ export class TripDetailComponent implements OnInit, OnDestroy {
       )
       .subscribe();
     this.subscriptions.push(carriageTypesSubscription);
+  }
+
+  public isDialog(isShow: boolean) {
+    this.isVisiblePath = isShow;
   }
 
   public ngOnInit() {

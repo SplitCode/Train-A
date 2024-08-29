@@ -4,7 +4,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'home',
+    path: '',
     loadChildren: () =>
       import('./home/pages/home-page/home-page.routes').then((m) => m.routes),
   },

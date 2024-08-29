@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { RoutesListComponent } from '../../../components/routes/routes-list/routes-list.component';
 
 @Component({
   selector: 'app-routes-page',
   standalone: true,
-  imports: [],
+  imports: [RoutesListComponent],
   templateUrl: './routes-page.component.html',
-  styleUrl: './routes-page.component.scss',
 })
 export class RoutesPageComponent {}

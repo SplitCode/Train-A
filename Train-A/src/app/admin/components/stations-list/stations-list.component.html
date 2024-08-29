@@ -1,4 +1,4 @@
-<p-carousel
+<!-- <p-carousel
   [value]="(stations$ | async) || []"
   [numVisible]="3"
   [numScroll]="3"
@@ -7,10 +7,33 @@
   <ng-template let-station pTemplate="item">
     <app-stations-item [station]="station"/>
   </ng-template>
-</p-carousel>
-<p-dialog draggable="false" header="Are you sure to delete {{localModalInfo.stationInfo.city}} station?" [modal]="true" [(visible)]="localModalInfo.visibleModal">
+</p-carousel> -->
+
+<cdk-virtual-scroll-viewport
+  itemSize="100"
+  class="viewport h-96 w-full overflow-auto"
+>
+  <div
+    *cdkVirtualFor="let station of stations$ | async"
+    class="item p-4 border-b border-gray-200"
+  >
+    <app-stations-item [station]="station"></app-stations-item>
+  </div>
+</cdk-virtual-scroll-viewport>
+<p-dialog
+  draggable="false"
+  header="Are you sure to delete {{ localModalInfo.stationInfo.city }} station?"
+  [modal]="true"
+  [(visible)]="localModalInfo.visibleModal"
+>
   <div class="flex justify-between">
-    <app-custom-button [config]="{label: 'Cancel', outlined:true}" (click)="closeModal()"/>
-    <app-custom-button [config]="{label: 'Confirm'}" (click)="deleteStation(); closeModal();"/>
+    <app-custom-button
+      [config]="{ label: 'Cancel', outlined: true }"
+      (click)="closeModal()"
+    />
+    <app-custom-button
+      [config]="{ label: 'Confirm' }"
+      (click)="deleteStation(); closeModal()"
+    />
   </div>
 </p-dialog>

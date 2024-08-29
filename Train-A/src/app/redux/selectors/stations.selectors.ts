@@ -25,3 +25,10 @@ export const selectModalInfo = createSelector(
   selectStationsState,
   (state: StationsState) => state.modalInfo,
 );
+
+export const selectStationCityByID = (stationID: number) =>
+  createSelector([selectAllStations], (stations) => {
+    const foundStation = stations.find((station) => station.id === stationID);
+    console.log(foundStation?.city);
+    return foundStation ? foundStation.city : `StationID ${stationID}`;
+  });

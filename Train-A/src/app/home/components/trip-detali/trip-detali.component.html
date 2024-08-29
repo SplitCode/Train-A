@@ -1,4 +1,39 @@
-<p>Trip Details</p>
-<p>Ride ID: {{ rideId }}</p>
-<p>From Station ID: {{ fromStationId }}</p>
-<p>To Station ID: {{ toStationId }}</p>
+<div class="flex">
+  <div class="max-w-2/5" *ngIf="rideInfo$ | async as rideInfo">
+    <p>Ride Path: {{ rideInfo.path }}</p>
+  </div>
+
+  <div *ngIf="timelineEvents$ | async as TimelineEvent">
+    <p-timeline
+      [value]="events"
+      align="alternate"
+      layout="vertical"
+      styleClass="custom-timeline"
+      [style]="{ 'max-width': '600px', margin: '0 auto' }"
+    >
+      <ng-template pTemplate="marker" let-event>
+        <span
+          class="flex w-8 h-8 items-center justify-center text-white rounded-full z-10 shadow-lg"
+          [ngStyle]="{ 'background-color': event.color }"
+        >
+          <i [class]="event.icon"></i>
+        </span>
+      </ng-template>
+
+      <ng-template pTemplate="content" let-event>
+        <div class="p-4 bg-gray-800 rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold text-white">{{ event.status }}</h3>
+          <h4 class="text-sm text-gray-400">{{ event.date }}</h4>
+          <p class="text-gray-300">
+            Arrival: {{ event.arrivalTime | date: "shortTime" }}, Departure:
+            {{ event.departureTime | date: "shortTime" }}
+          </p>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="opposite" let-event>
+        <span class="text-gray-400">{{ event.timeDifference }}</span>
+      </ng-template>
+    </p-timeline>
+  </div>
+</div>

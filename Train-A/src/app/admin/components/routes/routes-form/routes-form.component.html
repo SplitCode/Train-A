@@ -1,0 +1,45 @@
+<p-dialog
+  [header]="currentMode === 'create' ? 'Create Route' : 'Update Route'"
+  [modal]="true"
+  [(visible)]="isVisible"
+  [style]="{ width: '70%' }"
+  (onHide)="closeDialog()"
+>
+  <div class="flex gap-4 items-center">
+    <form
+      class="flex flex-col gap-4 text-center"
+      [formGroup]="routeForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="text-center flex flex-col">
+        <label>Stations</label>
+        <input pInputText formControlName="path" />
+        <div
+          *ngIf="
+            routeForm.get('path')?.invalid && routeForm.get('path')?.touched
+          "
+        >
+          Path is required.
+        </div>
+      </div>
+
+      <div>
+        <label>Carriages</label>
+        <input pInputText formControlName="carriages" />
+        <div
+          *ngIf="
+            routeForm.get('carriages')?.invalid &&
+            routeForm.get('carriages')?.touched
+          "
+        >
+          Carriages are required.
+        </div>
+      </div>
+
+      <app-custom-button
+        [config]="{ label: 'Save', disabled: !routeForm.valid }"
+        type="submit"
+      ></app-custom-button>
+    </form>
+  </div>
+</p-dialog>

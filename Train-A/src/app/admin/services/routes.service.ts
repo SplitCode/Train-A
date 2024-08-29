@@ -20,15 +20,17 @@ export class RoutesService {
     return this.http.delete<void>(`${this.apiUrl}/${routeId}`);
   }
 
-  // public createRoute(route: RoutesItem): Observable<RoutesItem['code']> {
-  //   return this.http
-  //     .post<{ code: RoutesItem['code'] }>(this.apiUrl, route)
-  //     .pipe(map((response) => response.code));
-  // }
+  createRoute(path: number[], carriages: string[]): Observable<RoutesItem> {
+    const body = { path, carriages };
+    return this.http.post<RoutesItem>(this.apiUrl, body);
+  }
 
-  // public updateRoute(route: RoutesItem): Observable<RoutesItem['code']> {
-  //   return this.http
-  //     .put<{ code: RoutesItem['code'] }>(`${this.apiUrl}/${route.id}`, route)
-  //     .pipe(map((response) => response.code));
-  // }
+  updateRoute(
+    id: number,
+    path: number[],
+    carriages: string[],
+  ): Observable<RoutesItem> {
+    const body = { path, carriages };
+    return this.http.put<RoutesItem>(`${this.apiUrl}/${id}`, body);
+  }
 }

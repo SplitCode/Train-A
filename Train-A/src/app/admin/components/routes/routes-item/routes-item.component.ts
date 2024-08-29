@@ -4,7 +4,10 @@ import { Store } from '@ngrx/store';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { FieldsetModule } from 'primeng/fieldset';
 import { CommonModule } from '@angular/common';
-import { deleteRoute } from '../../../../redux/actions/routes.actions';
+import {
+  deleteRoute,
+  showRouteForm,
+} from '../../../../redux/actions/routes.actions';
 import { DialogModule } from 'primeng/dialog';
 import { Router } from '@angular/router';
 
@@ -29,12 +32,11 @@ export class RoutesItemComponent {
   ) {}
 
   public updateRoute(): void {
-    // this.store.dispatch(
-    //   showRouteForm({
-    //     routeCode: this.config.code,
-    //     mode: 'update',
-    //   }),
-    // );
+    this.store.dispatch(
+      showRouteForm({
+        mode: 'update',
+      }),
+    );
     console.log('update');
   }
 
@@ -46,3 +48,5 @@ export class RoutesItemComponent {
     this.router.navigate(['/admin/routes', this.config.id]);
   }
 }
+
+// this.store.dispatch(showRouteForm({ routeId: this.config.id, mode: 'update' }));

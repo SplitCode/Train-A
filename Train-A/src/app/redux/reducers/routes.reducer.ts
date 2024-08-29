@@ -1,7 +1,9 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import {
   deleteRouteSuccess,
+  hideRouteForm,
   loadRoutesSuccess,
+  showRouteForm,
 } from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
@@ -15,10 +17,28 @@ export const reducer = createReducer(
       routes,
     }),
   ),
-  on(deleteRouteSuccess, (state, { routeId }) => ({
-    ...state,
-    routes: state.routes.filter((route) => route.id !== routeId),
-  })),
+  on(
+    deleteRouteSuccess,
+    (state, { routeId }): RoutesState => ({
+      ...state,
+      routes: state.routes.filter((route) => route.id !== routeId),
+    }),
+  ),
+  on(
+    showRouteForm,
+    (state, { mode }): RoutesState => ({
+      ...state,
+      formVisible: true,
+      mode,
+    }),
+  ),
+  on(
+    hideRouteForm,
+    (state): RoutesState => ({
+      ...state,
+      formVisible: false,
+    }),
+  ),
 );
 
 export function routesReducer(state: RoutesState | undefined, action: Action) {

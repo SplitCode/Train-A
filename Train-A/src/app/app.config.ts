@@ -20,6 +20,9 @@ import { PRIME_NG_MODULES } from './shared/modules/prime-ng-modules';
 import { StationsEffects } from './redux/effects/stations.effects';
 import { OrderService } from './order/services/order.service';
 import { RideEffects } from './redux/effects/ride.effects';
+import { SearchEffects } from './redux/effects/search.effects';
+import { RoutesEffects } from './redux/effects/routes.effects';
+import { RoutesService } from './admin/services/routes.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,11 +31,14 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     CarriageService,
     OrderService,
+    RoutesService,
     provideEffects([
       UserEffects,
       CarriageEffects,
       StationsEffects,
       RideEffects,
+      SearchEffects,
+      RoutesEffects,
     ]),
     PRIME_NG_MODULES.MessageService,
     importProvidersFrom(

@@ -5,7 +5,7 @@
   [responsiveOptions]="responsiveOptions"
 >
   <ng-template let-station pTemplate="item">
-    <app-stations-item [station]="station"/>
+    <app-stations-item [station]="station" />
   </ng-template>
 </p-carousel> -->
 
@@ -27,6 +27,14 @@
   [(visible)]="localModalInfo.visibleModal"
 >
   <div class="flex justify-between">
+    <app-custom-button
+      [config]="{ label: 'Cancel', outlined: true }"
+      (click)="closeModal()"
+    />
+    <app-custom-button
+      [config]="{ label: 'Confirm' }"
+      (click)="deleteStation(); closeModal()"
+    />
     <app-custom-button
       [config]="{ label: 'Cancel', outlined: true }"
       (click)="closeModal()"

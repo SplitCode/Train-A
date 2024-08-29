@@ -11,15 +11,3 @@ export const initialRoutesState: RoutesState = {
   formVisible: false,
   mode: 'create',
 };
-
-// export interface RoutesState {
-//   routes: RoutesItem[];
-//   // formVisibleForCarriageCode: string | null;
-//   // mode: 'create' | 'update';
-// }
-
-// export const initialRoutesState: RoutesState = {
-//   routes: [],
-//   // formVisibleForCarriageCode: null,
-//   // mode: 'create',
-// };

@@ -5,9 +5,13 @@ export enum UserRole {
 }
 
 export interface UserState {
+  name: string;
+  email: string;
   userRole: UserRole;
 }
 
 export const initialUserState: UserState = {
   userRole: UserRole.Guest,
+  name: '',
+  email: '',
 };

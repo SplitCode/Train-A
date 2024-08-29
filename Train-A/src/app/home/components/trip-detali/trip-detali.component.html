@@ -9,22 +9,26 @@
     [config]="{ label: 'Route', icon: 'pi pi-map' }"
   ></app-custom-button>
 
-  <!-- <div class="flex gap-4" *ngIf="timelineEvents$ | async as events">
-    <div>Departure: {{ events[0].departureTime | date: "medium" }}</div>
+  <div class="flex gap-4" *ngIf="timelineEvents$ | async as events">
+    <div *ngIf="events.length > 0 && events[0].departureTime">
+      Departure: {{ events[0].departureTime | date: "medium" }}
+    </div>
     <span
+      *ngIf="fromStationId"
       class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
     >
       From: {{ +fromStationId | stationCityById | async }}
     </span>
-    <div>
+    <div *ngIf="events.length > 0 && events[events.length - 1]?.arrivalTime">
       Arrival: {{ events[events.length - 1].arrivalTime | date: "medium" }}
     </div>
     <span
+      *ngIf="toStationId"
       class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
     >
-      To: {{ +toStationId! | stationCityById | async }}
+      To: {{ +toStationId | stationCityById | async }}
     </span>
-  </div> -->
+  </div>
 </div>
 
 <p-dialog

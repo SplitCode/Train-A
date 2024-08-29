@@ -41,7 +41,7 @@ export class RoutesItemComponent {
         mode: 'update',
       }),
     );
-    console.log('update');
+    // this.store.dispatch(showRouteForm({ mode: 'update', route }));
   }
 
   public deleteRoute(routeId: number): void {

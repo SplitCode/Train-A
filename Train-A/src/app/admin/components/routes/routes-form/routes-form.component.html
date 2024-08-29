@@ -5,41 +5,56 @@
   [style]="{ width: '70%' }"
   (onHide)="closeDialog()"
 >
-  <div class="flex gap-4 items-center">
+  <div class="flex flex-col gap-4">
     <form
-      class="flex flex-col gap-4 text-center"
+      class="flex flex-col gap-4"
       [formGroup]="routeForm"
       (ngSubmit)="onSubmit()"
     >
-      <div class="text-center flex flex-col">
-        <label>Stations</label>
-        <input pInputText formControlName="path" />
-        <div
-          *ngIf="
-            routeForm.get('path')?.invalid && routeForm.get('path')?.touched
-          "
-        >
-          Path is required.
+      <div class="flex gap-4">
+        <div formArrayName="path" class="flex-1">
+          <label>Stations</label>
+          <div *ngFor="let stationCtrl of pathControls; let i = index">
+            <div [formGroupName]="i">
+              <select formControlName="stationId">
+                <option
+                  *ngFor="let availableStation of availableStations"
+                  [value]="availableStation.id"
+                >
+                  {{ availableStation.city }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <button type="button" (click)="addStationField()">Add Station</button>
+        </div>
+
+        <div formArrayName="carriages" class="flex-1">
+          <label>Carriages</label>
+          <div *ngFor="let carriageCtrl of carriagesControls; let i = index">
+            <div [formGroupName]="i">
+              <select formControlName="carriageType">
+                <option
+                  *ngFor="let availableCarriage of availableCarriages"
+                  [value]="availableCarriage.code"
+                >
+                  {{ availableCarriage.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <button type="button" (click)="addCarriageField()">
+            Add Carriage
+          </button>
         </div>
       </div>
 
-      <div>
-        <label>Carriages</label>
-        <input pInputText formControlName="carriages" />
-        <div
-          *ngIf="
-            routeForm.get('carriages')?.invalid &&
-            routeForm.get('carriages')?.touched
-          "
-        >
-          Carriages are required.
-        </div>
+      <div class="flex mt-4">
+        <app-custom-button
+          [config]="{ label: 'Save', disabled: !routeForm.valid }"
+          type="submit"
+        ></app-custom-button>
       </div>
-
-      <app-custom-button
-        [config]="{ label: 'Save', disabled: !routeForm.valid }"
-        type="submit"
-      ></app-custom-button>
     </form>
   </div>
 </p-dialog>

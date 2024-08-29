@@ -64,7 +64,7 @@ export class RoutesEffects {
         this.routesService
           .updateRoute(route.id, route.path, route.carriages)
           .pipe(
-            map((updatedRoute) => createRouteSuccess({ route: updatedRoute })), // Возможно, нужно создать отдельное действие для успешного обновления
+            map((updatedRoute) => createRouteSuccess({ route: updatedRoute })),
             catchError((error) =>
               of(createRouteFailure({ error: error.message })),
             ),

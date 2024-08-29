@@ -1,0 +1,23 @@
+<app-custom-button
+  (click)="createRoute()"
+  [config]="{
+    styleClass: 'seat my-3',
+    label: 'Create',
+    icon: 'pi pi-file-plus',
+  }"
+></app-custom-button>
+
+<app-routes-form></app-routes-form>
+
+<p-panel class="mt-3 p-4 max-w-fit" header="Routes">
+  <ul class="list-none p-0">
+    <li *ngFor="let route of routes$ | async; let i = index" class="mb-8 p-0">
+      <app-routes-item
+        [config]="route"
+        [cityNames]="(cityNames$ | async)?.[i] || []"
+        [carriageNames]="(carriageNames$ | async)?.[i] || []"
+      ></app-routes-item>
+      <p-divider />
+    </li>
+  </ul>
+</p-panel>

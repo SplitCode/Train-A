@@ -6,4 +6,5 @@ export const API_CONFIG = {
   usersUrl: '/api/users',
   searchUrl: '/api/search',
   stationsUrl: '/api/station',
+  routesUrl: '/api/route',
 };

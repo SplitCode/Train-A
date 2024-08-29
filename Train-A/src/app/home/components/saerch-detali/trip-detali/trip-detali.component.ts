@@ -10,6 +10,7 @@ import { CustomButtonComponent } from '../../../../shared/components/custom-butt
 import { StationCityByIdPipe } from '../../../pipes/station-sity-by-id.pipe';
 import { RouteModalComponent } from '../route-modal/route-modal.component';
 import { TimelineEvent } from '../../../models/time-line-event.interface';
+import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-tabs.component';
 
 @Component({
   selector: 'app-trip-detali',
@@ -25,6 +26,7 @@ import { TimelineEvent } from '../../../models/time-line-event.interface';
     PRIME_NG_MODULES.TagModule,
     StationCityByIdPipe,
     RouteModalComponent,
+    CarriageTypeTabsComponent,
   ],
   standalone: true,
 })

@@ -12,18 +12,21 @@ import { Store } from '@ngrx/store';
 import { selectCarriageTypes } from '../../../../redux/selectors/ride.selectors';
 import { updateFilteredCarriages } from '../../../../redux/actions/ride.actions';
 import { selectCarriageByCode } from '../../../../redux/selectors/carriage.selectors';
+import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
+import { CommonModule } from '@angular/common';
+import { UniqueInArrPipe } from '../../../../shared/pipes/unique-in-arr.pipe';
 
 @Component({
   selector: 'app-carriage-type-tabs',
   templateUrl: './carriage-type-tabs.component.html',
   styleUrls: ['./carriage-type-tabs.component.scss'],
   standalone: true,
-  imports: [],
+  imports: [PRIME_NG_MODULES.TabViewModule, CommonModule, UniqueInArrPipe],
 })
 export class CarriageTypeTabsComponent implements OnInit {
   public carriagesByTypes = signal<CarriageItem[]>([]);
 
-  private carriageTypes$: Observable<string[] | undefined>;
+  public carriageTypes$: Observable<string[] | undefined>;
 
   private subscriptions: Subscription[] = [];
 

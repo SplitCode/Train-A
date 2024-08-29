@@ -28,8 +28,10 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TimelineModule } from 'primeng/timeline';
+import { TabViewModule } from 'primeng/tabview';
 
 export const PRIME_NG_MODULES = {
+  TabViewModule: [TabViewModule],
   TimelineModule: [TimelineModule],
   InputNumberModule: [InputNumberModule],
   ToastModule: [ToastModule],

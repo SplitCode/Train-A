@@ -1,3 +1,8 @@
-<p>
-  carriage-type-tabs works!
-</p>
+<p-tabView *ngIf="carriageTypes$ | async as carriageTypes">
+  <p-tabPanel
+    *ngFor="let carriageType of carriageTypes | uniqueInArr"
+    [header]="carriageType"
+  >
+    Information about {{ carriageType }}.
+  </p-tabPanel>
+</p-tabView>

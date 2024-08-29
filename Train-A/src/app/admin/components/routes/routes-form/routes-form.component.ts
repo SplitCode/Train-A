@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { DialogModule } from 'primeng/dialog';
+import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import {
   createRoute,
   hideRouteForm,
@@ -20,13 +20,12 @@ import {
   selector: 'app-routes-form',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
     CommonModule,
-    DialogModule,
+    ReactiveFormsModule,
     CustomButtonComponent,
+    PRIME_NG_MODULES.DialogModule,
   ],
   templateUrl: './routes-form.component.html',
-  styleUrl: './routes-form.component.scss',
 })
 export class RoutesFormComponent implements OnInit {
   private subscriptions: Subscription = new Subscription();

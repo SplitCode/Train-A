@@ -2,19 +2,23 @@ import { Component, Input } from '@angular/core';
 import { RoutesItem } from '../../../models/routes-item.interface';
 import { Store } from '@ngrx/store';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
-import { FieldsetModule } from 'primeng/fieldset';
+import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { CommonModule } from '@angular/common';
 import {
   deleteRoute,
   showRouteForm,
 } from '../../../../redux/actions/routes.actions';
-import { DialogModule } from 'primeng/dialog';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-routes-item',
   standalone: true,
-  imports: [CustomButtonComponent, FieldsetModule, CommonModule, DialogModule],
+  imports: [
+    CommonModule,
+    CustomButtonComponent,
+    PRIME_NG_MODULES.FieldsetModule,
+    PRIME_NG_MODULES.DialogModule,
+  ],
   templateUrl: './routes-item.component.html',
 })
 export class RoutesItemComponent {

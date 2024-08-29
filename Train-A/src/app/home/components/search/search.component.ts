@@ -85,6 +85,10 @@ export class SearchComponent implements OnInit {
 
   public onHide() {
     this.connectedStations = this.searchForm.value.city1.connectedTo;
+
+    this.searchForm.patchValue({
+      city2: '',
+    });
   }
 
   private findCity(id: number): Observable<StationsItem | undefined> {

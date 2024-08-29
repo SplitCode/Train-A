@@ -42,11 +42,9 @@ export class HeaderComponent implements OnInit {
   }
 
   public isActiveRoute(route: string): boolean {
-    return this.router.url.includes(route);
-  }
+    const activeRoute = this.router.url.split('/')[1];
 
-  public isActiveHome(route: string): boolean {
-    return this.router.url === route;
+    return activeRoute === route.split('/')[1];
   }
 
   public isGeneralUserOrManager(userRole: string): boolean {

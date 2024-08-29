@@ -15,6 +15,7 @@ import {
   deletedStation,
   stationModal,
 } from '../../../redux/actions/stations.actions';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-stations-list',
@@ -25,6 +26,7 @@ import {
     StationsItemComponent,
     DialogModule,
     CustomButtonComponent,
+    ScrollingModule,
   ],
   templateUrl: './stations-list.component.html',
   styleUrl: './stations-list.component.scss',

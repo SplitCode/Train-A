@@ -27,8 +27,10 @@ import { ImageModule } from 'primeng/image';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TimelineModule } from 'primeng/timeline';
 
 export const PRIME_NG_MODULES = {
+  TimelineModule: [TimelineModule],
   InputNumberModule: [InputNumberModule],
   ToastModule: [ToastModule],
   MessageService: [MessageService],

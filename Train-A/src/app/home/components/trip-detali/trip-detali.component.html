@@ -1,4 +1,88 @@
-<p>Trip Details</p>
-<p>Ride ID: {{ rideId }}</p>
-<p>From Station ID: {{ fromStationId }}</p>
-<p>To Station ID: {{ toStationId }}</p>
+<div class="flex gap-4 m-4 items-center">
+  <app-custom-button
+    routerLink="/"
+    [config]="{ label: 'Back', icon: 'pi pi-angle-double-left' }"
+  ></app-custom-button>
+
+  <app-custom-button
+    (clickEmitter)="isDialog(true)"
+    [config]="{ label: 'Route', icon: 'pi pi-map' }"
+  ></app-custom-button>
+
+  <!-- <div class="flex gap-4" *ngIf="timelineEvents$ | async as events">
+    <div>Departure: {{ events[0].departureTime | date: "medium" }}</div>
+    <span
+      class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
+    >
+      From: {{ +fromStationId | stationCityById | async }}
+    </span>
+    <div>
+      Arrival: {{ events[events.length - 1].arrivalTime | date: "medium" }}
+    </div>
+    <span
+      class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+    >
+      To: {{ +toStationId! | stationCityById | async }}
+    </span>
+  </div> -->
+</div>
+
+<p-dialog
+  [header]="'Route: ' + rideId"
+  (onHide)="isDialog(false)"
+  [modal]="true"
+  [(visible)]="isVisiblePath"
+>
+  <div *ngIf="timelineEvents$ | async as events">
+    <p-timeline
+      [value]="events"
+      align="alternate"
+      layout="vertical"
+      styleClass="custom-timeline"
+    >
+      <ng-template pTemplate="marker" let-event>
+        <span
+          class="flex w-8 h-8 items-center justify-center text-white rounded-full z-10 shadow-lg"
+          [ngStyle]="{ 'background-color': event.color }"
+        >
+          <i [class]="event.icon"></i>
+        </span>
+      </ng-template>
+
+      <ng-template
+        pTemplate="content"
+        let-event
+        let-first="first"
+        let-last="last"
+      >
+        <div class="p-4 bg-gray-800 rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold text-white">{{ event.status }}</h3>
+          <h4 class="text-sm text-gray-400">{{ event.date }}</h4>
+          <div class="text-gray-300">
+            <ng-container *ngIf="!first">
+              <span *ngIf="event.arrivalTime">
+                Arrival: {{ event.arrivalTime | date: "shortTime" }}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="!last">
+              <span *ngIf="event.departureTime">
+                Departure: {{ event.departureTime | date: "shortTime" }}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="last">
+              <span *ngIf="event.arrivalTime">
+                Arrival: {{ event.arrivalTime | date: "shortTime" }}
+              </span>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="opposite" let-event>
+        <span class="text-gray-400">
+          {{ event.timeDifference }}
+        </span>
+      </ng-template>
+    </p-timeline>
+  </div>
+</p-dialog>

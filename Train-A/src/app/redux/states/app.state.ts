@@ -1,5 +1,6 @@
 import { CarriageState } from './carriage.state';
 import { RideState } from './ride.state';
+import { SearchState } from './search.state';
 import { StationsState } from './stations.state';
 import { UserState } from './user.state';
 
@@ -8,4 +9,5 @@ export interface AppState {
   carriageState: CarriageState;
   stationsState: StationsState;
   rideState: RideState;
+  searchState: SearchState;
 }

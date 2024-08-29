@@ -58,10 +58,7 @@ export class ChangePasswordComponent implements OnInit {
   ) {
     this.passwordForm = this.fb.group(
       {
-        password: [
-          'qwerty123',
-          [noWhitespaceValidator(), Validators.minLength(8)],
-        ],
+        password: ['', [noWhitespaceValidator(), Validators.minLength(8)]],
       },
       { validators: passwordsMatchValidator },
     );
@@ -80,7 +77,8 @@ export class ChangePasswordComponent implements OnInit {
               summary: 'Success',
               detail: 'Password updated!',
             });
-            this.router.navigate(['/signin']);
+            this.visible = false;
+            this.passwordForm.reset();
           },
           error: (err: ServerError) => {
             this.isSubmitting = false;

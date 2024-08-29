@@ -14,6 +14,7 @@
       formControlName="name"
       tooltip="Natalia"
       placeholder="Enter your name"
+      [inValidate]="UpdateUserDataForm.get('name')?.errors ? true : false"
     >
       <div
         *ngIf="submitted && UpdateUserDataForm.get('name')?.errors"
@@ -36,6 +37,7 @@
       formControlName="email"
       tooltip="user@example.com"
       placeholder="Enter your email"
+      [inValidate]="UpdateUserDataForm.get('email')?.errors ? true : false"
     >
       <div
         *ngIf="submitted && UpdateUserDataForm.get('email')?.errors"

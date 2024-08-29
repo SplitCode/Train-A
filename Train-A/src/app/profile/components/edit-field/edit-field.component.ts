@@ -56,6 +56,8 @@ export class EditFieldComponent implements OnInit, ControlValueAccessor {
 
   @Input() value: string = '';
 
+  @Input() inValidate!: boolean;
+
   @Output() clickEmitter = new EventEmitter<void>();
 
   onClick() {
@@ -95,6 +97,8 @@ export class EditFieldComponent implements OnInit, ControlValueAccessor {
   }
 
   toggleEditMode() {
-    this.editMode = !this.editMode;
+    if (this.inValidate !== true) {
+      this.editMode = !this.editMode;
+    }
   }
 }

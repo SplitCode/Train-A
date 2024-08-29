@@ -1,7 +1,7 @@
 <div class="w-full min-h-[calc(100vh-73px-21px-40px)] flex justify-center items-center flex-col">
   <p-card [styleClass]="'rounded-lg'" class="w-full max-w-2xl">
-    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="flex flex-wrap gap-y-1">
-      <div class="grow w-[50%] min-w-72 pr-1">
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="flex flex-wrap gap-1">
+      <div class="grow w-[calc(50%-2px)] min-w-72">
           <div class="mb-2">Your City</div>
           <p-dropdown
             [styleClass]="'w-full'"
@@ -10,7 +10,6 @@
             [options]="(allStation$ | async) || []"
             optionLabel="city"
             [editable]="true"
-            class="grow w-[50%] min-w-72 pr-1"
             (onHide)="onHide()"
           />
           <div
@@ -28,7 +27,7 @@
           </small>
         </div>
       </div>
-      <div class="grow w-[50%] min-w-72 pl-1">
+      <div class="grow w-[calc(50%-2px)] min-w-72">
         <div class="mb-2">Destination City</div>
         <p-dropdown
           [styleClass]="'w-full'"
@@ -36,7 +35,6 @@
           [options]="connectedStations || []"
           optionLabel="id"
           [editable]="true"
-          class="grow w-[50%] min-w-72 pr-1"
           placeholder="Choose a station"
         />
         <div

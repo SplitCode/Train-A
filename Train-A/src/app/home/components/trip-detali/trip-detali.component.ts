@@ -2,35 +2,27 @@ import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
-  catchError,
   combineLatest,
   filter,
-  forkJoin,
-  map,
   mergeMap,
   Observable,
   of,
   Subscription,
-  switchMap,
-  take,
   tap,
 } from 'rxjs';
 import {
   loadRideInfo,
   updateFilteredCarriages,
 } from '../../../redux/actions/ride.actions';
-import {
-  selectCarriageTypes,
-  selectRideInfo,
-} from '../../../redux/selectors/ride.selectors';
-import { RideResponse } from '../../../order/models/ride-response.interface';
+import { selectCarriageTypes } from '../../../redux/selectors/ride.selectors';
+
 import { selectCarriageByCode } from '../../../redux/selectors/carriage.selectors';
 import { CarriageItem } from '../../../admin/models/carriage-item.interface';
 import { CommonModule } from '@angular/common';
 import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
-import { selectStationCityByID } from '../../../redux/selectors/stations.selectors';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
+import { RouteModalComponent } from '../route-modal/route-modal.component';
 interface TimelineEvent {
   status: string;
   date: string;
@@ -55,6 +47,7 @@ interface TimelineEvent {
     PRIME_NG_MODULES.DialogModule,
     PRIME_NG_MODULES.TagModule,
     StationCityByIdPipe,
+    RouteModalComponent,
   ],
   standalone: true,
 })
@@ -65,11 +58,9 @@ export class TripDetailComponent implements OnInit, OnDestroy {
 
   private carriageTypes$: Observable<string[] | undefined>;
 
-  timelineEvents$: Observable<TimelineEvent[]> = of([]);
+  public timelineEvents$: Observable<TimelineEvent[]> = of([]);
 
   public rideId: string | null = null;
-
-  public rideInfo$: Observable<RideResponse | null>;
 
   public fromStationId: string | null = null;
 
@@ -83,106 +74,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store,
   ) {
-    this.rideInfo$ = this.store.select(selectRideInfo);
     this.carriageTypes$ = this.store.select(selectCarriageTypes);
-  }
-
-  private buildEvents(): void {
-    if (this.rideId) {
-      this.rideInfo$ = this.store.select(selectRideInfo);
-      this.timelineEvents$ = this.rideInfo$.pipe(
-        switchMap((rideInfo) =>
-          rideInfo ? this.transformToTimelineEvents(rideInfo) : of([]),
-        ),
-        catchError(() => of([])),
-      );
-
-      const subscription = this.timelineEvents$.subscribe((events) => {
-        this.events = events;
-      });
-      this.subscriptions.push(subscription);
-    }
-  }
-
-  private transformToTimelineEvents(
-    rideInfo: RideResponse,
-  ): Observable<TimelineEvent[]> {
-    console.log(rideInfo);
-    const fromStationId = Number(this.fromStationId);
-    const toStationId = Number(this.toStationId);
-
-    const startIndex = rideInfo.path.indexOf(fromStationId);
-    const endIndex = rideInfo.path.indexOf(toStationId);
-
-    const filteredPath = rideInfo.path.slice(startIndex, endIndex + 1);
-    const stationObservables = filteredPath.map((stationId) =>
-      this.store.select(selectStationCityByID(stationId)).pipe(take(1)),
-    );
-
-    return forkJoin(stationObservables).pipe(
-      map((stationCities) => {
-        const timelineEvents: TimelineEvent[] = [];
-
-        filteredPath.forEach((stationId, index) => {
-          const segment = rideInfo.schedule.segments[startIndex + index];
-          const prevSegment =
-            rideInfo.schedule.segments[startIndex + index - 1];
-          const timeDifference =
-            index === 0 || index === filteredPath.length - 1
-              ? ''
-              : prevSegment
-                ? this.calculateTimeDifference(
-                    prevSegment.time[1],
-                    segment.time[0],
-                  )
-                : '';
-
-          console.log(
-            `Station ID: ${stationId}, Arrival Time: ${segment.time[0]}, Departure Time: ${segment.time[1]}, Time Difference: ${timeDifference}`,
-          );
-
-          timelineEvents.push({
-            status:
-              index === 0
-                ? 'First Station'
-                : index === filteredPath.length - 1
-                  ? 'Last Station'
-                  : '',
-            date: stationCities[index],
-            arrivalTime: index === 0 ? '' : segment.time[0],
-            departureTime:
-              index === filteredPath.length - 1 ? '' : segment.time[1],
-            timeDifference:
-              index === 0 || index === filteredPath.length - 1
-                ? ''
-                : timeDifference,
-            color:
-              index === 0
-                ? '#4CAF50'
-                : index === filteredPath.length - 1
-                  ? '#F44336'
-                  : '#FFC107',
-            icon:
-              index === 0
-                ? 'pi pi-map-marker'
-                : index === filteredPath.length - 1
-                  ? 'pi pi-flag'
-                  : 'pi pi-road',
-          });
-        });
-
-        return timelineEvents;
-      }),
-    );
-  }
-
-  private calculateTimeDifference(startTime: string, endTime: string): string {
-    const start = new Date(startTime);
-    const end = new Date(endTime);
-    const diffMs = end.getTime() - start.getTime();
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    return `${diffHours}h ${diffMinutes}m`;
   }
 
   private writeParamsFromRouter(): void {
@@ -245,7 +137,6 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     this.writeParamsFromRouter();
     this.loadRideInfo();
     this.processCarriagesByTypes();
-    this.buildEvents();
   }
 
   public ngOnDestroy() {

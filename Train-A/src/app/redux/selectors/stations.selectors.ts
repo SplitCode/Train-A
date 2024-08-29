@@ -25,18 +25,16 @@ export const selectModalInfo = createSelector(
   selectStationsState,
   (state: StationsState) => state.modalInfo,
 );
-
-const stationIndex: { [key: number]: StationsItem } = {};
 const cache: { [key: number]: string } = {};
-
 export const selectStationCityByID = (stationID: number) =>
-  createSelector([], () => {
+  createSelector([selectAllStations], (stations) => {
     if (cache[stationID]) {
       return cache[stationID];
     }
 
-    const foundStation = stationIndex[stationID];
+    const foundStation = stations.find((station) => station.id === stationID);
     const city = foundStation ? foundStation.city : `StationID ${stationID}`;
     cache[stationID] = city;
+    console.log(`Station ID: ${stationID}, City: ${city}`); // Логирование
     return city;
   });

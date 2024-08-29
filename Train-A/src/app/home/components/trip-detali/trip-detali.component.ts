@@ -5,11 +5,13 @@ import {
   catchError,
   combineLatest,
   filter,
+  forkJoin,
   map,
   mergeMap,
   Observable,
   of,
   Subscription,
+  switchMap,
   take,
   tap,
 } from 'rxjs';
@@ -76,8 +78,8 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     if (this.rideId) {
       this.rideInfo$ = this.store.select(selectRideInfo);
       this.timelineEvents$ = this.rideInfo$.pipe(
-        map((rideInfo) =>
-          rideInfo ? this.transformToTimelineEvents(rideInfo) : [],
+        switchMap((rideInfo) =>
+          rideInfo ? this.transformToTimelineEvents(rideInfo) : of([]),
         ),
         catchError(() => of([])),
       );
@@ -89,7 +91,9 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  private transformToTimelineEvents(rideInfo: RideResponse): TimelineEvent[] {
+  private transformToTimelineEvents(
+    rideInfo: RideResponse,
+  ): Observable<TimelineEvent[]> {
     console.log(rideInfo);
     const fromStationId = Number(this.fromStationId);
     const toStationId = Number(this.toStationId);
@@ -97,24 +101,23 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     const startIndex = rideInfo.path.indexOf(fromStationId);
     const endIndex = rideInfo.path.indexOf(toStationId);
 
-    if (startIndex === -1 || endIndex === -1 || startIndex > endIndex) {
-      return [];
-    }
-
     const filteredPath = rideInfo.path.slice(startIndex, endIndex + 1);
-    const timelineEvents: TimelineEvent[] = [];
+    const stationObservables = filteredPath.map((stationId) =>
+      this.store.select(selectStationCityByID(stationId)).pipe(take(1)),
+    );
 
-    filteredPath.forEach((stationId, index) => {
-      const segment = rideInfo.schedule.segments[startIndex + index];
-      const nextSegment = rideInfo.schedule.segments[startIndex + index + 1];
-      const timeDifference = nextSegment
-        ? this.calculateTimeDifference(segment.time[1], nextSegment.time[0])
-        : '';
+    return forkJoin(stationObservables).pipe(
+      map((stationCities) => {
+        const timelineEvents: TimelineEvent[] = [];
 
-      this.store
-        .select(selectStationCityByID(stationId))
-        .pipe(take(1))
-        .subscribe((stationCity) => {
+        filteredPath.forEach((stationId, index) => {
+          const segment = rideInfo.schedule.segments[startIndex + index];
+          const nextSegment =
+            rideInfo.schedule.segments[startIndex + index + 1];
+          const timeDifference = nextSegment
+            ? this.calculateTimeDifference(segment.time[1], nextSegment.time[0])
+            : '';
+
           timelineEvents.push({
             status:
               index === 0
@@ -122,7 +125,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
                 : index === filteredPath.length - 1
                   ? 'Last Station'
                   : '',
-            date: stationCity,
+            date: stationCities[index],
             arrivalTime: segment.time[0],
             departureTime: segment.time[1],
             timeDifference: timeDifference,
@@ -140,9 +143,10 @@ export class TripDetailComponent implements OnInit, OnDestroy {
                   : 'pi pi-road',
           });
         });
-    });
 
-    return timelineEvents;
+        return timelineEvents;
+      }),
+    );
   }
 
   private calculateTimeDifference(startTime: string, endTime: string): string {

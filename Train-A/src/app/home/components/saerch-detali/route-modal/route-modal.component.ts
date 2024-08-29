@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
+import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import {
   Observable,
   take,
@@ -10,22 +10,12 @@ import {
   switchMap,
   Subscription,
 } from 'rxjs';
-import { RideResponse } from '../../../order/models/ride-response.interface';
-import { selectStationCityByID } from '../../../redux/selectors/stations.selectors';
+import { RideResponse } from '../../../../order/models/ride-response.interface';
+import { selectStationCityByID } from '../../../../redux/selectors/stations.selectors';
 import { Store } from '@ngrx/store';
-import { selectRideInfo } from '../../../redux/selectors/ride.selectors';
+import { selectRideInfo } from '../../../../redux/selectors/ride.selectors';
 import { CommonModule } from '@angular/common';
-
-interface TimelineEvent {
-  status: string;
-  date: string;
-  arrivalTime: string;
-  departureTime: string;
-  timeDifference: string;
-  icon?: string;
-  color?: string;
-  image?: string;
-}
+import { TimelineEvent } from '../../../models/time-line-event.interface';
 
 @Component({
   selector: 'app-route-modal',
@@ -60,6 +50,10 @@ export class RouteModalComponent implements OnInit {
 
   public ngOnInit() {
     this.buildEvents();
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   private buildEvents(): void {

@@ -35,6 +35,5 @@ export const selectStationCityByID = (stationID: number) =>
     const foundStation = stations.find((station) => station.id === stationID);
     const city = foundStation ? foundStation.city : `StationID ${stationID}`;
     cache[stationID] = city;
-    console.log(`Station ID: ${stationID}, City: ${city}`); // Логирование
     return city;
   });

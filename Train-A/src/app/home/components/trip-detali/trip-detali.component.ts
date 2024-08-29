@@ -112,11 +112,21 @@ export class TripDetailComponent implements OnInit, OnDestroy {
 
         filteredPath.forEach((stationId, index) => {
           const segment = rideInfo.schedule.segments[startIndex + index];
-          const nextSegment =
-            rideInfo.schedule.segments[startIndex + index + 1];
-          const timeDifference = nextSegment
-            ? this.calculateTimeDifference(segment.time[1], nextSegment.time[0])
-            : '';
+          const prevSegment =
+            rideInfo.schedule.segments[startIndex + index - 1];
+          const timeDifference =
+            index === 0
+              ? 'First Station'
+              : prevSegment
+                ? this.calculateTimeDifference(
+                    prevSegment.time[1],
+                    segment.time[0],
+                  )
+                : '';
+
+          console.log(
+            `Station ID: ${stationId}, Arrival Time: ${segment.time[0]}, Departure Time: ${segment.time[1]}, Time Difference: ${timeDifference}`,
+          ); // Логирование
 
           timelineEvents.push({
             status:
@@ -126,7 +136,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
                   ? 'Last Station'
                   : '',
             date: stationCities[index],
-            arrivalTime: segment.time[0],
+            arrivalTime: index === 0 ? '' : segment.time[0],
             departureTime: segment.time[1],
             timeDifference: timeDifference,
             color:

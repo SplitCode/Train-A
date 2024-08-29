@@ -25,15 +25,17 @@ export const selectModalInfo = createSelector(
   selectStationsState,
   (state: StationsState) => state.modalInfo,
 );
-const cache: { [key: number]: string } = {};
+
+const cacheStationsCityByID: { [key: number]: string } = {};
+
 export const selectStationCityByID = (stationID: number) =>
   createSelector([selectAllStations], (stations) => {
-    if (cache[stationID]) {
-      return cache[stationID];
+    if (cacheStationsCityByID[stationID]) {
+      return cacheStationsCityByID[stationID];
     }
 
     const foundStation = stations.find((station) => station.id === stationID);
     const city = foundStation ? foundStation.city : `StationID ${stationID}`;
-    cache[stationID] = city;
+    cacheStationsCityByID[stationID] = city;
     return city;
   });

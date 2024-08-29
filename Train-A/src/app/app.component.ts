@@ -26,11 +26,12 @@ export class AppComponent implements OnInit {
   constructor(
     private primengConfig: PrimeNGConfig,
     private store: Store,
-  ) {}
+  ) {
+    this.store.dispatch(appInit());
+  }
 
   public ngOnInit() {
     this.primengConfig.ripple = true;
-    this.store.dispatch(appInit());
     this.dispatchCarriages();
     this.dispatchStations();
   }

@@ -1,0 +1,60 @@
+<div class="route-container">
+  <div class="route">
+    <div class="flex justify-end gap-2">
+      <app-custom-button
+        (click)="updateRoute()"
+        [config]="{
+          label: 'Update',
+          styleClass: 'my-2',
+          icon: 'pi pi-file-edit',
+        }"
+      />
+      <app-custom-button
+        (click)="visible = true"
+        [config]="{
+          label: 'Delete',
+          styleClass: 'my-2',
+          icon: 'pi pi-trash',
+        }"
+      />
+      <app-custom-button
+        (click)="assignRide()"
+        [config]="{
+          label: 'Assign Ride',
+          styleClass: 'my-2',
+          icon: 'pi pi-calendar',
+        }"
+      />
+    </div>
+    <p-fieldset [legend]="'Route ' + config.id.toString()">
+      <div class="flex flex-col gap-4">
+        <div>
+          <div>Cities:</div>
+          <div>{{ cityNames.join(" - ") }}</div>
+        </div>
+        <div>
+          <div>Carriage Types:</div>
+          <div>{{ carriageNames.join(" - ") }}</div>
+        </div>
+      </div>
+    </p-fieldset>
+  </div>
+</div>
+
+<p-dialog
+  draggable="false"
+  header="Are you sure to delete Route {{ config.id }} ?"
+  [modal]="true"
+  [(visible)]="visible"
+>
+  <div class="flex justify-between">
+    <app-custom-button
+      [config]="{ label: 'Cancel', outlined: true }"
+      (click)="visible = false"
+    />
+    <app-custom-button
+      [config]="{ label: 'Confirm' }"
+      (click)="visible = false; deleteRoute(config.id)"
+    />
+  </div>
+</p-dialog>

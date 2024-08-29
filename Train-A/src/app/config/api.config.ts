@@ -3,4 +3,5 @@ export const API_CONFIG = {
   signInUrl: '/api/signin',
   carriageUrl: '/api/carriage',
   stationsUrl: '/api/station',
+  routesUrl: '/api/route',
 };

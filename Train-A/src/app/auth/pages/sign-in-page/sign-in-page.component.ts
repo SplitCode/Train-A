@@ -86,7 +86,7 @@ export class SignInPageComponent {
             summary: 'Success',
             detail: 'Authorization successfully!',
           });
-          this.router.navigate(['/home']);
+          this.router.navigate(['/']);
         },
         error: (err: ServerError) => {
           this.isSubmitting = false;

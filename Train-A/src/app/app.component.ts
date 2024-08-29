@@ -9,6 +9,7 @@ import { appInit } from './redux/actions/app.actions';
 import { Store } from '@ngrx/store';
 import { loadCarriages } from './redux/actions/carriage.actions';
 import { loadStations } from './redux/actions/stations.actions';
+import { loadRoutes } from './redux/actions/routes.actions';
 
 @Component({
   selector: 'app-root',
@@ -34,10 +35,15 @@ export class AppComponent implements OnInit {
     this.primengConfig.ripple = true;
     this.dispatchCarriages();
     this.dispatchStations();
+    this.dispatchRoutes();
   }
 
   private dispatchCarriages(): void {
     this.store.dispatch(loadCarriages());
+  }
+
+  private dispatchRoutes(): void {
+    this.store.dispatch(loadRoutes());
   }
 
   private dispatchStations(): void {

@@ -75,5 +75,5 @@
       }"/>
     </form>
   </p-card>
-  <app-search-result-list *ngIf="isSearched" class="result w-full max-w-[1600px]"/>
+  <app-search-result-list *ngIf="isSearched | async" class="result w-full max-w-[1600px]"/>
 </div>

@@ -9,6 +9,7 @@ import { selectSearch } from '../../../redux/selectors/search.selectors';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormatDatePipe } from '../../pipes/format-date.pipe';
 import { FormatDayPipe } from '../../pipes/format-day.pipe';
+import { SearchItemComponent } from '../search-item/search-item.component';
 
 @Component({
   selector: 'app-search-result-list',
@@ -20,6 +21,7 @@ import { FormatDayPipe } from '../../pipes/format-day.pipe';
     ScrollingModule,
     FormatDatePipe,
     FormatDayPipe,
+    SearchItemComponent,
   ],
   templateUrl: './search-result-list.component.html',
   styleUrl: './search-result-list.component.scss',

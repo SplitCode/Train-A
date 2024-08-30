@@ -9,14 +9,13 @@
               <div class="w-[calc(100%/14)] min-w-32 text-center">
                 <div class="font-bold text-white">
                   {{ (segments.time[1] | formatDate) }}
-                  <!-- {{ formatDate(segments.time[1])[0] }} -->
                 </div>
                 <div class="text-white text-sm">
                   {{ (segments.time[1] | formatDay) }}
                 </div>
               </div>
             </ng-template>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eligendi quod sequi asperiores dolor unde laudantium dolores adipisci cumque veritatis.
+            <app-search-item />
           </p-tabPanel>
         </p-tabView>
       </ng-template>

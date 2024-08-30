@@ -1,10 +1,15 @@
 import { SearchForm } from './../../../redux/states/search.state';
 import { ConnectedStations } from './../../../redux/states/stations.state';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { StationsItem } from '../../../redux/states/stations.state';
 import { selectAllStations } from '../../../redux/selectors/stations.selectors';
 import {
@@ -34,18 +39,19 @@ import { SearchResultListComponent } from '../search-result-list/search-result-l
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, AfterViewChecked {
   public allStation$: Observable<StationsItem[]>;
 
   public connectedStations!: ConnectedStations[];
 
   public searchForm!: FormGroup;
 
-  public isSearched: boolean = false;
+  public isSearched: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
   constructor(
     private fb: FormBuilder,
     private store: Store,
+    private cd: ChangeDetectorRef,
   ) {
     this.allStation$ = this.store.select(selectAllStations);
 
@@ -57,6 +63,10 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngAfterViewChecked(): void {
+    this.cd.detectChanges();
+  }
 
   public onSubmit() {
     let findCity!: StationsItem;
@@ -78,7 +88,7 @@ export class SearchComponent implements OnInit {
     };
 
     this.store.dispatch(loadSearch({ form: submitedForm }));
-    this.isSearched = true;
+    this.isSearched.next(true);
   }
 
   public onHide() {

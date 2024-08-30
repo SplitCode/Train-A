@@ -1,5 +1,4 @@
 import { SearchForm } from './../../../redux/states/search.state';
-import { SearchService } from './../../services/search.service';
 import { ConnectedStations } from './../../../redux/states/stations.state';
 import { Component, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
@@ -18,6 +17,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { loadSearch } from '../../../redux/actions/search.actions';
+import { SearchResultListComponent } from '../search-result-list/search-result-list.component';
 
 @Component({
   selector: 'app-search',
@@ -29,6 +29,7 @@ import { loadSearch } from '../../../redux/actions/search.actions';
     ReactiveFormsModule,
     DropdownModule,
     CalendarModule,
+    SearchResultListComponent,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -40,10 +41,11 @@ export class SearchComponent implements OnInit {
 
   public searchForm!: FormGroup;
 
+  public isSearched: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private searchService: SearchService,
   ) {
     this.allStation$ = this.store.select(selectAllStations);
 
@@ -75,12 +77,8 @@ export class SearchComponent implements OnInit {
       time: this.searchForm.value.date[0].toISOString(),
     };
 
-    console.log('FindCity', findCity);
-    console.log('SearchForm', this.searchForm.value);
-    console.log('SubmitedForm', submitedForm);
-
-    // this.searchService.getSearch(submitedForm).subscribe();
     this.store.dispatch(loadSearch({ form: submitedForm }));
+    this.isSearched = true;
   }
 
   public onHide() {

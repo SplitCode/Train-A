@@ -76,13 +76,12 @@ export class RoutesFormComponent implements OnInit {
         this.currentMode = mode;
       }),
     );
+
     this.subscriptions.add(
-      this.routeForm.get('stations')?.valueChanges.subscribe(() => {
-        this.onHide();
+      this.carriages.valueChanges.subscribe(() => {
+        this.checkAndAddCarriageField();
       }),
     );
-
-    this.subscribeToLastCarriage();
   }
 
   ngOnDestroy() {
@@ -104,25 +103,42 @@ export class RoutesFormComponent implements OnInit {
     });
   }
 
+  checkAndAddCarriageField() {
+    const carriagesArray = this.carriages;
+    const lastControl = carriagesArray.at(carriagesArray.length - 1);
+
+    if (lastControl && lastControl.value) {
+      this.addCarriageField();
+    }
+  }
+
   addStationField() {
     this.stations.push(this.fb.control('', Validators.required));
   }
 
   addCarriageField() {
     this.carriages.push(this.fb.control('', Validators.required));
-    this.subscribeToLastCarriage();
   }
 
-  public onHide() {
-    this.connectedStations = this.routeForm.value.stations.connectedTo;
-
-    this.routeForm.patchValue({
-      city2: '',
-    });
+  removeCarriageField(index: number) {
+    this.carriages.removeAt(index);
   }
+
+  removeStationField(index: number) {
+    this.stations.removeAt(index);
+  }
+
+  // public onHide() {
+  //   this.connectedStations = this.routeForm.value.stations.connectedTo;
+
+  //   this.routeForm.patchValue({
+  //     city2: '',
+  //   });
+  // }
 
   closeDialog() {
     this.routeForm.reset();
+    this.clearFormArrays();
     this.store.dispatch(hideRouteForm());
   }
 
@@ -144,14 +160,14 @@ export class RoutesFormComponent implements OnInit {
     }
   }
 
-  private subscribeToLastCarriage() {
-    const lastCarriageControl = this.carriages.at(this.carriages.length - 1);
-    this.subscriptions.add(
-      lastCarriageControl.valueChanges.subscribe((value) => {
-        if (value) {
-          this.addCarriageField();
-        }
-      }),
-    );
+  private clearFormArrays() {
+    while (this.stations.length !== 1) {
+      this.stations.removeAt(1);
+    }
+    while (this.carriages.length !== 1) {
+      this.carriages.removeAt(1);
+    }
+    this.stations.at(0).reset();
+    this.carriages.at(0).reset();
   }
 }

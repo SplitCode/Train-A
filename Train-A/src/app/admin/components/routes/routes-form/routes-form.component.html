@@ -13,10 +13,10 @@
     >
       <div class="flex gap-4 w-full">
         <div formArrayName="stations" class="flex-1">
-          <div class="block mb-1">Stations</div>
+          <div class="mb-2">Stations</div>
           <div
             *ngFor="let stationControl of stations.controls; let i = index"
-            class="flex-1"
+            class="flex-1 mb-2"
           >
             <p-dropdown
               [styleClass]="'w-full'"
@@ -26,7 +26,6 @@
               optionValue="id"
               placeholder="Select station"
               [editable]="true"
-              (onHide)="onHide()"
             >
             </p-dropdown>
           </div>
@@ -34,10 +33,10 @@
         <!-- <button type="button" (click)="addStationField()">Add Station</button> -->
 
         <div formArrayName="carriages" class="flex-1">
-          <div class="block mb-1">Carriages</div>
+          <div class="mb-2">Carriages</div>
           <div
             *ngFor="let carriageControl of carriages.controls; let i = index"
-            class="flex-1"
+            class="flex-1 mb-2"
           >
             <p-dropdown
               [styleClass]="'w-full'"
@@ -48,10 +47,17 @@
               placeholder="Select carriage"
             >
             </p-dropdown>
+            <app-custom-button
+              *ngIf="carriages.length > 1 && i < carriages.length - 1"
+              (click)="removeCarriageField(i)"
+              [config]="{
+                styleClass: 'my-2',
+                icon: 'pi pi-times',
+              }"
+            />
           </div>
         </div>
       </div>
-      <!-- <button type="button" (click)="addCarriageField()">Add Carriage</button> -->
 
       <div class="flex justify-center mt-4">
         <app-custom-button

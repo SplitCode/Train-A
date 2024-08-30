@@ -16,6 +16,7 @@ import { Store } from '@ngrx/store';
 import { selectRideInfo } from '../../../../redux/selectors/ride.selectors';
 import { CommonModule } from '@angular/common';
 import { TimelineEvent } from '../../../models/time-line-event.interface';
+import { StationCityByIdPipe } from '../../../pipes/station-sity-by-id.pipe';
 
 @Component({
   selector: 'app-route-modal',
@@ -24,6 +25,7 @@ import { TimelineEvent } from '../../../models/time-line-event.interface';
   standalone: true,
   imports: [
     CommonModule,
+    StationCityByIdPipe,
     PRIME_NG_MODULES.DialogModule,
     PRIME_NG_MODULES.TimelineModule,
   ],
@@ -76,7 +78,6 @@ export class RouteModalComponent implements OnInit {
   private transformToTimelineEvents(
     rideInfo: RideResponse,
   ): Observable<TimelineEvent[]> {
-    console.log(rideInfo);
     const fromStationId = Number(this.config.fromStationId);
     const toStationId = Number(this.config.toStationId);
 
@@ -105,11 +106,6 @@ export class RouteModalComponent implements OnInit {
                     segment.time[0],
                   )
                 : '';
-
-          console.log(
-            `Station ID: ${stationId}, Arrival Time: ${segment.time[0]}, Departure Time: ${segment.time[1]}, Time Difference: ${timeDifference}`,
-          );
-
           timelineEvents.push({
             status:
               index === 0

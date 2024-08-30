@@ -24,9 +24,12 @@ export const selectMode = createSelector(
 
 export const selectCarriageByCode = (carriageCode: string) =>
   createSelector(selectAllCarriages, (carriages: CarriageItem[]) => {
+    console.log('carriageCode:', carriageCode);
+    console.log('selectCarriageByCode - carriages:', carriages);
     const foundCarriage = carriages.find(
       (carriage) => carriage.code === carriageCode,
     );
+    console.log('foundCarriage:', foundCarriage);
     return foundCarriage;
   });
 
@@ -40,5 +43,5 @@ export const selectCarriageNameByCode = (carriageCode: string) =>
     const foundCarriage = carriages.find(
       (carriage) => carriage.code === carriageCode,
     );
-    return foundCarriage ? foundCarriage.name : null;
+    return foundCarriage ? foundCarriage.name : 'CariageName';
   });

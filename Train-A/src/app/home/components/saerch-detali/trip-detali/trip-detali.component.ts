@@ -1,15 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { loadRideInfo } from '../../../../redux/actions/ride.actions';
 
 import { CommonModule } from '@angular/common';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
-import { StationCityByIdPipe } from '../../../pipes/station-sity-by-id.pipe';
 import { RouteModalComponent } from '../route-modal/route-modal.component';
-import { TimelineEvent } from '../../../models/time-line-event.interface';
 import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-tabs.component';
 
 @Component({
@@ -24,7 +22,6 @@ import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-t
     RouterModule,
     PRIME_NG_MODULES.DialogModule,
     PRIME_NG_MODULES.TagModule,
-    StationCityByIdPipe,
     RouteModalComponent,
     CarriageTypeTabsComponent,
   ],
@@ -33,8 +30,6 @@ import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-t
 export class TripDetailComponent implements OnInit, OnDestroy {
   public isVisiblePath: boolean = false;
 
-  public timelineEvents$: Observable<TimelineEvent[]> = of([]);
-
   public rideId: string | null = null;
 
   public fromStationId: string | null = null;
@@ -42,8 +37,6 @@ export class TripDetailComponent implements OnInit, OnDestroy {
   public toStationId: string | null = null;
 
   private subscriptions: Subscription[] = [];
-
-  events: TimelineEvent[] = [];
 
   constructor(
     private route: ActivatedRoute,

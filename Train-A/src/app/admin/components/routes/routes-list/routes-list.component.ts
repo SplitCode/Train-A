@@ -7,9 +7,11 @@ import { Store } from '@ngrx/store';
 import {
   selectAllRoutes,
   selectModalInfo,
+  selectRouteFormVisibility,
 } from '../../../../redux/selectors/routes.selectors';
 import {
   deleteRoute,
+  hideRouteForm,
   routeModal,
   showRouteForm,
 } from '../../../../redux/actions/routes.actions';
@@ -32,6 +34,7 @@ import { ModalInfo } from '../../../../redux/states/routes.state';
     PRIME_NG_MODULES.PanelModule,
     PRIME_NG_MODULES.DividerModule,
     PRIME_NG_MODULES.DialogModule,
+    PRIME_NG_MODULES.CardModule,
     ScrollingModule,
   ],
   templateUrl: './routes-list.component.html',
@@ -43,17 +46,18 @@ export class RoutesListComponent implements OnInit, OnDestroy {
 
   public cityNames$!: Observable<string[][]>;
 
-  modalInfo$!: Observable<ModalInfo>;
+  public modalInfo$!: Observable<ModalInfo>;
 
-  visible!: boolean;
+  public localModalInfo!: ModalInfo;
 
-  localModalInfo!: ModalInfo;
+  public formVisible$!: Observable<boolean>;
 
   private subscriptions: Subscription = new Subscription();
 
   constructor(private store: Store) {
     this.routes$ = this.store.select(selectAllRoutes);
     this.modalInfo$ = this.store.select(selectModalInfo);
+    this.formVisible$ = this.store.select(selectRouteFormVisibility);
   }
 
   ngOnInit() {
@@ -111,6 +115,10 @@ export class RoutesListComponent implements OnInit, OnDestroy {
         mode: 'create',
       }),
     );
+  }
+
+  public closeForm(): void {
+    this.store.dispatch(hideRouteForm());
   }
 
   public deleteRoute(): void {

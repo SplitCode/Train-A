@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
@@ -13,7 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import {
   selectRouteFormMode,
-  selectRouteFormVisibility,
+  // selectRouteFormVisibility,
 } from '../../../../redux/selectors/routes.selectors';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
 import {
@@ -32,21 +32,20 @@ import { selectAllCarriages } from '../../../../redux/selectors/carriage.selecto
     CustomButtonComponent,
     PRIME_NG_MODULES.DialogModule,
     PRIME_NG_MODULES.DropdownModule,
+    PRIME_NG_MODULES.CardModule,
   ],
   templateUrl: './routes-form.component.html',
 })
 export class RoutesFormComponent implements OnInit {
+  @Output() closeForm = new EventEmitter<void>();
+
   private subscriptions: Subscription = new Subscription();
 
-  public isVisible: boolean = false;
+  // public isVisible: boolean = false;
 
-  public currentMode: 'create' | 'update' = 'create';
+  // public isVisible$: Observable<boolean>;
 
   public routeForm: FormGroup;
-
-  public isVisible$: Observable<boolean>;
-
-  public currentMode$: Observable<'create' | 'update'>;
 
   public allCarriages$: Observable<CarriageItem[]>;
 
@@ -54,28 +53,36 @@ export class RoutesFormComponent implements OnInit {
 
   public connectedStations!: ConnectedStations[];
 
+  public currentMode$: Observable<'create' | 'update'>;
+
+  public currentMode: 'create' | 'update' = 'create';
+
   constructor(
     private store: Store,
     private fb: FormBuilder,
   ) {
     this.allStations$ = this.store.select(selectAllStations);
     this.allCarriages$ = this.store.select(selectAllCarriages);
-    this.isVisible$ = this.store.select(selectRouteFormVisibility);
+    // this.isVisible$ = this.store.select(selectRouteFormVisibility);
     this.currentMode$ = this.store.select(selectRouteFormMode);
     this.routeForm = this.createForm();
   }
 
   ngOnInit() {
-    this.subscriptions.add(
-      this.isVisible$.subscribe((visible) => {
-        this.isVisible = visible;
-      }),
-    );
+    // this.subscriptions.add(
+    //   this.isVisible$.subscribe((visible) => {
+    //     this.isVisible = visible;
+    //   }),
+    // );
     this.subscriptions.add(
       this.currentMode$.subscribe((mode) => {
         this.currentMode = mode;
       }),
     );
+
+    // this.store.select(selectRouteFormMode).subscribe((mode) => {
+    //   this.currentMode = mode;
+    // });
 
     this.subscriptions.add(
       this.carriages.valueChanges.subscribe(() => {
@@ -142,7 +149,7 @@ export class RoutesFormComponent implements OnInit {
     this.store.dispatch(hideRouteForm());
   }
 
-  onSubmit() {
+  public onSubmit() {
     console.log('Submit button clicked');
     if (this.routeForm.valid) {
       console.log('Form is valid');

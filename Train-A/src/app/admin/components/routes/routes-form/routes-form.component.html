@@ -1,8 +1,8 @@
-<p-dialog
-  [header]="currentMode === 'create' ? 'Create Route' : 'Update Route'"
-  [modal]="true"
-  [(visible)]="isVisible"
-  [style]="{ width: '70%' }"
+<p-card
+  [header]="
+    (currentMode$ | async) === 'create' ? 'Create Route' : 'Update Route'
+  "
+  [style]="{ width: '100%' }"
   (onHide)="closeDialog()"
 >
   <div class="w-full flex justify-center items-center flex-col">
@@ -20,7 +20,7 @@
           >
             <p-dropdown
               [styleClass]="'w-full'"
-              formControlName="i"
+              [formControlName]="i"
               [options]="(allStations$ | async) || []"
               optionLabel="city"
               optionValue="id"
@@ -67,4 +67,4 @@
       </div>
     </form>
   </div>
-</p-dialog>
+</p-card>

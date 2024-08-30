@@ -1,13 +1,13 @@
 <div
-  class="w-full min-h-[calc(100vh-73px-21px-40px)] flex justify-center items-center flex-col"
+  class="w-full min-h-[calc(100vh-73px-21px-40px)] flex justify-center items-center flex-col py-6"
 >
-  <p-card [styleClass]="'rounded-lg'" class="w-full max-w-2xl">
+  <p-card [styleClass]="'rounded-lg'" class="w-full max-w-2xl mb-12">
     <form
       [formGroup]="searchForm"
       (ngSubmit)="onSubmit()"
       class="flex flex-wrap gap-1"
     >
-      <div class="grow w-[calc(50%-2px)] min-w-72">
+      <div class="grow w-[calc(50%-2px)] min-w-64">
         <div class="mb-2">Your City</div>
         <p-dropdown
           [styleClass]="'w-full'"
@@ -30,7 +30,7 @@
           </small>
         </div>
       </div>
-      <div class="grow w-[calc(50%-2px)] min-w-72">
+      <div class="grow w-[calc(50%-2px)] min-w-64">
         <div class="mb-2">Destination City</div>
         <p-dropdown
           [styleClass]="'w-full'"
@@ -81,4 +81,8 @@
       />
     </form>
   </p-card>
+  <app-search-result-list
+    *ngIf="isSearched"
+    class="result w-full max-w-[1600px]"
+  />
 </div>

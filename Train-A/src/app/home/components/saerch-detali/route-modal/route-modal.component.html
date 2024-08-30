@@ -1,37 +1,8 @@
-<div class="flex gap-4 m-4 items-center">
-  <app-custom-button
-    routerLink="/"
-    [config]="{ label: 'Back', icon: 'pi pi-angle-double-left' }"
-  ></app-custom-button>
-
-  <app-custom-button
-    (clickEmitter)="isDialog(true)"
-    [config]="{ label: 'Route', icon: 'pi pi-map' }"
-  ></app-custom-button>
-
-  <!-- <div class="flex gap-4" *ngIf="timelineEvents$ | async as events">
-    <div>Departure: {{ events[0].departureTime | date: "medium" }}</div>
-    <span
-      class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
-    >
-      From: {{ +fromStationId | stationCityById | async }}
-    </span>
-    <div>
-      Arrival: {{ events[events.length - 1].arrivalTime | date: "medium" }}
-    </div>
-    <span
-      class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
-    >
-      To: {{ +toStationId! | stationCityById | async }}
-    </span>
-  </div> -->
-</div>
-
 <p-dialog
-  [header]="'Route: ' + rideId"
+  [header]="'Route: ' + config.rideId"
   (onHide)="isDialog(false)"
   [modal]="true"
-  [(visible)]="isVisiblePath"
+  [(visible)]="config.isVisiblePath"
 >
   <div *ngIf="timelineEvents$ | async as events">
     <p-timeline
@@ -86,3 +57,26 @@
     </p-timeline>
   </div>
 </p-dialog>
+
+
+<div class="flex gap-4" *ngIf="timelineEvents$ | async as events">
+  <div *ngIf="events.length > 0 && events[0]?.departureTime">
+    Departure: {{ events[0].departureTime | date: "medium" }}
+  </div>
+  <span
+    *ngIf="config.fromStationId"
+    class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
+  >
+    From: {{ +config.fromStationId | stationCityById | async }}
+  </span>
+  <div *ngIf="events.length > 0 && events[events.length - 1]?.arrivalTime">
+    Arrival: {{ events[events.length - 1].arrivalTime | date: "medium" }}
+  </div>
+  <span
+    *ngIf="config.toStationId"
+    class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+  >
+    To: {{ +config.toStationId | stationCityById | async }}
+  </span>
+</div>
+

@@ -31,11 +31,17 @@ export class SearchResultListComponent implements OnInit {
 
   public routes!: Routes[];
 
+  public cityFromTo!: string[];
+
   constructor(private store: Store) {
     this.searchItem$ = this.store.select(selectSearch);
   }
 
   ngOnInit(): void {
+    this.searchItem$.forEach((item) => {
+      this.cityFromTo = [item.from.city, item.to.city];
+    });
+
     this.searchItem$.forEach((item) => {
       this.routes = item.routes;
       console.log(item);

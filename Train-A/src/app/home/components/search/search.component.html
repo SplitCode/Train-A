@@ -1,5 +1,5 @@
 <div class="w-full min-h-[calc(100vh-73px-21px-40px)] flex justify-center items-center flex-col py-6">
-  <p-card [styleClass]="'rounded-lg'" class="w-full max-w-2xl mb-12">
+  <p-card [styleClass]="'rounded-lg'" class="w-full max-w-2xl">
     <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="flex flex-wrap gap-1">
       <div class="grow w-[calc(50%-2px)] min-w-64">
           <div class="mb-2">Your City</div>
@@ -75,5 +75,5 @@
       }"/>
     </form>
   </p-card>
-  <app-search-result-list *ngIf="isSearched | async" class="result w-full max-w-[1600px]"/>
+  <app-search-result-list *ngIf="isSearched | async" class="result w-full max-w-[1600px] mt-12"/>
 </div>

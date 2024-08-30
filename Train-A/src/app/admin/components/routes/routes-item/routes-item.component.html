@@ -10,19 +10,19 @@
         }"
       />
       <app-custom-button
-        (click)="setModalInfo(true, config.id)"
-        [config]="{
-          label: 'Delete',
-          styleClass: 'my-2',
-          icon: 'pi pi-trash',
-        }"
-      />
-      <app-custom-button
         (click)="assignRide()"
         [config]="{
           label: 'Assign Ride',
           styleClass: 'my-2',
           icon: 'pi pi-calendar',
+        }"
+      />
+      <app-custom-button
+        (click)="setModalInfo(true, config.id)"
+        [config]="{
+          label: 'Delete',
+          styleClass: 'my-2',
+          icon: 'pi pi-trash',
         }"
       />
     </div>

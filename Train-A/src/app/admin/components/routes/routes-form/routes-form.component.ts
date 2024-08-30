@@ -15,6 +15,13 @@ import {
   selectRouteFormMode,
   selectRouteFormVisibility,
 } from '../../../../redux/selectors/routes.selectors';
+import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
+import {
+  ConnectedStations,
+  StationsItem,
+} from '../../../../redux/states/stations.state';
+import { CarriageItem } from '../../../models/carriage-item.interface';
+import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
 
 @Component({
   selector: 'app-routes-form',
@@ -24,6 +31,7 @@ import {
     ReactiveFormsModule,
     CustomButtonComponent,
     PRIME_NG_MODULES.DialogModule,
+    PRIME_NG_MODULES.DropdownModule,
   ],
   templateUrl: './routes-form.component.html',
 })
@@ -40,17 +48,21 @@ export class RoutesFormComponent implements OnInit {
 
   public currentMode$: Observable<'create' | 'update'>;
 
-  public availableStations: { id: string; city: string }[] = [];
+  public allCarriages$: Observable<CarriageItem[]>;
 
-  public availableCarriages: { code: string; name: string }[] = [];
+  public allStations$: Observable<StationsItem[]>;
+
+  public connectedStations!: ConnectedStations[];
 
   constructor(
     private store: Store,
     private fb: FormBuilder,
   ) {
-    this.routeForm = this.createForm();
+    this.allStations$ = this.store.select(selectAllStations);
+    this.allCarriages$ = this.store.select(selectAllCarriages);
     this.isVisible$ = this.store.select(selectRouteFormVisibility);
     this.currentMode$ = this.store.select(selectRouteFormMode);
+    this.routeForm = this.createForm();
   }
 
   ngOnInit() {
@@ -64,58 +76,49 @@ export class RoutesFormComponent implements OnInit {
         this.currentMode = mode;
       }),
     );
-    this.availableStations = [
-      { id: '1', city: 'New York' },
-      { id: '2', city: 'Los Angeles' },
-      { id: '3', city: 'Chicago' },
-    ];
+    this.subscriptions.add(
+      this.routeForm.get('stations')?.valueChanges.subscribe(() => {
+        this.onHide();
+      }),
+    );
 
-    this.availableCarriages = [
-      { code: 'A', name: 'First Class' },
-      { code: 'B', name: 'Second Class' },
-      { code: 'C', name: 'Sleeper' },
-    ];
+    this.subscribeToLastCarriage();
   }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  get pathControls() {
-    return (this.routeForm.get('path') as FormArray)?.controls;
+  get stations() {
+    return this.routeForm.get('stations') as FormArray;
   }
 
-  get carriagesControls() {
-    return (this.routeForm.get('carriages') as FormArray)?.controls;
+  get carriages() {
+    return this.routeForm.get('carriages') as FormArray;
   }
 
   createForm(): FormGroup {
     return this.fb.group({
-      path: this.fb.array([this.createStationField()]),
-      carriages: this.fb.array([this.createCarriageField()]),
-    });
-  }
-
-  createStationField(): FormGroup {
-    return this.fb.group({
-      stationId: ['', Validators.required],
-    });
-  }
-
-  createCarriageField(): FormGroup {
-    return this.fb.group({
-      carriageType: ['', Validators.required],
+      stations: this.fb.array([this.fb.control('', Validators.required)]),
+      carriages: this.fb.array([this.fb.control('', Validators.required)]),
     });
   }
 
   addStationField() {
-    const pathArray = this.routeForm.get('path') as FormArray;
-    pathArray.push(this.createStationField());
+    this.stations.push(this.fb.control('', Validators.required));
   }
 
   addCarriageField() {
-    const carriagesArray = this.routeForm.get('carriages') as FormArray;
-    carriagesArray.push(this.createCarriageField());
+    this.carriages.push(this.fb.control('', Validators.required));
+    this.subscribeToLastCarriage();
+  }
+
+  public onHide() {
+    this.connectedStations = this.routeForm.value.stations.connectedTo;
+
+    this.routeForm.patchValue({
+      city2: '',
+    });
   }
 
   closeDialog() {
@@ -139,5 +142,16 @@ export class RoutesFormComponent implements OnInit {
         }),
       );
     }
+  }
+
+  private subscribeToLastCarriage() {
+    const lastCarriageControl = this.carriages.at(this.carriages.length - 1);
+    this.subscriptions.add(
+      lastCarriageControl.valueChanges.subscribe((value) => {
+        if (value) {
+          this.addCarriageField();
+        }
+      }),
+    );
   }
 }

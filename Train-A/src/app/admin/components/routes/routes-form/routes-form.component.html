@@ -5,51 +5,55 @@
   [style]="{ width: '70%' }"
   (onHide)="closeDialog()"
 >
-  <div class="flex flex-col gap-4">
+  <div class="w-full flex justify-center items-center flex-col">
     <form
-      class="flex flex-col gap-4"
+      class="flex flex-col gap-4 w-full"
       [formGroup]="routeForm"
       (ngSubmit)="onSubmit()"
     >
-      <div class="flex gap-4">
-        <div formArrayName="path" class="flex-1">
-          <label>Stations</label>
-          <div *ngFor="let stationCtrl of pathControls; let i = index">
-            <div [formGroupName]="i">
-              <select formControlName="stationId">
-                <option
-                  *ngFor="let availableStation of availableStations"
-                  [value]="availableStation.id"
-                >
-                  {{ availableStation.city }}
-                </option>
-              </select>
-            </div>
+      <div class="flex gap-4 w-full">
+        <div formArrayName="stations" class="flex-1">
+          <div class="block mb-1">Stations</div>
+          <div
+            *ngFor="let stationControl of stations.controls; let i = index"
+            class="flex-1"
+          >
+            <p-dropdown
+              [styleClass]="'w-full'"
+              formControlName="i"
+              [options]="(allStations$ | async) || []"
+              optionLabel="city"
+              optionValue="id"
+              placeholder="Select station"
+              [editable]="true"
+              (onHide)="onHide()"
+            >
+            </p-dropdown>
           </div>
-          <button type="button" (click)="addStationField()">Add Station</button>
         </div>
+        <!-- <button type="button" (click)="addStationField()">Add Station</button> -->
 
         <div formArrayName="carriages" class="flex-1">
-          <label>Carriages</label>
-          <div *ngFor="let carriageCtrl of carriagesControls; let i = index">
-            <div [formGroupName]="i">
-              <select formControlName="carriageType">
-                <option
-                  *ngFor="let availableCarriage of availableCarriages"
-                  [value]="availableCarriage.code"
-                >
-                  {{ availableCarriage.name }}
-                </option>
-              </select>
-            </div>
+          <div class="block mb-1">Carriages</div>
+          <div
+            *ngFor="let carriageControl of carriages.controls; let i = index"
+            class="flex-1"
+          >
+            <p-dropdown
+              [styleClass]="'w-full'"
+              [formControlName]="i"
+              [options]="(allCarriages$ | async) || []"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="Select carriage"
+            >
+            </p-dropdown>
           </div>
-          <button type="button" (click)="addCarriageField()">
-            Add Carriage
-          </button>
         </div>
       </div>
+      <!-- <button type="button" (click)="addCarriageField()">Add Carriage</button> -->
 
-      <div class="flex mt-4">
+      <div class="flex justify-center mt-4">
         <app-custom-button
           [config]="{ label: 'Save', disabled: !routeForm.valid }"
           type="submit"

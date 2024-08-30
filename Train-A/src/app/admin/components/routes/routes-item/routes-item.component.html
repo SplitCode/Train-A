@@ -1,32 +1,32 @@
 <div class="route-container">
   <div class="route">
-    <div class="flex justify-end gap-2">
-      <app-custom-button
-        (click)="updateRoute()"
-        [config]="{
-          label: 'Update',
-          styleClass: 'my-2',
-          icon: 'pi pi-file-edit',
-        }"
-      />
-      <app-custom-button
-        (click)="assignRide()"
-        [config]="{
-          label: 'Assign Ride',
-          styleClass: 'my-2',
-          icon: 'pi pi-calendar',
-        }"
-      />
-      <app-custom-button
-        (click)="setModalInfo(true, config.id)"
-        [config]="{
-          label: 'Delete',
-          styleClass: 'my-2',
-          icon: 'pi pi-trash',
-        }"
-      />
-    </div>
     <p-fieldset [legend]="'Route ' + config.id.toString()">
+      <div class="flex justify-end gap-2">
+        <app-custom-button
+          (click)="updateRoute()"
+          [config]="{
+            label: 'Update',
+            styleClass: 'my-2',
+            icon: 'pi pi-file-edit',
+          }"
+        />
+        <app-custom-button
+          (click)="assignRide()"
+          [config]="{
+            label: 'Assign Ride',
+            styleClass: 'my-2',
+            icon: 'pi pi-calendar',
+          }"
+        />
+        <app-custom-button
+          (click)="setModalInfo(true, config.id)"
+          [config]="{
+            label: 'Delete',
+            styleClass: 'my-2',
+            icon: 'pi pi-trash',
+          }"
+        />
+      </div>
       <div class="flex flex-col gap-4">
         <div>
           <div>Cities:</div>

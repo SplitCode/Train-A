@@ -12,7 +12,7 @@
 <p-panel class="mt-3 p-4 max-w-fit" header="Routes">
   <cdk-virtual-scroll-viewport
     itemSize="100"
-    class="viewport h-96 w-full overflow-auto"
+    class="viewport h-[600px] w-full overflow-auto"
   >
     <div
       *cdkVirtualFor="let route of routes$ | async; let i = index"

@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { RoutesState } from '../states/routes.state';
-// import { RoutesItem } from '../../admin/models/routes-item.interface';
 
 const selectRoutesState = createFeatureSelector<RoutesState>('routesState');
 
@@ -17,4 +16,9 @@ export const selectRouteFormVisibility = createSelector(
 export const selectRouteFormMode = createSelector(
   selectRoutesState,
   (state: RoutesState) => state.mode,
+);
+
+export const selectModalInfo = createSelector(
+  selectRoutesState,
+  (state: RoutesState) => state.modalInfo,
 );

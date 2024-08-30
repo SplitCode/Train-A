@@ -4,14 +4,22 @@ import { CommonModule } from '@angular/common';
 import { RoutesItem } from '../../../models/routes-item.interface';
 import { combineLatest, map, Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectAllRoutes } from '../../../../redux/selectors/routes.selectors';
-import { showRouteForm } from '../../../../redux/actions/routes.actions';
+import {
+  selectAllRoutes,
+  selectModalInfo,
+} from '../../../../redux/selectors/routes.selectors';
+import {
+  deleteRoute,
+  routeModal,
+  showRouteForm,
+} from '../../../../redux/actions/routes.actions';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { RoutesItemComponent } from '../routes-item/routes-item.component';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
 import { RoutesFormComponent } from '../routes-form/routes-form.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ModalInfo } from '../../../../redux/states/routes.state';
 
 @Component({
   selector: 'app-routes-list',
@@ -23,6 +31,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     CommonModule,
     PRIME_NG_MODULES.PanelModule,
     PRIME_NG_MODULES.DividerModule,
+    PRIME_NG_MODULES.DialogModule,
     ScrollingModule,
   ],
   templateUrl: './routes-list.component.html',
@@ -34,10 +43,17 @@ export class RoutesListComponent implements OnInit, OnDestroy {
 
   public cityNames$!: Observable<string[][]>;
 
+  modalInfo$!: Observable<ModalInfo>;
+
+  visible!: boolean;
+
+  localModalInfo!: ModalInfo;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(private store: Store) {
     this.routes$ = this.store.select(selectAllRoutes);
+    this.modalInfo$ = this.store.select(selectModalInfo);
   }
 
   ngOnInit() {
@@ -47,6 +63,10 @@ export class RoutesListComponent implements OnInit, OnDestroy {
         this.carriageNames$ = this.getCarriageNames();
       }),
     );
+
+    this.modalInfo$.forEach((item) => {
+      this.localModalInfo = { ...item };
+    });
   }
 
   private getCityNames(): Observable<string[][]> {
@@ -89,6 +109,25 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       showRouteForm({
         mode: 'create',
+      }),
+    );
+  }
+
+  public deleteRoute(): void {
+    this.store.dispatch(
+      deleteRoute({ routeId: this.localModalInfo.routeInfo.id }),
+    );
+  }
+
+  public closeModal() {
+    this.store.dispatch(
+      routeModal({
+        modalInfo: {
+          visibleModal: false,
+          routeInfo: {
+            id: 0,
+          },
+        },
       }),
     );
   }

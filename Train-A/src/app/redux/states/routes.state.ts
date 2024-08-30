@@ -4,10 +4,24 @@ export interface RoutesState {
   routes: RoutesItem[];
   formVisible: boolean;
   mode: 'create' | 'update';
+  modalInfo: ModalInfo;
 }
 
 export const initialRoutesState: RoutesState = {
   routes: [],
   formVisible: false,
   mode: 'create',
+  modalInfo: {
+    visibleModal: false,
+    routeInfo: {
+      id: 0,
+    },
+  },
 };
+
+export interface ModalInfo {
+  visibleModal: boolean;
+  routeInfo: {
+    id: number;
+  };
+}

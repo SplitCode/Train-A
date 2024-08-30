@@ -14,8 +14,6 @@
     itemSize="100"
     class="viewport h-96 w-full overflow-auto"
   >
-    <!-- <ul class="list-none p-0">
-    <li *ngFor="let route of routes$ | async; let i = index" class="mb-8 p-0"> -->
     <div
       *cdkVirtualFor="let route of routes$ | async; let i = index"
       class="item p-4 border-b border-gray-200"
@@ -26,8 +24,24 @@
         [carriageNames]="(carriageNames$ | async)?.[i] || []"
       ></app-routes-item>
       <p-divider />
-      <!-- </li>
-  </ul> -->
     </div>
   </cdk-virtual-scroll-viewport>
 </p-panel>
+
+<p-dialog
+  draggable="false"
+  header="Are you sure to delete Route {{ localModalInfo.routeInfo.id }} ?"
+  [modal]="true"
+  [(visible)]="localModalInfo.visibleModal"
+>
+  <div class="flex justify-between">
+    <app-custom-button
+      [config]="{ label: 'Cancel', outlined: true }"
+      (click)="closeModal()"
+    />
+    <app-custom-button
+      [config]="{ label: 'Confirm' }"
+      (click)="deleteRoute(); closeModal()"
+    />
+  </div>
+</p-dialog>

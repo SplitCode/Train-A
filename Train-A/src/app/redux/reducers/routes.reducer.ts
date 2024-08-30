@@ -3,6 +3,7 @@ import {
   deleteRouteSuccess,
   hideRouteForm,
   loadRoutesSuccess,
+  routeModal,
   showRouteForm,
 } from '../actions/routes.actions';
 
@@ -37,6 +38,13 @@ export const reducer = createReducer(
     (state): RoutesState => ({
       ...state,
       formVisible: false,
+    }),
+  ),
+  on(
+    routeModal,
+    (state, { modalInfo }): RoutesState => ({
+      ...state,
+      modalInfo: modalInfo,
     }),
   ),
 );

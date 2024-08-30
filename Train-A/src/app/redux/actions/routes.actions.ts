@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { RoutesItem } from '../../admin/models/routes-item.interface';
+import { ModalInfo } from '../states/routes.state';
 
 export const loadRoutes = createAction('[Routes List] Load Routes');
 
@@ -54,3 +55,8 @@ export const showRouteForm = createAction(
 );
 
 export const hideRouteForm = createAction('[Route] Hide Route Form');
+
+export const routeModal = createAction(
+  '[RouteModal] Route Modal',
+  props<{ modalInfo: ModalInfo }>(),
+);

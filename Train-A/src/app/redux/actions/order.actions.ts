@@ -6,6 +6,7 @@ export const loadOrdersSuccess = createAction(
   '[Carriage List] Load Orders Success',
   props<{ carriages: OrderItem[] }>(),
 );
+
 export const loadOrdersFailure = createAction(
   '[Carriage List] Load Orders Failure',
   props<{ error: unknown }>(),

@@ -1,5 +1,5 @@
 export interface RouteButtonConfig {
-  rideId: string;
-  fromStationId: string;
-  toStationId: string;
+  rideId: number;
+  fromStationId: number;
+  toStationId: number;
 }

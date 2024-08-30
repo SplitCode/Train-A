@@ -8,3 +8,11 @@ export const selectSearch = createSelector(
   selectSearchState,
   (state: SearchState) => state.searchItem,
 );
+
+export const selectFromToStationIds = createSelector(
+  selectSearchState,
+  (state: SearchState) => ({
+    fromStationId: state.searchItem.from.stationId,
+    toStationId: state.searchItem.to.stationId,
+  }),
+);

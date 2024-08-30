@@ -7,7 +7,7 @@ export interface SearchForm {
 }
 
 export interface SearchItem {
-  form: Direction;
+  from: Direction;
   routes: Routes[];
   to: Direction;
 }
@@ -53,7 +53,7 @@ export interface Price {
 export const initialSearchState: SearchState = {
   error: '',
   searchItem: {
-    form: {
+    from: {
       city: '',
       geolocation: {
         latitude: 0,

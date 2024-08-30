@@ -1,22 +1,41 @@
-
-<p-card *ngFor="let item of routes" [styleClass]="'rounded-lg'" class="result w-full max-w-[1600px] block [&:not(:last-child)]:mb-3">
+<p-card
+  *ngFor="let item of routes"
+  [styleClass]="'rounded-lg'"
+  class="result w-full max-w-[1600px] block [&:not(:last-child)]:mb-3"
+>
   <p-tabView [scrollable]="true">
-    <p-tabPanel *ngFor="let schedule of item.schedule" header="Ride Id: {{schedule.rideId}}">
+    <p-tabPanel
+      *ngFor="let schedule of item.schedule"
+      header="Ride Id: {{ schedule.rideId }}"
+    >
       <ng-template pTemplate="content">
         <p-tabView class="inner-tabs" [scrollable]="true">
           <p-tabPanel *ngFor="let segments of schedule.segments">
             <ng-template pTemplate="header">
               <div class="w-[calc(100%/14)] min-w-32 text-center">
                 <div class="font-bold text-white">
-                  {{ (segments.time[1] | formatDate) }}
+                  {{ segments.time[1] | formatDate }}
                   <!-- {{ formatDate(segments.time[1])[0] }} -->
                 </div>
                 <div class="text-white text-sm">
-                  {{ (segments.time[1] | formatDay) }}
+                  {{ segments.time[1] | formatDay }}
                 </div>
               </div>
             </ng-template>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed eligendi quod sequi asperiores dolor unde laudantium dolores adipisci cumque veritatis.
+            <ng-container *ngIf="fromToIds$ | async as fromToIds">
+              <ng-template pTemplate="route-button">
+                <app-route-button
+                  [routeButtonConfig]="{
+                    rideId: schedule.rideId,
+                    fromStationId: fromToIds.fromStationId,
+                    toStationId: fromToIds.toStationId,
+                  }"
+                />
+              </ng-template>
+            </ng-container>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed
+            eligendi quod sequi asperiores dolor unde laudantium dolores
+            adipisci cumque veritatis.
           </p-tabPanel>
         </p-tabView>
       </ng-template>

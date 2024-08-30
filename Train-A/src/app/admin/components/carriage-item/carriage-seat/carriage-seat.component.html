@@ -1,0 +1,8 @@
+<app-custom-button
+  [id]="carriageSeatConfig?.seatId"
+  (click)="handleEvent($event)"
+  [config]="{
+    label: carriageSeatConfig?.seatId?.toString(),
+    styleClass: getSeatClass(),
+  }"
+/>

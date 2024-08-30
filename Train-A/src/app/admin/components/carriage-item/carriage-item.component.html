@@ -20,22 +20,20 @@
               class="row"
               *ngFor="let col of createRange(config.rows); let rowIndex = index"
             >
-              <app-custom-button
-                [config]="{ styleClass: 'seat' }"
-                class="right text-red-950"
+              <app-carriage-seat
                 *ngFor="
                   let seat of createRange(config.rightSeats);
                   let seatIndex = index
                 "
-              >
-                {{
-                  (config.rows - rowIndex - 1) *
-                    (config.leftSeats + config.rightSeats) +
+                [carriageSeatConfig]="{
+                  seatId:
+                    (config.rows - rowIndex - 1) *
+                      (config.leftSeats + config.rightSeats) +
                     config.leftSeats +
                     seatIndex +
-                    1
-                }}
-              </app-custom-button>
+                    1,
+                }"
+              />
             </div>
           </div>
 
@@ -46,21 +44,19 @@
               class="row"
               *ngFor="let col of createRange(config.rows); let rowIndex = index"
             >
-              <app-custom-button
-                [config]="{ styleClass: 'seat' }"
-                class="left text-red-950"
+              <app-carriage-seat
                 *ngFor="
                   let seat of createRange(config.leftSeats);
                   let seatIndex = index
                 "
-              >
-                {{
-                  (config.rows - rowIndex - 1) *
-                    (config.leftSeats + config.rightSeats) +
+                [carriageSeatConfig]="{
+                  seatId:
+                    (config.rows - rowIndex - 1) *
+                      (config.leftSeats + config.rightSeats) +
                     seatIndex +
-                    1
-                }}
-              </app-custom-button>
+                    1,
+                }"
+              />
             </div>
           </div>
         </div>

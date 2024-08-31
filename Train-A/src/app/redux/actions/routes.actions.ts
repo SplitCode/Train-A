@@ -34,7 +34,6 @@ export const deleteRouteFailure = createAction(
 
 export const createRoute = createAction(
   '[Routes List] Create Route',
-  // props<{ route: RoutesItem }>(),
   props<{ route: CreateRouteRequest }>(),
 );
 

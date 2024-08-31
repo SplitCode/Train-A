@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of } from 'rxjs';
+import { mergeMap, map, catchError, of, tap } from 'rxjs';
 import { RoutesService } from '../../admin/services/routes.service';
+import { MessageService } from 'primeng/api';
 import {
   loadRoutes,
   loadRoutesSuccess,
@@ -63,6 +64,14 @@ export class RoutesEffects {
   createRouteSuccess$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(createRouteSuccess),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail:
+            'The route has been successfully created and added to the end of the list!',
+        });
+      }),
       map(() => loadRoutes()),
     );
   });
@@ -83,5 +92,8 @@ export class RoutesEffects {
     );
   });
 
-  constructor(private routesService: RoutesService) {}
+  constructor(
+    private routesService: RoutesService,
+    private messageService: MessageService,
+  ) {}
 }

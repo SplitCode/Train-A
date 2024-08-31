@@ -11,7 +11,6 @@ import {
 } from '../../../../redux/selectors/routes.selectors';
 import {
   deleteRoute,
-  hideRouteForm,
   routeModal,
   showRouteForm,
 } from '../../../../redux/actions/routes.actions';
@@ -109,7 +108,7 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  public createRoute(): void {
+  public showForm(): void {
     this.store.dispatch(
       showRouteForm({
         mode: 'create',
@@ -117,9 +116,9 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     );
   }
 
-  public closeForm(): void {
-    this.store.dispatch(hideRouteForm());
-  }
+  // public closeForm(): void {
+  //   this.store.dispatch(hideRouteForm());
+  // }
 
   public deleteRoute(): void {
     this.store.dispatch(

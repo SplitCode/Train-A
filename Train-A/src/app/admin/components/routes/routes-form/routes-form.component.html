@@ -3,7 +3,6 @@
     (currentMode$ | async) === 'create' ? 'Create Route' : 'Update Route'
   "
   [style]="{ width: '100%' }"
-  (onHide)="closeDialog()"
 >
   <div class="w-full flex justify-center items-center flex-col">
     <form
@@ -36,7 +35,7 @@
           <div class="mb-2">Carriages</div>
           <div
             *ngFor="let carriageControl of carriages.controls; let i = index"
-            class="flex-1 mb-2"
+            class="flex items-center gap-2 mb-2"
           >
             <p-dropdown
               [styleClass]="'w-full'"
@@ -51,17 +50,28 @@
               *ngIf="carriages.length > 1 && i < carriages.length - 1"
               (click)="removeCarriageField(i)"
               [config]="{
-                styleClass: 'my-2',
-                icon: 'pi pi-times',
+                icon: 'pi pi-trash',
               }"
             />
           </div>
         </div>
       </div>
 
-      <div class="flex justify-center mt-4">
+      <div class="flex justify-center mt-4 gap-4">
         <app-custom-button
-          [config]="{ label: 'Save', disabled: !routeForm.valid }"
+          [config]="{
+            label: 'Cancel',
+            styleClass: 'w-32',
+          }"
+          type="button"
+          (click)="closeForm()"
+        ></app-custom-button>
+        <app-custom-button
+          [config]="{
+            label: 'Save',
+            disabled: !routeForm.valid,
+            styleClass: 'w-32',
+          }"
           type="submit"
         ></app-custom-button>
       </div>

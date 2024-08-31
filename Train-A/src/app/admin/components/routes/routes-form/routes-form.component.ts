@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+// import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
@@ -35,15 +37,10 @@ import { selectAllCarriages } from '../../../../redux/selectors/carriage.selecto
     PRIME_NG_MODULES.CardModule,
   ],
   templateUrl: './routes-form.component.html',
+  styleUrl: './routes-form.component.scss',
 })
 export class RoutesFormComponent implements OnInit {
-  @Output() closeForm = new EventEmitter<void>();
-
   private subscriptions: Subscription = new Subscription();
-
-  // public isVisible: boolean = false;
-
-  // public isVisible$: Observable<boolean>;
 
   public routeForm: FormGroup;
 
@@ -63,27 +60,11 @@ export class RoutesFormComponent implements OnInit {
   ) {
     this.allStations$ = this.store.select(selectAllStations);
     this.allCarriages$ = this.store.select(selectAllCarriages);
-    // this.isVisible$ = this.store.select(selectRouteFormVisibility);
     this.currentMode$ = this.store.select(selectRouteFormMode);
     this.routeForm = this.createForm();
   }
 
   ngOnInit() {
-    // this.subscriptions.add(
-    //   this.isVisible$.subscribe((visible) => {
-    //     this.isVisible = visible;
-    //   }),
-    // );
-    this.subscriptions.add(
-      this.currentMode$.subscribe((mode) => {
-        this.currentMode = mode;
-      }),
-    );
-
-    // this.store.select(selectRouteFormMode).subscribe((mode) => {
-    //   this.currentMode = mode;
-    // });
-
     this.subscriptions.add(
       this.carriages.valueChanges.subscribe(() => {
         this.checkAndAddCarriageField();
@@ -103,14 +84,14 @@ export class RoutesFormComponent implements OnInit {
     return this.routeForm.get('carriages') as FormArray;
   }
 
-  createForm(): FormGroup {
+  private createForm(): FormGroup {
     return this.fb.group({
       stations: this.fb.array([this.fb.control('', Validators.required)]),
       carriages: this.fb.array([this.fb.control('', Validators.required)]),
     });
   }
 
-  checkAndAddCarriageField() {
+  private checkAndAddCarriageField() {
     const carriagesArray = this.carriages;
     const lastControl = carriagesArray.at(carriagesArray.length - 1);
 
@@ -143,7 +124,18 @@ export class RoutesFormComponent implements OnInit {
   //   });
   // }
 
-  closeDialog() {
+  private clearFormArrays() {
+    while (this.stations.length !== 1) {
+      this.stations.removeAt(1);
+    }
+    while (this.carriages.length !== 1) {
+      this.carriages.removeAt(1);
+    }
+    this.stations.at(0).reset();
+    this.carriages.at(0).reset();
+  }
+
+  public closeForm() {
     this.routeForm.reset();
     this.clearFormArrays();
     this.store.dispatch(hideRouteForm());
@@ -161,20 +153,9 @@ export class RoutesFormComponent implements OnInit {
           } else {
             this.store.dispatch(updateRoute({ route: this.routeForm.value }));
           }
-          this.closeDialog();
+          this.closeForm();
         }),
       );
     }
-  }
-
-  private clearFormArrays() {
-    while (this.stations.length !== 1) {
-      this.stations.removeAt(1);
-    }
-    while (this.carriages.length !== 1) {
-      this.carriages.removeAt(1);
-    }
-    this.stations.at(0).reset();
-    this.carriages.at(0).reset();
   }
 }

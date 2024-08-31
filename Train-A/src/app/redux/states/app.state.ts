@@ -4,6 +4,7 @@ import { SearchState } from './search.state';
 import { StationsState } from './stations.state';
 import { RoutesState } from './routes.state';
 import { UserState } from './user.state';
+import { OrderState } from './order.state';
 
 export interface AppState {
   userState: UserState;
@@ -12,4 +13,5 @@ export interface AppState {
   rideState: RideState;
   searchState: SearchState;
   routesState: RoutesState;
+  orderState: OrderState;
 }

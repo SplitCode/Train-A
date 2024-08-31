@@ -97,7 +97,11 @@ export class CarriageTypeTabsComponent implements OnInit {
   getCarriageConfig(carriageType: string): CarriageItem | undefined {
     const carriage = this.getCarriageByType(carriageType);
     if (carriage) {
-      return { ...carriage, mode: carriage.mode || 'interActive' };
+      return {
+        ...carriage,
+        mode: carriage.mode || 'interActive',
+        isWorking: true,
+      };
     }
     return undefined;
   }

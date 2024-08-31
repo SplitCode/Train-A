@@ -1,5 +1,6 @@
+@import url("./carriage-seat/carriage-seat.component.scss");
+
 :host ::ng-deep {
-  @import url("./carriage-seat/carriage-seat.component.scss");
   .carriage-container {
     display: flex;
     justify-content: center;

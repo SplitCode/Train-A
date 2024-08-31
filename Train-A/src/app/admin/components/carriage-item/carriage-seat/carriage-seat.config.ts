@@ -7,4 +7,5 @@ export interface CarriageSeatConfig {
   seatId: number;
   status?: SeatStatus;
   styleClass?: string;
+  isWorking: boolean;
 }

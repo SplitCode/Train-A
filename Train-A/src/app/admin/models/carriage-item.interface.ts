@@ -5,4 +5,5 @@ export interface CarriageItem {
   rightSeats: number;
   rows: number;
   mode?: string;
+  isWorking: boolean;
 }

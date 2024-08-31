@@ -46,7 +46,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
 
   public searchForm!: FormGroup;
 
-  public isSearched: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  public isSearched: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
     private fb: FormBuilder,

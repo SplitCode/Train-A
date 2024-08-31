@@ -16,7 +16,5 @@ export class SearchItemComponent implements OnInit {
 
   @Input() segment!: Segments;
 
-  ngOnInit(): void {
-    console.log(this.segment);
-  }
+  ngOnInit(): void {}
 }

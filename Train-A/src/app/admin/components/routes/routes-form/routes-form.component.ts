@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
-// import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import {
@@ -13,10 +12,7 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
-import {
-  selectRouteFormMode,
-  // selectRouteFormVisibility,
-} from '../../../../redux/selectors/routes.selectors';
+import { selectRouteFormMode } from '../../../../redux/selectors/routes.selectors';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
 import {
   ConnectedStations,
@@ -24,6 +20,7 @@ import {
 } from '../../../../redux/states/stations.state';
 import { CarriageItem } from '../../../models/carriage-item.interface';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
+import { validateRouteForm } from './routes-validation.directive';
 
 @Component({
   selector: 'app-routes-form',
@@ -70,6 +67,12 @@ export class RoutesFormComponent implements OnInit {
         this.checkAndAddCarriageField();
       }),
     );
+
+    this.subscriptions.add(
+      this.stations.valueChanges.subscribe(() => {
+        this.checkAndAddStationField();
+      }),
+    );
   }
 
   ngOnDestroy() {
@@ -85,10 +88,13 @@ export class RoutesFormComponent implements OnInit {
   }
 
   private createForm(): FormGroup {
-    return this.fb.group({
-      stations: this.fb.array([this.fb.control('', Validators.required)]),
-      carriages: this.fb.array([this.fb.control('', Validators.required)]),
-    });
+    return this.fb.group(
+      {
+        stations: this.fb.array([this.fb.control('')]),
+        carriages: this.fb.array([this.fb.control('')]),
+      },
+      { validators: validateRouteForm },
+    );
   }
 
   private checkAndAddCarriageField() {
@@ -100,12 +106,21 @@ export class RoutesFormComponent implements OnInit {
     }
   }
 
+  private checkAndAddStationField() {
+    const stationsArray = this.stations;
+    const lastControl = stationsArray.at(stationsArray.length - 1);
+
+    if (lastControl && lastControl.value) {
+      this.addStationField();
+    }
+  }
+
   addStationField() {
-    this.stations.push(this.fb.control('', Validators.required));
+    this.stations.push(this.fb.control(''));
   }
 
   addCarriageField() {
-    this.carriages.push(this.fb.control('', Validators.required));
+    this.carriages.push(this.fb.control(''));
   }
 
   removeCarriageField(index: number) {
@@ -142,14 +157,21 @@ export class RoutesFormComponent implements OnInit {
   }
 
   public onSubmit() {
-    console.log('Submit button clicked');
     if (this.routeForm.valid) {
-      console.log('Form is valid');
+      const sanitizedStations = this.stations.value.slice(0, -1);
+      const sanitizedCarriages = this.carriages.value.slice(0, -1);
+
+      const routeData = {
+        path: sanitizedStations,
+        carriages: sanitizedCarriages,
+      };
+
       this.subscriptions.add(
         this.currentMode$.subscribe((mode) => {
           console.log('Current mode:', mode);
           if (mode === 'create') {
-            this.store.dispatch(createRoute({ route: this.routeForm.value }));
+            console.log(routeData);
+            this.store.dispatch(createRoute({ route: routeData }));
           } else {
             this.store.dispatch(updateRoute({ route: this.routeForm.value }));
           }

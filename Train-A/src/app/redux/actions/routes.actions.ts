@@ -1,5 +1,8 @@
 import { createAction, props } from '@ngrx/store';
-import { RoutesItem } from '../../admin/models/routes-item.interface';
+import {
+  CreateRouteRequest,
+  RoutesItem,
+} from '../../admin/models/routes-item.interface';
 import { ModalInfo } from '../states/routes.state';
 
 export const loadRoutes = createAction('[Routes List] Load Routes');
@@ -31,7 +34,8 @@ export const deleteRouteFailure = createAction(
 
 export const createRoute = createAction(
   '[Routes List] Create Route',
-  props<{ route: RoutesItem }>(),
+  // props<{ route: RoutesItem }>(),
+  props<{ route: CreateRouteRequest }>(),
 );
 
 export const createRouteSuccess = createAction(

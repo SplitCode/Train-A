@@ -15,7 +15,7 @@
           <div class="mb-2">Stations</div>
           <div
             *ngFor="let stationControl of stations.controls; let i = index"
-            class="flex-1 mb-2"
+            class="flex items-center gap-2 mb-2"
           >
             <p-dropdown
               [styleClass]="'w-full'"
@@ -24,12 +24,17 @@
               optionLabel="city"
               optionValue="id"
               placeholder="Select station"
-              [editable]="true"
             >
             </p-dropdown>
+            <app-custom-button
+              *ngIf="stations.length > 1 && i < stations.length - 1"
+              (click)="removeStationField(i)"
+              [config]="{
+                icon: 'pi pi-trash',
+              }"
+            />
           </div>
         </div>
-        <!-- <button type="button" (click)="addStationField()">Add Station</button> -->
 
         <div formArrayName="carriages" class="flex-1">
           <div class="mb-2">Carriages</div>
@@ -69,10 +74,10 @@
         <app-custom-button
           [config]="{
             label: 'Save',
-            disabled: !routeForm.valid,
+            type: 'submit',
+            disabled: routeForm.invalid,
             styleClass: 'w-32',
           }"
-          type="submit"
         ></app-custom-button>
       </div>
     </form>

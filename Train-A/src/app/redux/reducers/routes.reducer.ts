@@ -1,5 +1,8 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import {
+  createRoute,
+  createRouteFailure,
+  createRouteSuccess,
   deleteRouteSuccess,
   hideRouteForm,
   loadRoutesSuccess,
@@ -23,6 +26,24 @@ export const reducer = createReducer(
     (state, { routeId }): RoutesState => ({
       ...state,
       routes: state.routes.filter((route) => route.id !== routeId),
+    }),
+  ),
+  on(createRoute, (state): RoutesState => {
+    return {
+      ...state,
+    };
+  }),
+  on(
+    createRouteSuccess,
+    (state, {}): RoutesState => ({
+      ...state,
+    }),
+  ),
+  on(
+    createRouteFailure,
+    (state, { error }): RoutesState => ({
+      ...state,
+      error,
     }),
   ),
   on(

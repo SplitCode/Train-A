@@ -5,6 +5,7 @@ export interface RoutesState {
   formVisible: boolean;
   mode: 'create' | 'update';
   modalInfo: ModalInfo;
+  error: string;
 }
 
 export const initialRoutesState: RoutesState = {
@@ -17,6 +18,7 @@ export const initialRoutesState: RoutesState = {
       id: 0,
     },
   },
+  error: '',
 };
 
 export interface ModalInfo {

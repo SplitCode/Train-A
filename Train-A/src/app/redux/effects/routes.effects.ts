@@ -14,6 +14,7 @@ import {
   createRoute,
   updateRoute,
 } from '../actions/routes.actions';
+import { RoutesItem } from '../../admin/models/routes-item.interface';
 
 @Injectable()
 export class RoutesEffects {
@@ -48,12 +49,21 @@ export class RoutesEffects {
       ofType(createRoute),
       mergeMap(({ route }) =>
         this.routesService.createRoute(route.path, route.carriages).pipe(
-          map((createdRoute) => createRouteSuccess({ route: createdRoute })),
+          map((createdRoute: RoutesItem) =>
+            createRouteSuccess({ route: createdRoute }),
+          ),
           catchError((error) =>
             of(createRouteFailure({ error: error.message })),
           ),
         ),
       ),
+    );
+  });
+
+  createRouteSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createRouteSuccess),
+      map(() => loadRoutes()),
     );
   });
 

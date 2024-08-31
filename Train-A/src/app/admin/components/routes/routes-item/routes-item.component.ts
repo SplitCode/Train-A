@@ -36,13 +36,12 @@ export class RoutesItemComponent {
     private router: Router,
   ) {}
 
-  public updateRoute(): void {
+  public showForm(): void {
     this.store.dispatch(
       showRouteForm({
         mode: 'update',
       }),
     );
-    // this.store.dispatch(showRouteForm({ mode: 'update', route }));
   }
 
   public assignRide(): void {

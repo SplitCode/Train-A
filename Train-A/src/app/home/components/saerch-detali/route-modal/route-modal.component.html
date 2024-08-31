@@ -58,7 +58,6 @@
   </div>
 </p-dialog>
 
-
 <div class="flex gap-4" *ngIf="timelineEvents$ | async as events">
   <div *ngIf="events.length > 0 && events[0]?.departureTime">
     Departure: {{ events[0].departureTime | date: "medium" }}
@@ -79,4 +78,3 @@
     To: {{ +config.toStationId | stationCityById | async }}
   </span>
 </div>
-

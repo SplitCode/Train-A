@@ -116,10 +116,6 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     );
   }
 
-  // public closeForm(): void {
-  //   this.store.dispatch(hideRouteForm());
-  // }
-
   public deleteRoute(): void {
     this.store.dispatch(
       deleteRoute({ routeId: this.localModalInfo.routeInfo.id }),
@@ -139,5 +135,3 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     );
   }
 }
-
-// this.store.dispatch(createRoute({ route: { path: [], carriages: [] } }));

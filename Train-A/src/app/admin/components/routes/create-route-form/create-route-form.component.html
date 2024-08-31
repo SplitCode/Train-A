@@ -1,9 +1,4 @@
-<p-card
-  [header]="
-    (currentMode$ | async) === 'create' ? 'Create Route' : 'Update Route'
-  "
-  [style]="{ width: '100%' }"
->
+<p-card header="Create Route" [style]="{ width: '100%' }">
   <div class="w-full flex justify-center items-center flex-col">
     <form
       class="flex flex-col gap-4 w-full"

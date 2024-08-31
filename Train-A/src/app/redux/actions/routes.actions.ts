@@ -52,9 +52,17 @@ export const updateRoute = createAction(
   props<{ route: RoutesItem }>(),
 );
 
+// export const showRouteForm = createAction(
+//   '[Routes List] Show Route Form',
+//   props<{ mode: 'create' | 'update' }>(),
+// );
+
 export const showRouteForm = createAction(
   '[Routes List] Show Route Form',
-  props<{ mode: 'create' | 'update' }>(),
+  props<{
+    routeId: number | null;
+    mode: 'create' | 'update';
+  }>(),
 );
 
 export const hideRouteForm = createAction('[Route] Hide Route Form');

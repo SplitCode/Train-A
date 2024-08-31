@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import {
   selectAllRoutes,
   selectModalInfo,
+  selectRouteFormMode,
   selectRouteFormVisibility,
 } from '../../../../redux/selectors/routes.selectors';
 import {
@@ -18,7 +19,8 @@ import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { RoutesItemComponent } from '../routes-item/routes-item.component';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
-import { RoutesFormComponent } from '../routes-form/routes-form.component';
+import { CreateRouteFormComponent } from '../create-route-form/create-route-form.component';
+import { UpdateRouteFormComponent } from '../update-route-form/update-route-form.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ModalInfo } from '../../../../redux/states/routes.state';
 
@@ -28,7 +30,8 @@ import { ModalInfo } from '../../../../redux/states/routes.state';
   imports: [
     CustomButtonComponent,
     RoutesItemComponent,
-    RoutesFormComponent,
+    CreateRouteFormComponent,
+    UpdateRouteFormComponent,
     CommonModule,
     PRIME_NG_MODULES.PanelModule,
     PRIME_NG_MODULES.DividerModule,
@@ -49,7 +52,9 @@ export class RoutesListComponent implements OnInit, OnDestroy {
 
   public localModalInfo!: ModalInfo;
 
-  public formVisible$!: Observable<boolean>;
+  public formVisible$: Observable<boolean>;
+
+  public currentMode$: Observable<'create' | 'update'>;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -57,6 +62,7 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     this.routes$ = this.store.select(selectAllRoutes);
     this.modalInfo$ = this.store.select(selectModalInfo);
     this.formVisible$ = this.store.select(selectRouteFormVisibility);
+    this.currentMode$ = this.store.select(selectRouteFormMode);
   }
 
   ngOnInit() {
@@ -108,9 +114,10 @@ export class RoutesListComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  public showForm(): void {
+  public showCreateForm(): void {
     this.store.dispatch(
       showRouteForm({
+        routeId: null,
         mode: 'create',
       }),
     );

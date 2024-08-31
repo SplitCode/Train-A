@@ -5,14 +5,14 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import {
-  createRoute,
+  // createRoute,
   hideRouteForm,
   updateRoute,
 } from '../../../../redux/actions/routes.actions';
 import { Observable, Subscription } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
-import { selectRouteFormMode } from '../../../../redux/selectors/routes.selectors';
+// import { selectRouteFormMode } from '../../../../redux/selectors/routes.selectors';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
 import {
   ConnectedStations,
@@ -20,10 +20,10 @@ import {
 } from '../../../../redux/states/stations.state';
 import { CarriageItem } from '../../../models/carriage-item.interface';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
-import { validateRouteForm } from './routes-validation.directive';
+import { validateRouteForm } from '../create-route-form/routes-validation.directive';
 
 @Component({
-  selector: 'app-routes-form',
+  selector: 'app-update-route-form',
   standalone: true,
   imports: [
     CommonModule,
@@ -33,10 +33,10 @@ import { validateRouteForm } from './routes-validation.directive';
     PRIME_NG_MODULES.DropdownModule,
     PRIME_NG_MODULES.CardModule,
   ],
-  templateUrl: './routes-form.component.html',
-  styleUrl: './routes-form.component.scss',
+  templateUrl: './update-route-form.component.html',
+  styleUrl: './update-route-form.component.scss',
 })
-export class RoutesFormComponent implements OnInit {
+export class UpdateRouteFormComponent implements OnInit {
   private subscriptions: Subscription = new Subscription();
 
   public routeForm: FormGroup;
@@ -47,9 +47,9 @@ export class RoutesFormComponent implements OnInit {
 
   public connectedStations!: ConnectedStations[];
 
-  public currentMode$: Observable<'create' | 'update'>;
+  // public currentMode$: Observable<'create' | 'update'>;
 
-  public currentMode: 'create' | 'update' = 'create';
+  // public currentMode: 'create' | 'update' = 'create';
 
   constructor(
     private store: Store,
@@ -57,7 +57,7 @@ export class RoutesFormComponent implements OnInit {
   ) {
     this.allStations$ = this.store.select(selectAllStations);
     this.allCarriages$ = this.store.select(selectAllCarriages);
-    this.currentMode$ = this.store.select(selectRouteFormMode);
+    // this.currentMode$ = this.store.select(selectRouteFormMode);
     this.routeForm = this.createForm();
   }
 
@@ -157,27 +157,27 @@ export class RoutesFormComponent implements OnInit {
   }
 
   public onSubmit() {
-    if (this.routeForm.valid) {
-      const sanitizedStations = this.stations.value.slice(0, -1);
-      const sanitizedCarriages = this.carriages.value.slice(0, -1);
+    // if (this.routeForm.valid) {
+    //   const sanitizedStations = this.stations.value.slice(0, -1);
+    //   const sanitizedCarriages = this.carriages.value.slice(0, -1);
 
-      const routeData = {
-        path: sanitizedStations,
-        carriages: sanitizedCarriages,
-      };
+    //   const routeData = {
+    //     path: sanitizedStations,
+    //     carriages: sanitizedCarriages,
+    //   };
 
-      this.subscriptions.add(
-        this.currentMode$.subscribe((mode) => {
-          console.log('Current mode:', mode);
-          if (mode === 'create') {
-            console.log(routeData);
-            this.store.dispatch(createRoute({ route: routeData }));
-          } else {
-            this.store.dispatch(updateRoute({ route: this.routeForm.value }));
-          }
-          this.closeForm();
-        }),
-      );
-    }
+    //   this.subscriptions.add(
+    //     this.currentMode$.subscribe((mode) => {
+    //       console.log('Current mode:', mode);
+    //       if (mode === 'create') {
+    //         console.log(routeData);
+    //   this.store.dispatch(createRoute({ route: routeData }));
+    // } else {
+    this.store.dispatch(updateRoute({ route: this.routeForm.value }));
+    // }
+    this.closeForm();
+    //       }),
+    //     );
+    //   }
   }
 }

@@ -36,9 +36,10 @@ export class RoutesItemComponent {
     private router: Router,
   ) {}
 
-  public showForm(): void {
+  public showUpdateForm(): void {
     this.store.dispatch(
       showRouteForm({
+        routeId: this.config.id,
         mode: 'update',
       }),
     );

@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
     PRIME_NG_MODULES.FieldsetModule,
   ],
   templateUrl: './routes-item.component.html',
+  styleUrl: './routes-item.component.scss',
 })
 export class RoutesItemComponent {
   @Input() public config!: RoutesItem;

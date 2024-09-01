@@ -29,6 +29,8 @@
               (click)="removeStationField(i)"
               [config]="{
                 icon: 'pi pi-trash',
+                styleClass:
+                  'hover:text-red-600 bg-transparent border-none border-0',
               }"
             />
           </div>
@@ -54,6 +56,8 @@
               (click)="removeCarriageField(i)"
               [config]="{
                 icon: 'pi pi-trash',
+                styleClass:
+                  'hover:text-red-600 bg-transparent border-none border-0',
               }"
             />
           </div>
@@ -64,6 +68,7 @@
         <app-custom-button
           [config]="{
             label: 'Cancel',
+            outlined: true,
             styleClass: 'w-32',
           }"
           type="button"

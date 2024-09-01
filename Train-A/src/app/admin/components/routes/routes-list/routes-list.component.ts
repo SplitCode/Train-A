@@ -87,7 +87,7 @@ export class RoutesListComponent implements OnInit, OnDestroy {
         routes.map((route) =>
           route.path.map((stationId) => {
             const station = allStations.find((s) => s.id === stationId);
-            return station ? station.city : 'Unknown city';
+            return station ? station.city : stationId.toString();
           }),
         ),
       ),
@@ -103,7 +103,7 @@ export class RoutesListComponent implements OnInit, OnDestroy {
         routes.map((route) =>
           route.carriages.map((code) => {
             const carriage = allCarriages.find((c) => c.code === code);
-            return carriage ? carriage.name : 'Unknown type';
+            return carriage ? carriage.name : code;
           }),
         ),
       ),

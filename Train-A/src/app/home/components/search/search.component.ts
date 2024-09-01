@@ -23,6 +23,7 @@ import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { loadSearch } from '../../../redux/actions/search.actions';
 import { SearchResultListComponent } from '../search-result-list/search-result-list.component';
+import { GetCityByIDService } from '../../../shared/services/getCityByID.service';
 
 @Component({
   selector: 'app-search',
@@ -42,7 +43,7 @@ import { SearchResultListComponent } from '../search-result-list/search-result-l
 export class SearchComponent implements OnInit, AfterViewChecked {
   public allStation$: Observable<StationsItem[]>;
 
-  public connectedStations!: ConnectedStations[];
+  public connectedStations: { cityName: string }[] = [];
 
   public searchForm!: FormGroup;
 
@@ -52,6 +53,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     private fb: FormBuilder,
     private store: Store,
     private cd: ChangeDetectorRef,
+    private getCityByIDService: GetCityByIDService,
   ) {
     this.allStation$ = this.store.select(selectAllStations);
 
@@ -92,7 +94,17 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   }
 
   public onHide() {
-    this.connectedStations = this.searchForm.value.city1.connectedTo;
+    this.connectedStations = [];
+
+    this.searchForm.value.city1.connectedTo.forEach(
+      (city: ConnectedStations) => {
+        this.getCityByIDService.getCityByID(city.id).subscribe((cityName) => {
+          if (cityName) {
+            this.connectedStations.push({ cityName });
+          }
+        });
+      },
+    );
 
     this.searchForm.patchValue({
       city2: '',

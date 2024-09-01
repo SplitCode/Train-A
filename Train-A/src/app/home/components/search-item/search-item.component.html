@@ -4,7 +4,7 @@
       <div>
         <div class="text-lg font-bold ">{{segment.time[0] | getTime}}</div>
         <div class="text-nowrap text-xs capitalize">{{segment.time[0] | formatDate}}</div>
-        <div class="text-xs font-medium leading-7 capitalize">{{ cityFromTo[0] }}</div>
+        <div class="text-xs font-medium leading-7 capitalize">{{ cityFromTo[0] }} (Maybe?)</div>
       </div>
       <div class="relative w-full h-0.5 bg-slate-600 mx-3 px-3">
         <div class="absolute left-0 top-1/2 trans size-3 rounded-full border-2 border-solid border-slate-600 bg-slate-100" style="transform: translateY(-50%);"></div>
@@ -14,7 +14,7 @@
       <div class="">
         <div class="text-lg font-bold ">{{segment.time[1] | getTime}}</div>
         <div class="text-nowrap text-xs capitalize">{{ segment.time[1] | formatDate }}</div>
-        <div class="text-xs font-medium leading-7 capitalize">{{ cityFromTo[1] }}</div>
+        <div class="text-xs font-medium leading-7 capitalize">{{ cityFromTo[1] }} (Maybe?)</div>
       </div>
     </div>
     <div class="flex items-center px-4 pb-4 pt-2">
@@ -43,15 +43,10 @@
     </div>
   </div>
   <div class="flex flex-col w-full ml-auto md:w-auto sm:flex-row">
-    <div class="w-full h-full md:max-w-max border-t-0 border-l-0 sm:border-l sm:border-t-0 border-r-0 border-b-0 border-stone-600 border-solid p-4 text-center">
-      <div class="mb-2 mx-auto max-w-[96px]">Carriage type 1st class</div>
+    <div *ngFor="let price of segment.price | keyvalue" class="flex flex-col w-full h-full md:max-w-max border-t-0 border-l-0 sm:border-l sm:border-t-0 border-r-0 border-b-0 border-stone-600 border-solid p-4 text-center">
+      <div class="mb-2 mx-auto max-w-[96px] capitalize">{{price.key}}</div>
       <div class="mb-6 text-gray-400">58 seats</div>
-      <div class="font-bold text-xl">$731</div>
-    </div>
-    <div class="w-full h-full md:max-w-max border-t border-l-0 sm:border-l sm:border-t-0 border-r-0 border-b-0 border-stone-600 border-solid p-4 text-center">
-      <div class="mb-2 mx-auto max-w-[96px]">Carriage type 1st class</div>
-      <div class="mb-6 text-gray-400">58 seats</div>
-      <div class="font-bold text-xl">$731</div>
+      <div class="font-bold text-xl mt-auto">{{price.value}}</div>
     </div>
   </div>
 </div>

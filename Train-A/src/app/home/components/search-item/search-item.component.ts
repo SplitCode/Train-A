@@ -3,11 +3,18 @@ import { Segments } from '../../../redux/states/search.state';
 import { FormatDatePipe } from '../../pipes/format-date.pipe';
 import { GetTimePipe } from '../../pipes/get-time.pipe';
 import { FullTimePipe } from '../../pipes/full-time.pipe';
+import { CommonModule, KeyValuePipe } from '@angular/common';
 
 @Component({
   selector: 'app-search-item',
   standalone: true,
-  imports: [FormatDatePipe, GetTimePipe, FullTimePipe],
+  imports: [
+    CommonModule,
+    FormatDatePipe,
+    GetTimePipe,
+    FullTimePipe,
+    KeyValuePipe,
+  ],
   templateUrl: './search-item.component.html',
   styleUrl: './search-item.component.scss',
 })

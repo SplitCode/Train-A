@@ -15,6 +15,8 @@ export interface SearchItem {
 export interface SearchState {
   searchItem: SearchItem;
   error: string;
+  loading: boolean;
+  firstFound: boolean;
 }
 
 export interface Direction {
@@ -52,6 +54,8 @@ export interface Price {
 
 export const initialSearchState: SearchState = {
   error: '',
+  loading: false,
+  firstFound: false,
   searchItem: {
     from: {
       city: '',
@@ -61,19 +65,7 @@ export const initialSearchState: SearchState = {
       },
       stationId: 0,
     },
-    routes: [
-      {
-        id: 0,
-        carriages: [],
-        path: [],
-        schedule: [
-          {
-            rideId: 0,
-            segments: [{ occupiedSeats: [], time: [], price: [] }],
-          },
-        ],
-      },
-    ],
+    routes: [],
     to: {
       city: '',
       geolocation: {

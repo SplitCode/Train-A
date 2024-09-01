@@ -9,7 +9,7 @@ import {
 import { CardModule } from 'primeng/card';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { StationsItem } from '../../../redux/states/stations.state';
 import { selectAllStations } from '../../../redux/selectors/stations.selectors';
 import {
@@ -24,6 +24,10 @@ import { CalendarModule } from 'primeng/calendar';
 import { loadSearch } from '../../../redux/actions/search.actions';
 import { SearchResultListComponent } from '../search-result-list/search-result-list.component';
 import { GetCityByIDService } from '../../../shared/services/getCityByID.service';
+import {
+  selectIsSearch,
+  selectIsSearchFounded,
+} from '../../../redux/selectors/search.selectors';
 
 @Component({
   selector: 'app-search',
@@ -43,11 +47,13 @@ import { GetCityByIDService } from '../../../shared/services/getCityByID.service
 export class SearchComponent implements OnInit, AfterViewChecked {
   public allStation$: Observable<StationsItem[]>;
 
+  public isSearched: Observable<boolean>;
+
+  public firstFound: Observable<boolean>;
+
   public connectedStations: { cityName: string; cityId: number }[] = [];
 
   public searchForm!: FormGroup;
-
-  public isSearched: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
     private fb: FormBuilder,
@@ -56,6 +62,8 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     private getCityByIDService: GetCityByIDService,
   ) {
     this.allStation$ = this.store.select(selectAllStations);
+    this.isSearched = this.store.select(selectIsSearch);
+    this.firstFound = this.store.select(selectIsSearchFounded);
 
     this.searchForm = this.fb.group({
       city1: [[], Validators.required],
@@ -90,7 +98,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     };
 
     this.store.dispatch(loadSearch({ form: submitedForm }));
-    this.isSearched.next(true);
+    // this.isSearched.next(true);
   }
 
   public onHide() {

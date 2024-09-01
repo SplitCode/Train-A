@@ -12,6 +12,8 @@ export const searchReducer = createReducer(
     loadSearch,
     (state): SearchState => ({
       ...state,
+      loading: true,
+      firstFound: true,
     }),
   ),
   on(
@@ -19,6 +21,7 @@ export const searchReducer = createReducer(
     (state, { search }): SearchState => ({
       ...state,
       searchItem: search,
+      loading: false,
     }),
   ),
   on(

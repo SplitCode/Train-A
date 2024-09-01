@@ -49,18 +49,28 @@ export const createRouteFailure = createAction(
 
 export const updateRoute = createAction(
   '[Routes List] Update Route',
+  props<{ id: number; route: { path: number[]; carriages: string[] } }>(),
+);
+
+// export const updateRoute = createAction(
+//   '[Routes List] Update Route',
+//   props<{ route: RoutesItem }>(),
+// );
+
+export const updateRouteSuccess = createAction(
+  '[Routes List] Update Route Success',
   props<{ route: RoutesItem }>(),
 );
 
-// export const showRouteForm = createAction(
-//   '[Routes List] Show Route Form',
-//   props<{ mode: 'create' | 'update' }>(),
-// );
+export const updateRouteFailure = createAction(
+  '[Routes List] Update Route Failure',
+  props<{ error: string }>(),
+);
 
 export const showRouteForm = createAction(
   '[Routes List] Show Route Form',
   props<{
-    routeId: number | null;
+    routeId: RoutesItem['id'] | null;
     mode: 'create' | 'update';
   }>(),
 );

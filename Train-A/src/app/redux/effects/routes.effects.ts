@@ -14,6 +14,8 @@ import {
   createRouteSuccess,
   createRoute,
   updateRoute,
+  updateRouteSuccess,
+  updateRouteFailure,
 } from '../actions/routes.actions';
 import { RoutesItem } from '../../admin/models/routes-item.interface';
 
@@ -79,16 +81,32 @@ export class RoutesEffects {
   updateRoute$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updateRoute),
-      mergeMap(({ route }) =>
-        this.routesService
-          .updateRoute(route.id, route.path, route.carriages)
-          .pipe(
-            map((updatedRoute) => createRouteSuccess({ route: updatedRoute })),
-            catchError((error) =>
-              of(createRouteFailure({ error: error.message })),
-            ),
-          ),
+      mergeMap(({ id, route }) =>
+        this.routesService.updateRoute(id, route.path, route.carriages).pipe(
+          map((updatedRoute) => {
+            console.log('Effect: updateRouteSuccess', updatedRoute);
+            return updateRouteSuccess({ route: updatedRoute });
+          }),
+          catchError((error) => {
+            console.error('Effect: updateRouteFailure', error);
+            return of(updateRouteFailure({ error: error.message }));
+          }),
+        ),
       ),
+    );
+  });
+
+  updateRouteSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateRouteSuccess),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'The route has been successfully updated!',
+        });
+      }),
+      map(() => loadRoutes()),
     );
   });
 

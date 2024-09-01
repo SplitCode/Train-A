@@ -8,6 +8,7 @@ import {
   loadRoutesSuccess,
   routeModal,
   showRouteForm,
+  updateRouteSuccess,
 } from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
@@ -46,11 +47,27 @@ export const reducer = createReducer(
       error,
     }),
   ),
+  on(updateRouteSuccess, (state, { route }) => {
+    const routeIndex = state.routes.findIndex((r) => r.id === route.id);
+    if (routeIndex !== -1) {
+      const updatedRoutes = [...state.routes];
+      updatedRoutes[routeIndex] = {
+        ...updatedRoutes[routeIndex],
+        ...route,
+      };
+      return {
+        ...state,
+        routes: updatedRoutes,
+      };
+    }
+    return state;
+  }),
   on(
     showRouteForm,
-    (state, { mode }): RoutesState => ({
+    (state, { routeId, mode }): RoutesState => ({
       ...state,
       formVisible: true,
+      routeId: routeId,
       mode,
     }),
   ),
@@ -59,6 +76,7 @@ export const reducer = createReducer(
     (state): RoutesState => ({
       ...state,
       formVisible: false,
+      routeId: null,
     }),
   ),
   on(

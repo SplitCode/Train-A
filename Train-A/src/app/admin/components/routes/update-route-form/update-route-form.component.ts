@@ -5,22 +5,25 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import {
-  // createRoute,
   hideRouteForm,
   updateRoute,
 } from '../../../../redux/actions/routes.actions';
-import { Observable, Subscription } from 'rxjs';
+import { filter, Observable, Subscription, switchMap } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
-// import { selectRouteFormMode } from '../../../../redux/selectors/routes.selectors';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
 import {
-  ConnectedStations,
+  // ConnectedStations,
   StationsItem,
 } from '../../../../redux/states/stations.state';
 import { CarriageItem } from '../../../models/carriage-item.interface';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
 import { validateRouteForm } from '../create-route-form/routes-validation.directive';
+import {
+  selectRouteById,
+  selectRouteId,
+} from '../../../../redux/selectors/routes.selectors';
+import { RoutesItem } from '../../../models/routes-item.interface';
 
 @Component({
   selector: 'app-update-route-form',
@@ -45,11 +48,11 @@ export class UpdateRouteFormComponent implements OnInit {
 
   public allStations$: Observable<StationsItem[]>;
 
-  public connectedStations!: ConnectedStations[];
+  public routeId$: Observable<number | null>;
 
-  // public currentMode$: Observable<'create' | 'update'>;
+  public currentRoute$: Observable<RoutesItem | undefined>;
 
-  // public currentMode: 'create' | 'update' = 'create';
+  // public connectedStations!: ConnectedStations[];
 
   constructor(
     private store: Store,
@@ -57,11 +60,24 @@ export class UpdateRouteFormComponent implements OnInit {
   ) {
     this.allStations$ = this.store.select(selectAllStations);
     this.allCarriages$ = this.store.select(selectAllCarriages);
-    // this.currentMode$ = this.store.select(selectRouteFormMode);
+    this.routeId$ = this.store.select(selectRouteId);
+    this.currentRoute$ = this.routeId$.pipe(
+      filter((routeId): routeId is number => routeId !== null),
+      switchMap((routeId) => this.store.select(selectRouteById(routeId))),
+    );
     this.routeForm = this.createForm();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.currentRoute$.subscribe((route) => {
+        console.log('This route:', route);
+        if (route) {
+          this.populateStationsAndCarriages(route);
+        }
+      }),
+    );
+
     this.subscriptions.add(
       this.carriages.valueChanges.subscribe(() => {
         this.checkAndAddCarriageField();
@@ -90,11 +106,26 @@ export class UpdateRouteFormComponent implements OnInit {
   private createForm(): FormGroup {
     return this.fb.group(
       {
-        stations: this.fb.array([this.fb.control('')]),
-        carriages: this.fb.array([this.fb.control('')]),
+        stations: this.fb.array([]),
+        carriages: this.fb.array([]),
       },
       { validators: validateRouteForm },
     );
+  }
+
+  private populateStationsAndCarriages(route: RoutesItem) {
+    this.clearFormArrays();
+
+    route.path.forEach((stationID: number) => {
+      this.stations.push(this.fb.control(stationID));
+    });
+
+    route.carriages.forEach((carriageCode: string) => {
+      this.carriages.push(this.fb.control(carriageCode));
+    });
+
+    this.checkAndAddStationField();
+    this.checkAndAddCarriageField();
   }
 
   private checkAndAddCarriageField() {
@@ -139,15 +170,24 @@ export class UpdateRouteFormComponent implements OnInit {
   //   });
   // }
 
+  // private clearFormArrays() {
+  //   while (this.stations.length !== 1) {
+  //     this.stations.removeAt(1);
+  //   }
+  //   while (this.carriages.length !== 1) {
+  //     this.carriages.removeAt(1);
+  //   }
+  //   this.stations.at(0).reset();
+  //   this.carriages.at(0).reset();
+  // }
+
   private clearFormArrays() {
-    while (this.stations.length !== 1) {
-      this.stations.removeAt(1);
+    while (this.stations.length !== 0) {
+      this.stations.removeAt(0);
     }
-    while (this.carriages.length !== 1) {
-      this.carriages.removeAt(1);
+    while (this.carriages.length !== 0) {
+      this.carriages.removeAt(0);
     }
-    this.stations.at(0).reset();
-    this.carriages.at(0).reset();
   }
 
   public closeForm() {
@@ -157,27 +197,23 @@ export class UpdateRouteFormComponent implements OnInit {
   }
 
   public onSubmit() {
-    // if (this.routeForm.valid) {
-    //   const sanitizedStations = this.stations.value.slice(0, -1);
-    //   const sanitizedCarriages = this.carriages.value.slice(0, -1);
+    if (this.routeForm.valid) {
+      const sanitizedStations = this.stations.value.slice(0, -1);
+      const sanitizedCarriages = this.carriages.value.slice(0, -1);
 
-    //   const routeData = {
-    //     path: sanitizedStations,
-    //     carriages: sanitizedCarriages,
-    //   };
+      const routeData = {
+        path: sanitizedStations,
+        carriages: sanitizedCarriages,
+      };
 
-    //   this.subscriptions.add(
-    //     this.currentMode$.subscribe((mode) => {
-    //       console.log('Current mode:', mode);
-    //       if (mode === 'create') {
-    //         console.log(routeData);
-    //   this.store.dispatch(createRoute({ route: routeData }));
-    // } else {
-    this.store.dispatch(updateRoute({ route: this.routeForm.value }));
-    // }
-    this.closeForm();
-    //       }),
-    //     );
-    //   }
+      this.routeId$.subscribe((routeId) => {
+        if (routeId !== null) {
+          this.store.dispatch(updateRoute({ id: routeId, route: routeData }));
+        }
+      });
+
+      console.log(routeData);
+      this.closeForm();
+    }
   }
 }

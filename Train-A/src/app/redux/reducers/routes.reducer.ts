@@ -3,6 +3,8 @@ import {
   createRoute,
   createRouteFailure,
   createRouteSuccess,
+  deleteRoute,
+  deleteRouteFailure,
   deleteRouteSuccess,
   hideRouteForm,
   loadRoutesSuccess,
@@ -22,11 +24,23 @@ export const reducer = createReducer(
       routes,
     }),
   ),
+  on(deleteRoute, (state): RoutesState => {
+    return {
+      ...state,
+    };
+  }),
   on(
     deleteRouteSuccess,
     (state, { routeId }): RoutesState => ({
       ...state,
       routes: state.routes.filter((route) => route.id !== routeId),
+    }),
+  ),
+  on(
+    deleteRouteFailure,
+    (state, { error }): RoutesState => ({
+      ...state,
+      error,
     }),
   ),
   on(createRoute, (state): RoutesState => {

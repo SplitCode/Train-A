@@ -41,6 +41,13 @@ export class RoutesEffects {
       mergeMap((action) =>
         this.routesService.deleteRoute(action.routeId).pipe(
           map(() => deleteRouteSuccess({ routeId: action.routeId })),
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'The route has been successfully deleted!',
+            });
+          }),
           catchError((error) => of(deleteRouteFailure({ error }))),
         ),
       ),

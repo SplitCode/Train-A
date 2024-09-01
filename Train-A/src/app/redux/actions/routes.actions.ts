@@ -1,5 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { RoutesItem } from '../../admin/models/routes-item.interface';
+import {
+  CreateRouteRequest,
+  RoutesItem,
+} from '../../admin/models/routes-item.interface';
+import { ModalInfo } from '../states/routes.state';
 
 export const loadRoutes = createAction('[Routes List] Load Routes');
 
@@ -30,7 +34,7 @@ export const deleteRouteFailure = createAction(
 
 export const createRoute = createAction(
   '[Routes List] Create Route',
-  props<{ route: RoutesItem }>(),
+  props<{ route: CreateRouteRequest }>(),
 );
 
 export const createRouteSuccess = createAction(
@@ -43,14 +47,37 @@ export const createRouteFailure = createAction(
   props<{ error: string }>(),
 );
 
+// export const updateRoute = createAction(
+//   '[Routes List] Update Route',
+//   props<{ route: RoutesItem }>(),
+// );
+
 export const updateRoute = createAction(
   '[Routes List] Update Route',
+  props<{ id: number; route: { path: number[]; carriages: string[] } }>(),
+);
+
+export const updateRouteSuccess = createAction(
+  '[Routes List] Update Route Success',
   props<{ route: RoutesItem }>(),
+);
+
+export const updateRouteFailure = createAction(
+  '[Routes List] Update Route Failure',
+  props<{ error: string }>(),
 );
 
 export const showRouteForm = createAction(
   '[Routes List] Show Route Form',
-  props<{ mode: 'create' | 'update' }>(),
+  props<{
+    routeId: RoutesItem['id'] | null;
+    mode: 'create' | 'update';
+  }>(),
 );
 
 export const hideRouteForm = createAction('[Route] Hide Route Form');
+
+export const routeModal = createAction(
+  '[RouteModal] Route Modal',
+  props<{ modalInfo: ModalInfo }>(),
+);

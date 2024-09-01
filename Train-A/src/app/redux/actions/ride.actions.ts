@@ -16,17 +16,21 @@ export const loadRideInfoFailure = createAction(
   '[Ride] Load Ride Info Failure',
   props<{ error: unknown }>(),
 );
+
 export const updateFilteredCarriages = createAction(
   '[Ride] Update Filtered Carriages',
   props<{ filteredCarriages: CarriageItem[] }>(),
 );
+
 export const loadFilteredCarriages = createAction(
   '[Ride] Load Filtered Carriages',
 );
+
 export const loadFilteredCarriagesSuccess = createAction(
   '[Ride] Load Filtered Carriages Success',
   props<{ filteredCarriages: CarriageItem[] }>(),
 );
+
 export const loadCarriagesAndStationsFailure = createAction(
   '[Ride] Load Carriages and Stations Failure',
   props<{ error: unknown }>(),

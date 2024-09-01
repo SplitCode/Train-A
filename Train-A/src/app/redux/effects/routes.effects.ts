@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of } from 'rxjs';
+import { mergeMap, map, catchError, of, tap } from 'rxjs';
 import { RoutesService } from '../../admin/services/routes.service';
+import { MessageService } from 'primeng/api';
 import {
   loadRoutes,
   loadRoutesSuccess,
@@ -13,7 +14,10 @@ import {
   createRouteSuccess,
   createRoute,
   updateRoute,
+  updateRouteSuccess,
+  updateRouteFailure,
 } from '../actions/routes.actions';
+import { RoutesItem } from '../../admin/models/routes-item.interface';
 
 @Injectable()
 export class RoutesEffects {
@@ -37,6 +41,13 @@ export class RoutesEffects {
       mergeMap((action) =>
         this.routesService.deleteRoute(action.routeId).pipe(
           map(() => deleteRouteSuccess({ routeId: action.routeId })),
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'The route has been successfully deleted!',
+            });
+          }),
           catchError((error) => of(deleteRouteFailure({ error }))),
         ),
       ),
@@ -48,7 +59,9 @@ export class RoutesEffects {
       ofType(createRoute),
       mergeMap(({ route }) =>
         this.routesService.createRoute(route.path, route.carriages).pipe(
-          map((createdRoute) => createRouteSuccess({ route: createdRoute })),
+          map((createdRoute: RoutesItem) =>
+            createRouteSuccess({ route: createdRoute }),
+          ),
           catchError((error) =>
             of(createRouteFailure({ error: error.message })),
           ),
@@ -57,21 +70,55 @@ export class RoutesEffects {
     );
   });
 
+  createRouteSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createRouteSuccess),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail:
+            'The route has been successfully created and added to the end of the list!',
+        });
+      }),
+      map(() => loadRoutes()),
+    );
+  });
+
   updateRoute$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updateRoute),
-      mergeMap(({ route }) =>
-        this.routesService
-          .updateRoute(route.id, route.path, route.carriages)
-          .pipe(
-            map((updatedRoute) => createRouteSuccess({ route: updatedRoute })),
-            catchError((error) =>
-              of(createRouteFailure({ error: error.message })),
-            ),
-          ),
+      mergeMap(({ id, route }) =>
+        this.routesService.updateRoute(id, route.path, route.carriages).pipe(
+          map((updatedRoute) => {
+            console.log('Effect: updateRouteSuccess', updatedRoute);
+            return updateRouteSuccess({ route: updatedRoute });
+          }),
+          catchError((error) => {
+            console.error('Effect: updateRouteFailure', error);
+            return of(updateRouteFailure({ error: error.message }));
+          }),
+        ),
       ),
     );
   });
 
-  constructor(private routesService: RoutesService) {}
+  updateRouteSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateRouteSuccess),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'The route has been successfully updated!',
+        });
+      }),
+      map(() => loadRoutes()),
+    );
+  });
+
+  constructor(
+    private routesService: RoutesService,
+    private messageService: MessageService,
+  ) {}
 }

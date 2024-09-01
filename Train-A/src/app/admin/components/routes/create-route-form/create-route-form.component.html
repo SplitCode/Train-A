@@ -1,0 +1,85 @@
+<p-card header="Create Route" [style]="{ width: '100%' }">
+  <div class="w-full flex justify-center items-center flex-col">
+    <form
+      class="flex flex-col gap-4 w-full"
+      [formGroup]="routeForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="flex gap-4 w-full">
+        <div formArrayName="stations" class="flex-1">
+          <div class="mb-2">Stations</div>
+          <div
+            *ngFor="let stationControl of stations.controls; let i = index"
+            class="flex items-center gap-2 mb-2"
+          >
+            <p-dropdown
+              [styleClass]="'w-full'"
+              [formControlName]="i"
+              [options]="(allStations$ | async) || []"
+              optionLabel="city"
+              optionValue="id"
+              placeholder="Select station"
+            >
+            </p-dropdown>
+            <app-custom-button
+              *ngIf="stations.length > 1 && i < stations.length - 1"
+              (click)="removeStationField(i)"
+              [config]="{
+                icon: 'pi pi-trash',
+                styleClass:
+                  'hover:text-red-600 bg-transparent border-none border-0',
+              }"
+            />
+          </div>
+        </div>
+
+        <div formArrayName="carriages" class="flex-1">
+          <div class="mb-2">Carriages</div>
+          <div
+            *ngFor="let carriageControl of carriages.controls; let i = index"
+            class="flex items-center gap-2 mb-2"
+          >
+            <p-dropdown
+              [styleClass]="'w-full'"
+              [formControlName]="i"
+              [options]="(allCarriages$ | async) || []"
+              optionLabel="name"
+              optionValue="code"
+              placeholder="Select carriage"
+            >
+            </p-dropdown>
+            <app-custom-button
+              *ngIf="carriages.length > 1 && i < carriages.length - 1"
+              (click)="removeCarriageField(i)"
+              [config]="{
+                icon: 'pi pi-trash',
+                styleClass:
+                  'hover:text-red-600 bg-transparent border-none border-0',
+              }"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center mt-4 gap-4">
+        <app-custom-button
+          [config]="{
+            label: 'Cancel',
+            outlined: true,
+            styleClass: 'w-32',
+          }"
+          type="button"
+          (click)="closeForm()"
+        ></app-custom-button>
+        <app-custom-button
+          [config]="{
+            label: 'Save',
+            type: 'submit',
+            disabled: routeForm.invalid,
+            styleClass: 'w-32',
+          }"
+        ></app-custom-button>
+      </div>
+    </form>
+  </div>
+</p-card>

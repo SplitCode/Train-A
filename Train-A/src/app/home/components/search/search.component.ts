@@ -43,7 +43,7 @@ import { GetCityByIDService } from '../../../shared/services/getCityByID.service
 export class SearchComponent implements OnInit, AfterViewChecked {
   public allStation$: Observable<StationsItem[]>;
 
-  public connectedStations: { cityName: string }[] = [];
+  public connectedStations: { cityName: string; cityId: number }[] = [];
 
   public searchForm!: FormGroup;
 
@@ -73,7 +73,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   public onSubmit() {
     let findCity!: StationsItem;
 
-    this.findCity(this.searchForm.value.city2.id).subscribe((city) => {
+    this.findCity(this.searchForm.value.city2.cityId).subscribe((city) => {
       if (city) {
         findCity = city;
       } else {
@@ -100,7 +100,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
       (city: ConnectedStations) => {
         this.getCityByIDService.getCityByID(city.id).subscribe((cityName) => {
           if (cityName) {
-            this.connectedStations.push({ cityName });
+            this.connectedStations.push({ cityName, cityId: city.id });
           }
         });
       },

@@ -5,7 +5,6 @@ export interface RoutesState {
   formVisible: boolean;
   mode: 'create' | 'update';
   routeId: number | null;
-  // formVisibleForRoutesId: number | null;
   modalInfo: ModalInfo;
   error: string;
 }
@@ -15,7 +14,6 @@ export const initialRoutesState: RoutesState = {
   formVisible: false,
   mode: 'create',
   routeId: null,
-  // formVisibleForRoutesId: null,
   modalInfo: {
     visibleModal: false,
     routeInfo: {

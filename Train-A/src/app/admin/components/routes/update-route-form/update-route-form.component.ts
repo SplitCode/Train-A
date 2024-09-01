@@ -8,7 +8,7 @@ import {
   hideRouteForm,
   updateRoute,
 } from '../../../../redux/actions/routes.actions';
-import { filter, Observable, Subscription, switchMap } from 'rxjs';
+import { filter, Observable, Subscription, switchMap, take } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
@@ -40,6 +40,8 @@ import { RoutesItem } from '../../../models/routes-item.interface';
   styleUrl: './update-route-form.component.scss',
 })
 export class UpdateRouteFormComponent implements OnInit {
+  private routeId: number | null = null;
+
   private subscriptions: Subscription = new Subscription();
 
   public routeForm: FormGroup;
@@ -69,6 +71,12 @@ export class UpdateRouteFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.subscriptions.add(
+      this.routeId$.pipe(take(1)).subscribe((routeId) => {
+        this.routeId = routeId;
+      }),
+    );
+
     this.subscriptions.add(
       this.currentRoute$.subscribe((route) => {
         console.log('This route:', route);
@@ -170,17 +178,6 @@ export class UpdateRouteFormComponent implements OnInit {
   //   });
   // }
 
-  // private clearFormArrays() {
-  //   while (this.stations.length !== 1) {
-  //     this.stations.removeAt(1);
-  //   }
-  //   while (this.carriages.length !== 1) {
-  //     this.carriages.removeAt(1);
-  //   }
-  //   this.stations.at(0).reset();
-  //   this.carriages.at(0).reset();
-  // }
-
   private clearFormArrays() {
     while (this.stations.length !== 0) {
       this.stations.removeAt(0);
@@ -197,7 +194,7 @@ export class UpdateRouteFormComponent implements OnInit {
   }
 
   public onSubmit() {
-    if (this.routeForm.valid) {
+    if (this.routeForm.valid && this.routeId !== null) {
       const sanitizedStations = this.stations.value.slice(0, -1);
       const sanitizedCarriages = this.carriages.value.slice(0, -1);
 
@@ -206,12 +203,7 @@ export class UpdateRouteFormComponent implements OnInit {
         carriages: sanitizedCarriages,
       };
 
-      this.routeId$.subscribe((routeId) => {
-        if (routeId !== null) {
-          this.store.dispatch(updateRoute({ id: routeId, route: routeData }));
-        }
-      });
-
+      this.store.dispatch(updateRoute({ id: this.routeId, route: routeData }));
       console.log(routeData);
       this.closeForm();
     }

@@ -62,5 +62,3 @@ export class RoutesItemComponent {
     );
   }
 }
-
-// this.store.dispatch(showRouteForm({ routeId: this.config.id, mode: 'update' }));

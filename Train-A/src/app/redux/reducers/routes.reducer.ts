@@ -58,6 +58,7 @@ export const reducer = createReducer(
       return {
         ...state,
         routes: updatedRoutes,
+        routeId: null,
       };
     }
     return state;

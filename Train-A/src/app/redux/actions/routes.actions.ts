@@ -47,15 +47,15 @@ export const createRouteFailure = createAction(
   props<{ error: string }>(),
 );
 
-export const updateRoute = createAction(
-  '[Routes List] Update Route',
-  props<{ id: number; route: { path: number[]; carriages: string[] } }>(),
-);
-
 // export const updateRoute = createAction(
 //   '[Routes List] Update Route',
 //   props<{ route: RoutesItem }>(),
 // );
+
+export const updateRoute = createAction(
+  '[Routes List] Update Route',
+  props<{ id: number; route: { path: number[]; carriages: string[] } }>(),
+);
 
 export const updateRouteSuccess = createAction(
   '[Routes List] Update Route Success',

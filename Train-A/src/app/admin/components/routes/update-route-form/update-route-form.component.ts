@@ -47,6 +47,8 @@ export class UpdateRouteFormComponent implements OnInit {
 
   public allStations$: Observable<StationsItem[]>;
 
+  public availableStationsList: StationsItem[][] = [];
+
   public routeId$: Observable<number | null>;
 
   public currentRoute$: Observable<RoutesItem | undefined>;
@@ -74,7 +76,6 @@ export class UpdateRouteFormComponent implements OnInit {
 
     this.subscriptions.add(
       this.currentRoute$.subscribe((route) => {
-        console.log('This route:', route);
         if (route) {
           this.populateStationsAndCarriages(route);
         }
@@ -82,14 +83,18 @@ export class UpdateRouteFormComponent implements OnInit {
     );
 
     this.subscriptions.add(
-      this.carriages.valueChanges.subscribe(() => {
-        this.checkAndAddCarriageField();
+      this.stations.valueChanges.subscribe(() => {
+        if (this.stations.length > 0) {
+          this.checkAndAddStationField();
+        }
       }),
     );
 
     this.subscriptions.add(
-      this.stations.valueChanges.subscribe(() => {
-        this.checkAndAddStationField();
+      this.carriages.valueChanges.subscribe(() => {
+        if (this.carriages.length > 0) {
+          this.checkAndAddCarriageField();
+        }
       }),
     );
   }
@@ -131,6 +136,18 @@ export class UpdateRouteFormComponent implements OnInit {
     this.checkAndAddCarriageField();
   }
 
+  private checkAndAddStationField() {
+    const stationsArray = this.stations;
+    const lastControlIndex = stationsArray.length - 1;
+    const lastControl = stationsArray.at(lastControlIndex);
+
+    if (lastControl && lastControl.value !== null) {
+      const selectedStationId: number = lastControl.value;
+      this.updateConnectedStations(selectedStationId, lastControlIndex + 1);
+      this.addStationField();
+    }
+  }
+
   private checkAndAddCarriageField() {
     const carriagesArray = this.carriages;
     const lastControl = carriagesArray.at(carriagesArray.length - 1);
@@ -140,29 +157,79 @@ export class UpdateRouteFormComponent implements OnInit {
     }
   }
 
-  private checkAndAddStationField() {
-    const stationsArray = this.stations;
-    const lastControl = stationsArray.at(stationsArray.length - 1);
+  private updateConnectedStations(stationId: number, nextIndex: number) {
+    this.allStations$.pipe(take(1)).subscribe((stations) => {
+      const selectedStation = stations.find(
+        (station) => station.id === stationId,
+      );
 
-    if (lastControl && lastControl.value) {
-      this.addStationField();
-    }
+      if (selectedStation?.connectedTo) {
+        const connectedStationIds = selectedStation.connectedTo.map(
+          (connection) => connection.id,
+        );
+
+        const connectedStations = stations.filter((station) =>
+          connectedStationIds.includes(station.id),
+        );
+
+        this.availableStationsList[nextIndex] = connectedStations;
+      } else {
+        this.availableStationsList[nextIndex] = [];
+      }
+    });
   }
 
   addStationField() {
     this.stations.push(this.fb.control(''));
+    this.availableStationsList.push([]);
+    this.updateStationControls();
   }
 
   addCarriageField() {
     this.carriages.push(this.fb.control(''));
   }
 
+  removeStationField(index: number) {
+    this.subscriptions.unsubscribe();
+    this.stations.removeAt(index);
+    this.availableStationsList.splice(index, 1);
+
+    const newLastControlIndex = this.stations.length - 1;
+    if (newLastControlIndex >= 0) {
+      const previousStationId = this.stations.at(newLastControlIndex).value;
+      this.updateConnectedStations(previousStationId, newLastControlIndex + 1);
+    }
+
+    this.subscriptions = new Subscription();
+    this.subscribeToFormChanges();
+  }
+
+  private subscribeToFormChanges() {
+    this.subscriptions.add(
+      this.stations.valueChanges.subscribe(() => {
+        this.checkAndAddStationField();
+      }),
+    );
+
+    this.subscriptions.add(
+      this.carriages.valueChanges.subscribe(() => {
+        this.checkAndAddCarriageField();
+      }),
+    );
+  }
+
   removeCarriageField(index: number) {
     this.carriages.removeAt(index);
   }
 
-  removeStationField(index: number) {
-    this.stations.removeAt(index);
+  private updateStationControls() {
+    this.stations.controls.forEach((control, index) => {
+      if (index < this.stations.length - 1) {
+        control.disable();
+      } else {
+        control.enable();
+      }
+    });
   }
 
   private clearFormArrays() {

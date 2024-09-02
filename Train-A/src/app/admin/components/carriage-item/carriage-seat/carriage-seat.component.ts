@@ -96,7 +96,7 @@ export class CarriageSeatComponent
             },
           }),
         );
-        console.log('fromStationId', this.fromStationId);
+        // console.log('fromStationId', this.fromStationId);
       }
     }
   }

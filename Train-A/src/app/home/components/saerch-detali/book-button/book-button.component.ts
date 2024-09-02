@@ -69,7 +69,7 @@ export class BookButtonComponent
   }
 
   override handleEvent() {
-    console.log(this.bookButtonConfig?.seatId);
+    console.log(this.bookButtonConfig);
   }
 
   public get carriageNumber() {

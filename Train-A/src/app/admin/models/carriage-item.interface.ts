@@ -7,4 +7,5 @@ export interface CarriageItem {
   mode?: string;
   isWorking: boolean;
   carriageNumber?: number;
+  totalRidePrice?: number;
 }

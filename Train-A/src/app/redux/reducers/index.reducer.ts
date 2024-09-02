@@ -8,6 +8,7 @@ import { rideReducer } from './ride.reducer';
 import { searchReducer } from './search.reducer';
 import { routesReducer } from './routes.reducer';
 import { orderReducer } from './order.reducer';
+import { trainReducer } from './train.reducer';
 
 export const indexReducer: ActionReducerMap<AppState> = {
   userState: userReducer,
@@ -17,5 +18,6 @@ export const indexReducer: ActionReducerMap<AppState> = {
   searchState: searchReducer,
   routesState: routesReducer,
   orderState: orderReducer,
+  trainState: trainReducer,
 };
 export const metaReducers: MetaReducer<AppState>[] = [actionStateLogger];

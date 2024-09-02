@@ -23,6 +23,7 @@ import { RideEffects } from './redux/effects/ride.effects';
 import { SearchEffects } from './redux/effects/search.effects';
 import { RoutesEffects } from './redux/effects/routes.effects';
 import { RoutesService } from './admin/services/routes.service';
+import { TrainEffects } from './redux/effects/train.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,6 +40,7 @@ export const appConfig: ApplicationConfig = {
       RideEffects,
       SearchEffects,
       RoutesEffects,
+      TrainEffects,
     ]),
     PRIME_NG_MODULES.MessageService,
     importProvidersFrom(

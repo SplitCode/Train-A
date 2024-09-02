@@ -3,7 +3,9 @@
     *ngFor="let carriageType of carriageTypes | uniqueInArr"
     [header]="carriageType"
   >
-    <ng-container *ngIf="getCarriageConfig(carriageType) as carriageConfig">
+    <ng-container
+      *ngFor="let carriageConfig of getCarriagesConfig(carriageType)"
+    >
       <app-carriage-item
         *ngIf="carriageConfig"
         [config]="carriageConfig"

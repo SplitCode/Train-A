@@ -7,14 +7,14 @@ import {
 export interface OrderState {
   book: OrderRequest | null;
   orderRequest: OrderRequest | null;
-  orderResponce: SuccessOrderResponse | null;
+  orderResponse: SuccessOrderResponse | null;
   error?: ErrorOrderResponse;
   loading: boolean;
 }
 export const initialState: OrderState = {
   book: null,
   orderRequest: null,
-  orderResponce: null,
+  orderResponse: null,
   error: undefined,
   loading: false,
 };

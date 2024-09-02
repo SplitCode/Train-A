@@ -8,4 +8,5 @@ export interface CarriageSeatConfig {
   status?: SeatStatus;
   styleClass?: string;
   isWorking: boolean;
+  carriageType?: string;
 }

@@ -1,11 +1,16 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { createSelector } from '@ngrx/store';
 import { OrderState } from '../states/order.state';
+import { OrderRequest } from '../../home/models/order-responce.interface';
+import { AppState } from '../states/app.state';
 
-export const selectOrderState = createFeatureSelector<OrderState>('order');
+const selectOrderState = (state: AppState): OrderState => state.orderState;
 
 export const selectBook = createSelector(
   selectOrderState,
-  (state: OrderState) => state.book,
+  (state: OrderState): OrderRequest | null => {
+    console.log('OrderState:', state);
+    return state?.book ? state.book : null;
+  },
 );
 
 export const selectOrderError = createSelector(

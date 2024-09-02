@@ -19,7 +19,7 @@ export const orderReducer = createReducer(
     return {
       ...state,
       book,
-      loading: true,
+      loading: false,
       error: undefined,
     };
   }),
@@ -35,7 +35,7 @@ export const orderReducer = createReducer(
     createOrderSuccess,
     (state, { orderResponse }): OrderState => ({
       ...state,
-      orderResponce: orderResponse,
+      orderResponse: orderResponse,
       loading: false,
     }),
   ),

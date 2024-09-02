@@ -18,7 +18,9 @@ export const loadRideInfoFailure = createAction(
 );
 export const updateFilteredCarriages = createAction(
   '[Ride] Update Filtered Carriages',
-  props<{ filteredCarriages: CarriageItem[] }>(),
+  (filteredCarriages: CarriageItem[]) => ({
+    filteredCarriages,
+  }),
 );
 export const loadFilteredCarriages = createAction(
   '[Ride] Load Filtered Carriages',

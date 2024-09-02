@@ -6,4 +6,5 @@ export interface CarriageItem {
   rows: number;
   mode?: string;
   isWorking: boolean;
+  carriageNumber?: number;
 }

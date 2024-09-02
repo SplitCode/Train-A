@@ -1,3 +1,5 @@
+<p>{{ config.carriageNumber }}</p>
+
 <div class="carriage-container">
   <div class="carriage">
     <app-custom-button
@@ -57,6 +59,7 @@
                     seatIndex +
                     1,
                   isWorking: config.isWorking,
+                  carriageType: config.code,
                 }"
               />
             </div>

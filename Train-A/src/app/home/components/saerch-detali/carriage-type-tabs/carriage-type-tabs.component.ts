@@ -30,6 +30,8 @@ import { CarriageItemComponent } from '../../../../admin/components/carriage-ite
   ],
 })
 export class CarriageTypeTabsComponent implements OnInit {
+  private carriagesConfigCache: { [key: string]: CarriageItem[] } = {};
+
   public carriagesByTypes = signal<CarriageItem[]>([]);
 
   public carriageTypes$: Observable<string[] | undefined>;
@@ -55,11 +57,16 @@ export class CarriageTypeTabsComponent implements OnInit {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  private updateCarriagesByTypes(carriagesByTypeItems: CarriageItem[]): void {
-    this.carriagesByTypes.update(() => carriagesByTypeItems);
-    this.store.dispatch(
-      updateFilteredCarriages({ filteredCarriages: carriagesByTypeItems }),
+  private updateCarrNumbersInTrain(carriagesByTypeItems: CarriageItem[]): void {
+    const carriagesWithNumbers = carriagesByTypeItems.map(
+      (carriage, index) => ({
+        ...carriage,
+        carriageNumber: index + 1,
+      }),
     );
+
+    this.carriagesByTypes.update(() => carriagesWithNumbers);
+    this.store.dispatch(updateFilteredCarriages(carriagesWithNumbers));
   }
 
   private processCarriagesByTypes(): void {
@@ -81,7 +88,7 @@ export class CarriageTypeTabsComponent implements OnInit {
           );
         }),
         tap((carriagesByTypeItems) => {
-          this.updateCarriagesByTypes(carriagesByTypeItems);
+          this.updateCarrNumbersInTrain(carriagesByTypeItems);
         }),
       )
       .subscribe();
@@ -89,20 +96,22 @@ export class CarriageTypeTabsComponent implements OnInit {
   }
 
   getCarriageByType(carriageType: string): CarriageItem | undefined {
+    console.log(carriageType);
     return this.carriagesByTypes().find(
       (carriage) => carriage.name === carriageType,
     );
   }
 
-  getCarriageConfig(carriageType: string): CarriageItem | undefined {
-    const carriage = this.getCarriageByType(carriageType);
-    if (carriage) {
-      return {
-        ...carriage,
-        mode: carriage.mode || 'interActive',
-        isWorking: true,
-      };
+  getCarriagesConfig(carriageType: string): CarriageItem[] {
+    if (!this.carriagesConfigCache[carriageType]) {
+      this.carriagesConfigCache[carriageType] = this.carriagesByTypes()
+        .filter((carriage) => carriage.name === carriageType)
+        .map((carriage) => ({
+          ...carriage,
+          mode: carriage.mode || 'interActive',
+          isWorking: true,
+        }));
     }
-    return undefined;
+    return this.carriagesConfigCache[carriageType];
   }
 }

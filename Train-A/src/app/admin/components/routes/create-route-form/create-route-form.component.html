@@ -15,7 +15,7 @@
             <p-dropdown
               [styleClass]="'w-full'"
               [formControlName]="i"
-              [options]="(allStations$ | async) || []"
+              [options]="availableStationsList[i] || []"
               optionLabel="city"
               optionValue="id"
               placeholder="Select station"

@@ -8,12 +8,12 @@ import {
   createRoute,
   hideRouteForm,
 } from '../../../../redux/actions/routes.actions';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, take } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
 import {
-  ConnectedStations,
+  // ConnectedStations,
   StationsItem,
 } from '../../../../redux/states/stations.state';
 import { CarriageItem } from '../../../models/carriage-item.interface';
@@ -43,7 +43,8 @@ export class CreateRouteFormComponent implements OnInit {
 
   public allStations$: Observable<StationsItem[]>;
 
-  public connectedStations!: ConnectedStations[];
+  // public connectedStations: StationsItem[] = [];
+  public availableStationsList: StationsItem[][] = [];
 
   constructor(
     private store: Store,
@@ -56,16 +57,20 @@ export class CreateRouteFormComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.add(
+      this.stations.valueChanges.subscribe(() => {
+        this.checkAndAddStationField();
+      }),
+    );
+
+    this.subscriptions.add(
       this.carriages.valueChanges.subscribe(() => {
         this.checkAndAddCarriageField();
       }),
     );
 
-    this.subscriptions.add(
-      this.stations.valueChanges.subscribe(() => {
-        this.checkAndAddStationField();
-      }),
-    );
+    this.allStations$.pipe(take(1)).subscribe((stations) => {
+      this.availableStationsList = [stations];
+    });
   }
 
   ngOnDestroy() {
@@ -83,11 +88,23 @@ export class CreateRouteFormComponent implements OnInit {
   private createForm(): FormGroup {
     return this.fb.group(
       {
-        stations: this.fb.array([this.fb.control('')]),
-        carriages: this.fb.array([this.fb.control('')]),
+        stations: this.fb.array([this.fb.control(null)]),
+        carriages: this.fb.array([this.fb.control(null)]),
       },
       { validators: validateRouteForm },
     );
+  }
+
+  private checkAndAddStationField() {
+    const stationsArray = this.stations;
+    const lastControlIndex = stationsArray.length - 1;
+    const lastControl = stationsArray.at(lastControlIndex);
+
+    if (lastControl && lastControl.value !== null) {
+      const selectedStationId: number = lastControl.value;
+      this.updateConnectedStations(selectedStationId, lastControlIndex + 1);
+      this.addStationField();
+    }
   }
 
   private checkAndAddCarriageField() {
@@ -99,21 +116,35 @@ export class CreateRouteFormComponent implements OnInit {
     }
   }
 
-  private checkAndAddStationField() {
-    const stationsArray = this.stations;
-    const lastControl = stationsArray.at(stationsArray.length - 1);
+  private updateConnectedStations(stationId: number, nextIndex: number) {
+    this.allStations$.pipe(take(1)).subscribe((stations) => {
+      const selectedStation = stations.find(
+        (station) => station.id === stationId,
+      );
 
-    if (lastControl && lastControl.value) {
-      this.addStationField();
-    }
+      if (selectedStation?.connectedTo) {
+        const connectedStationIds = selectedStation.connectedTo.map(
+          (connection) => connection.id,
+        );
+
+        const connectedStations = stations.filter((station) =>
+          connectedStationIds.includes(station.id),
+        );
+
+        this.availableStationsList[nextIndex] = connectedStations;
+      } else {
+        this.availableStationsList[nextIndex] = [];
+      }
+    });
   }
 
   addStationField() {
-    this.stations.push(this.fb.control(''));
+    this.stations.push(this.fb.control(null));
+    this.availableStationsList.push([]);
   }
 
   addCarriageField() {
-    this.carriages.push(this.fb.control(''));
+    this.carriages.push(this.fb.control(null));
   }
 
   removeCarriageField(index: number) {
@@ -122,15 +153,8 @@ export class CreateRouteFormComponent implements OnInit {
 
   removeStationField(index: number) {
     this.stations.removeAt(index);
+    this.availableStationsList.splice(index, 1);
   }
-
-  // public onHide() {
-  //   this.connectedStations = this.routeForm.value.stations.connectedTo;
-
-  //   this.routeForm.patchValue({
-  //     city2: '',
-  //   });
-  // }
 
   private clearFormArrays() {
     while (this.stations.length !== 1) {

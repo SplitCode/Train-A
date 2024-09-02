@@ -155,16 +155,19 @@ export class CreateRouteFormComponent implements OnInit {
   removeStationField(index: number) {
     this.stations.removeAt(index);
     this.availableStationsList.splice(index, 1);
-    this.updateStationControls();
 
     const newLastControlIndex = this.stations.length - 1;
-
-    if (newLastControlIndex > 0) {
-      const previousStationId = this.stations.at(newLastControlIndex - 1).value;
-      this.updateConnectedStations(previousStationId, newLastControlIndex);
-    } else {
-      this.availableStationsList[newLastControlIndex] =
-        this.availableStationsList[0];
+    if (newLastControlIndex >= 0) {
+      if (this.stations.length === 1) {
+        this.allStations$.pipe(take(1)).subscribe((stations) => {
+          this.availableStationsList[0] = stations;
+        });
+      } else {
+        const previousStationId = this.stations.at(
+          newLastControlIndex - 1,
+        ).value;
+        this.updateConnectedStations(previousStationId, newLastControlIndex);
+      }
     }
   }
 

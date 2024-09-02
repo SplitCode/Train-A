@@ -200,14 +200,20 @@ export class CreateRouteFormComponent implements OnInit {
 
   public onSubmit() {
     if (this.routeForm.valid) {
-      const sanitizedStations = this.stations.value.slice(0, -1);
-      const sanitizedCarriages = this.carriages.value.slice(0, -1);
+      const sanitizedStations = this.stations.controls
+        .filter((control) => control.value !== null)
+        .map((control) => control.value);
+
+      const sanitizedCarriages = this.carriages.controls
+        .filter((control) => control.value !== null)
+        .map((control) => control.value);
 
       const routeData = {
         path: sanitizedStations,
         carriages: sanitizedCarriages,
       };
 
+      console.log(routeData);
       this.store.dispatch(createRoute({ route: routeData }));
       this.closeForm();
     }

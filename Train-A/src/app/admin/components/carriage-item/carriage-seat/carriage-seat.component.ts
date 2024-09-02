@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { CustomButtonComponent } from '../../../../shared/components';
 import { CarriageSeatConfig, SeatStatus } from './carriage-seat.config';
 import { CommonModule } from '@angular/common';
@@ -16,7 +23,10 @@ import { selectBook } from '../../../../redux/selectors/order.selectors';
   imports: [CustomButtonComponent, CommonModule],
   standalone: true,
 })
-export class CarriageSeatComponent extends CustomButtonComponent {
+export class CarriageSeatComponent
+  extends CustomButtonComponent
+  implements OnInit
+{
   private store = inject(Store);
 
   @Input() public carriageSeatConfig?: CarriageSeatConfig;
@@ -82,6 +92,7 @@ export class CarriageSeatComponent extends CustomButtonComponent {
               fromStationId: +this.fromStationId,
               toStationId: +this.toStationId,
               carriageNumber: this.carriageSeatConfig.carriageNumber,
+              isShowBook: true,
             },
           }),
         );

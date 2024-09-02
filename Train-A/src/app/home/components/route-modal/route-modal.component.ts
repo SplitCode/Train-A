@@ -44,6 +44,7 @@ export class RouteModalComponent implements OnInit {
     fromStationId: string | null;
     toStationId: string | null;
     rideId: string | null;
+    showFromToCities: boolean;
   };
 
   constructor(private store: Store) {

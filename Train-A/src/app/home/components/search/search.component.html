@@ -1,28 +1,31 @@
-<div class="w-full min-h-[calc(100vh-73px-21px-40px)] flex justify-center items-center flex-col py-6">
+<div
+  class="w-full min-h-[calc(100vh-73px-21px-40px)] flex justify-center items-center flex-col py-6"
+>
   <p-card [styleClass]="'rounded-lg'" class="w-full max-w-2xl mb-12">
-    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="flex flex-wrap gap-1">
+    <form
+      [formGroup]="searchForm"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-wrap gap-1"
+    >
       <div class="grow w-[calc(50%-2px)] min-w-64">
-          <div class="mb-2">Your City</div>
-          <p-dropdown
-            [styleClass]="'w-full'"
-            formControlName="city1"
-            placeholder="Choose a station"
-            [options]="(allStation$ | async) || []"
-            optionLabel="city"
-            [editable]="true"
-            (onHide)="onHide()"
-          />
-          <div
+        <div class="mb-2">Your City</div>
+        <p-dropdown
+          [styleClass]="'w-full'"
+          formControlName="city1"
+          placeholder="Choose a station"
+          [options]="(allStation$ | async) || []"
+          optionLabel="city"
+          [editable]="true"
+          (onHide)="onHide()"
+        />
+        <div
           *ngIf="
             searchForm.get('city1')?.invalid &&
-            (searchForm.get('city1')?.dirty ||
-              searchForm.get('city1')?.touched)
+            (searchForm.get('city1')?.dirty || searchForm.get('city1')?.touched)
           "
           class="font-extralight text-red-500"
         >
-          <small
-            *ngIf="searchForm.get('city1')?.hasError('required')"
-          >
+          <small *ngIf="searchForm.get('city1')?.hasError('required')">
             Required
           </small>
         </div>
@@ -40,40 +43,47 @@
         <div
           *ngIf="
             searchForm.get('city2')?.invalid &&
-            (searchForm.get('city2')?.dirty ||
-              searchForm.get('city2')?.touched)
+            (searchForm.get('city2')?.dirty || searchForm.get('city2')?.touched)
           "
           class="font-extralight text-red-500"
         >
-          <small
-            *ngIf="searchForm.get('city2')?.hasError('required')"
-          >
+          <small *ngIf="searchForm.get('city2')?.hasError('required')">
             Required
           </small>
         </div>
       </div>
-      <p-calendar placeholder="Date of your trip" class="w-full" [styleClass]="'w-full'" selectionMode="range"  formControlName="date" />
+      <p-calendar
+        placeholder="Date of your trip"
+        class="w-full"
+        [styleClass]="'w-full'"
+        selectionMode="range"
+        formControlName="date"
+      />
       <div
         *ngIf="
           searchForm.get('date')?.invalid &&
-          (searchForm.get('date')?.dirty ||
-            searchForm.get('date')?.touched)
+          (searchForm.get('date')?.dirty || searchForm.get('date')?.touched)
         "
         class="font-extralight text-red-500"
       >
-        <small
-          *ngIf="searchForm.get('date')?.hasError('required')"
-        >
+        <small *ngIf="searchForm.get('date')?.hasError('required')">
           Required
         </small>
       </div>
-      <app-custom-button class="w-full" [config]="{
-        label: 'Search',
-        type: 'submit',
-        styleClass: 'w-full',
-        disabled: searchForm.invalid,
-      }"/>
+      <app-custom-button
+        class="w-full"
+        [config]="{
+          label: 'Search',
+          type: 'submit',
+          styleClass: 'w-full',
+          disabled: searchForm.invalid,
+        }"
+      />
     </form>
   </p-card>
-  <app-search-result-list *ngIf="isSearched" class="result w-full max-w-[1600px]"/>
+  <app-search-result-list
+    *ngIf="isSearched"
+    class="result w-full max-w-[1600px]"
+  />
 </div>
+

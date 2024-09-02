@@ -3,12 +3,12 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { loadRideInfo } from '../../../../redux/actions/ride.actions';
-
 import { CommonModule } from '@angular/common';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { RouteModalComponent } from '../../route-modal/route-modal.component';
 import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-tabs.component';
+import { BookButtonComponent } from '../book-button/book-button.component';
 
 @Component({
   selector: 'app-trip-detali',
@@ -24,6 +24,7 @@ import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-t
     PRIME_NG_MODULES.TagModule,
     RouteModalComponent,
     CarriageTypeTabsComponent,
+    BookButtonComponent,
   ],
   standalone: true,
 })

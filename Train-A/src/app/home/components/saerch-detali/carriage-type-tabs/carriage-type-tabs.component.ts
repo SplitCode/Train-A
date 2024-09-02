@@ -17,6 +17,7 @@ import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { CommonModule } from '@angular/common';
 import { UniqueInArrPipe } from '../../../../shared/pipes/unique-in-arr.pipe';
 import { CarriageItemComponent } from '../../../../admin/components/carriage-item/carriage-item.component';
+
 @Component({
   selector: 'app-carriage-type-tabs',
   templateUrl: './carriage-type-tabs.component.html',

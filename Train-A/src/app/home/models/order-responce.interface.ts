@@ -4,6 +4,8 @@ export interface OrderRequest {
   fromStationId: number;
   toStationId: number;
   carriageNumber: number;
+  isShowBook: boolean;
+  price?: number;
 }
 
 export interface OrderResponse {

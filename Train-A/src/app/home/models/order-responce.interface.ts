@@ -3,7 +3,7 @@ export interface OrderRequest {
   seat: number;
   fromStationId: number;
   toStationId: number;
-  carriageType?: string;
+  carriageNumber: number;
 }
 
 export interface OrderResponse {

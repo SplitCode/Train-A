@@ -2,15 +2,18 @@
   <p-tabPanel
     *ngFor="let carriageType of carriageTypes | uniqueInArr"
     [header]="carriageType"
+    [cache]="false"
   >
-    <ng-container
-      *ngFor="let carriageConfig of getCarriagesConfig(carriageType)"
-    >
-      <app-carriage-item
-        *ngIf="carriageConfig"
-        [config]="carriageConfig"
-      ></app-carriage-item>
-    </ng-container>
+    <ng-template pTemplate="content">
+      <ng-container
+        *ngFor="let carriageConfig of getCarriagesConfig(carriageType)"
+      >
+        <app-carriage-item
+          *ngIf="carriageConfig"
+          [config]="carriageConfig"
+        ></app-carriage-item>
+      </ng-container>
+    </ng-template>
   </p-tabPanel>
 </p-tabView>
 <ng-template #loading>

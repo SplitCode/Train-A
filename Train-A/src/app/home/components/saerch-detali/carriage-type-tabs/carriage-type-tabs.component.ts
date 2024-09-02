@@ -95,14 +95,14 @@ export class CarriageTypeTabsComponent implements OnInit {
     this.subscriptions.push(carriageTypesSubscription);
   }
 
-  getCarriageByType(carriageType: string): CarriageItem | undefined {
+  private getCarriageByType(carriageType: string): CarriageItem | undefined {
     console.log(carriageType);
     return this.carriagesByTypes().find(
       (carriage) => carriage.name === carriageType,
     );
   }
 
-  getCarriagesConfig(carriageType: string): CarriageItem[] {
+  public getCarriagesConfig(carriageType: string): CarriageItem[] {
     if (!this.carriagesConfigCache[carriageType]) {
       this.carriagesConfigCache[carriageType] = this.carriagesByTypes()
         .filter((carriage) => carriage.name === carriageType)

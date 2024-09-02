@@ -32,6 +32,10 @@ export class CarriageItemComponent implements OnInit {
     return Array.from({ length: count }, (_, i) => i);
   }
 
+  public get carriageNumber(): CarriageItem['carriageNumber'] | undefined {
+    return this.config.carriageNumber ? this.config.carriageNumber : undefined;
+  }
+
   public triggerUpdate(): void {
     this.store.dispatch(
       showCarriageForm({

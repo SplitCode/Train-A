@@ -1,4 +1,8 @@
-<p>{{ config.carriageNumber }}</p>
+<span
+  *ngIf="carriageNumber"
+  class="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300"
+  >Car {{ carriageNumber }}</span
+>
 
 <div class="carriage-container">
   <div class="carriage">
@@ -35,6 +39,7 @@
                     seatIndex +
                     1,
                   isWorking: config.isWorking,
+                  carriageNumber: carriageNumber,
                 }"
               />
             </div>
@@ -59,7 +64,7 @@
                     seatIndex +
                     1,
                   isWorking: config.isWorking,
-                  carriageType: config.code,
+                  carriageNumber: carriageNumber,
                 }"
               />
             </div>

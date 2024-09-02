@@ -12,10 +12,7 @@ import { filter, Observable, Subscription, switchMap, take } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
-import {
-  // ConnectedStations,
-  StationsItem,
-} from '../../../../redux/states/stations.state';
+import { StationsItem } from '../../../../redux/states/stations.state';
 import { CarriageItem } from '../../../models/carriage-item.interface';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
 import { validateRouteForm } from '../create-route-form/routes-validation.directive';
@@ -53,8 +50,6 @@ export class UpdateRouteFormComponent implements OnInit {
   public routeId$: Observable<number | null>;
 
   public currentRoute$: Observable<RoutesItem | undefined>;
-
-  // public connectedStations!: ConnectedStations[];
 
   constructor(
     private store: Store,
@@ -169,14 +164,6 @@ export class UpdateRouteFormComponent implements OnInit {
   removeStationField(index: number) {
     this.stations.removeAt(index);
   }
-
-  // public onHide() {
-  //   this.connectedStations = this.routeForm.value.stations.connectedTo;
-
-  //   this.routeForm.patchValue({
-  //     city2: '',
-  //   });
-  // }
 
   private clearFormArrays() {
     while (this.stations.length !== 0) {

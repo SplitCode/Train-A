@@ -180,17 +180,17 @@ export class UpdateRouteFormComponent implements OnInit {
   }
 
   addStationField() {
-    this.stations.push(this.fb.control(''));
+    this.stations.push(this.fb.control(null));
     this.availableStationsList.push([]);
     this.updateStationControls();
   }
 
   addCarriageField() {
-    this.carriages.push(this.fb.control(''));
+    this.carriages.push(this.fb.control(null));
   }
 
   removeStationField(index: number) {
-    this.subscriptions.unsubscribe();
+    // this.subscriptions.unsubscribe();
     this.stations.removeAt(index);
     this.availableStationsList.splice(index, 1);
 
@@ -200,23 +200,23 @@ export class UpdateRouteFormComponent implements OnInit {
       this.updateConnectedStations(previousStationId, newLastControlIndex + 1);
     }
 
-    this.subscriptions = new Subscription();
-    this.subscribeToFormChanges();
+    // this.subscriptions = new Subscription();
+    // this.subscribeToFormChanges();
   }
 
-  private subscribeToFormChanges() {
-    this.subscriptions.add(
-      this.stations.valueChanges.subscribe(() => {
-        this.checkAndAddStationField();
-      }),
-    );
+  // private subscribeToFormChanges() {
+  //   this.subscriptions.add(
+  //     this.stations.valueChanges.subscribe(() => {
+  //       this.checkAndAddStationField();
+  //     }),
+  //   );
 
-    this.subscriptions.add(
-      this.carriages.valueChanges.subscribe(() => {
-        this.checkAndAddCarriageField();
-      }),
-    );
-  }
+  //   this.subscriptions.add(
+  //     this.carriages.valueChanges.subscribe(() => {
+  //       this.checkAndAddCarriageField();
+  //     }),
+  //   );
+  // }
 
   removeCarriageField(index: number) {
     this.carriages.removeAt(index);
@@ -249,16 +249,21 @@ export class UpdateRouteFormComponent implements OnInit {
 
   public onSubmit() {
     if (this.routeForm.valid && this.routeId !== null) {
-      const sanitizedStations = this.stations.value.slice(0, -1);
-      const sanitizedCarriages = this.carriages.value.slice(0, -1);
+      const sanitizedStations = this.stations.controls
+        .map((control) => control.value)
+        .filter((value) => value !== null);
+
+      const sanitizedCarriages = this.carriages.controls
+        .map((control) => control.value)
+        .filter((value) => value !== null);
 
       const routeData = {
         path: sanitizedStations,
         carriages: sanitizedCarriages,
       };
 
-      this.store.dispatch(updateRoute({ id: this.routeId, route: routeData }));
       console.log(routeData);
+      this.store.dispatch(updateRoute({ id: this.routeId, route: routeData }));
       this.closeForm();
     }
   }

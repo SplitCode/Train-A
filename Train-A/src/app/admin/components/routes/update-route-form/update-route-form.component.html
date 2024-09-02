@@ -34,6 +34,12 @@
               }"
             />
           </div>
+          <div
+            *ngIf="routeForm.errors?.['stationsMinLength']"
+            class="error-text text-red-600"
+          >
+            Minimum 3 stations
+          </div>
         </div>
 
         <div formArrayName="carriages" class="flex-1">
@@ -60,6 +66,12 @@
                   'hover:text-red-600 bg-transparent border-none border-0',
               }"
             />
+          </div>
+          <div
+            *ngIf="routeForm.errors?.['carriagesMinLength']"
+            class="error-text text-red-600"
+          >
+            Minimum 3 carriages
           </div>
         </div>
       </div>

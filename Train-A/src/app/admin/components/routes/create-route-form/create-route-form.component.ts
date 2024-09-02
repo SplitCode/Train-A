@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import {
@@ -12,10 +12,7 @@ import { Observable, Subscription, take } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
-import {
-  // ConnectedStations,
-  StationsItem,
-} from '../../../../redux/states/stations.state';
+import { StationsItem } from '../../../../redux/states/stations.state';
 import { CarriageItem } from '../../../models/carriage-item.interface';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
 import { validateRouteForm } from './routes-validation.directive';
@@ -43,7 +40,6 @@ export class CreateRouteFormComponent implements OnInit {
 
   public allStations$: Observable<StationsItem[]>;
 
-  // public connectedStations: StationsItem[] = [];
   public availableStationsList: StationsItem[][] = [];
 
   constructor(
@@ -88,11 +84,15 @@ export class CreateRouteFormComponent implements OnInit {
   private createForm(): FormGroup {
     return this.fb.group(
       {
-        stations: this.fb.array([this.fb.control(null)]),
+        stations: this.fb.array([this.createStationControl(true)]),
         carriages: this.fb.array([this.fb.control(null)]),
       },
       { validators: validateRouteForm },
     );
+  }
+
+  private createStationControl(isLast: boolean): FormControl {
+    return this.fb.control({ value: null, disabled: !isLast });
   }
 
   private checkAndAddStationField() {
@@ -139,8 +139,9 @@ export class CreateRouteFormComponent implements OnInit {
   }
 
   addStationField() {
-    this.stations.push(this.fb.control(null));
+    this.stations.push(this.createStationControl(true));
     this.availableStationsList.push([]);
+    this.updateStationControls();
   }
 
   addCarriageField() {
@@ -154,6 +155,27 @@ export class CreateRouteFormComponent implements OnInit {
   removeStationField(index: number) {
     this.stations.removeAt(index);
     this.availableStationsList.splice(index, 1);
+    this.updateStationControls();
+
+    const newLastControlIndex = this.stations.length - 1;
+
+    if (newLastControlIndex > 0) {
+      const previousStationId = this.stations.at(newLastControlIndex - 1).value;
+      this.updateConnectedStations(previousStationId, newLastControlIndex);
+    } else {
+      this.availableStationsList[newLastControlIndex] =
+        this.availableStationsList[0];
+    }
+  }
+
+  private updateStationControls() {
+    this.stations.controls.forEach((control, index) => {
+      if (index < this.stations.length - 1) {
+        control.disable();
+      } else {
+        control.enable();
+      }
+    });
   }
 
   private clearFormArrays() {

@@ -57,7 +57,6 @@ export const initialSearchState: SearchState = {
   loading: false,
   firstFound: false,
   searchItem: {
-
     from: {
       city: '',
       geolocation: {

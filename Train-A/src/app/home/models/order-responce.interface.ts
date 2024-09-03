@@ -1,10 +1,10 @@
 export interface OrderRequest {
   rideId: number;
   seat: number;
-  fromStationId: number;
-  toStationId: number;
-  carriageNumber: number;
-  isShowBook: boolean;
+  stationStart: number;
+  stationEnd: number;
+  carriageNumber?: number;
+  isShowBook?: boolean;
   price?: number;
 }
 

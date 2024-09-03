@@ -54,8 +54,6 @@ export class TrainEffects {
           }
         });
 
-        console.log('Train array:', trainArray);
-
         return updateTrainArraySuccess({
           trainArray: trainArray as CarriageItem[],
         });

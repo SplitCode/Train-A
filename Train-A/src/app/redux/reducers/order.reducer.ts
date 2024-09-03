@@ -17,7 +17,6 @@ import { OrderState } from '../states/order.state';
 export const orderReducer = createReducer(
   initialState,
   on(createBook, (state, { book }): OrderState => {
-    console.log('Reducer - createBook:', state);
     return {
       ...state,
       book,

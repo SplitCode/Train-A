@@ -10,11 +10,14 @@ import { CustomButtonComponent } from '../../../../shared/components';
 import { CarriageSeatConfig, SeatStatus } from './carriage-seat.config';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { createBook } from '../../../../redux/actions/order.actions';
 import { Store } from '@ngrx/store';
 import { OrderRequest } from '../../../../home/models/order-responce.interface';
-import { selectBook } from '../../../../redux/selectors/order.selectors';
+import {
+  selectBook,
+  selectOccupiedSeatsByRideId,
+} from '../../../../redux/selectors/order.selectors';
 
 @Component({
   selector: 'app-carriage-seat',
@@ -43,15 +46,26 @@ export class CarriageSeatComponent
 
   private book$: Observable<OrderRequest | null>;
 
+  private occupiedSeats$: Observable<number[]> = of([]);
+
   constructor(private route: ActivatedRoute) {
     super();
     this.book$ = this.store.select(selectBook);
+    this.route.paramMap.subscribe((params) => {
+      this.rideId = params.get('rideId');
+      if (this.rideId != null) {
+        this.occupiedSeats$ = this.store.select(
+          selectOccupiedSeatsByRideId(+this.rideId),
+        );
+      }
+    });
   }
 
   public ngOnInit() {
     if (this.carriageSeatConfig?.isWorking) {
       this.writeParamsFromRouter();
       this.listenBookStatus();
+      this.listenOccupateSeat();
     }
   }
 
@@ -73,7 +87,6 @@ export class CarriageSeatComponent
   override handleEvent() {
     if (this.carriageSeatConfig) {
       this.bookSeat();
-      console.log('CarriageSeatConfig', this.carriageSeatConfig);
     }
   }
 
@@ -125,7 +138,7 @@ export class CarriageSeatComponent
     }
   }
 
-  private listenBookStatus() {
+  private listenBookStatus(): void {
     const bookSubscription = this.book$.subscribe((book) => {
       if (this.carriageSeatConfig) {
         this.carriageSeatConfig.status = undefined;
@@ -136,11 +149,28 @@ export class CarriageSeatComponent
         book.seat === this.carriageSeatConfig?.seatIdTrain &&
         book.carriageNumber === this.carriageSeatConfig?.carriageNumber
       ) {
-        console.log(this.carriageSeatConfig);
         this.setBookedStatus();
       }
     });
 
     this.subscriptions.push(bookSubscription);
+  }
+
+  private listenOccupateSeat(): void {
+    const seatIdTrain = this.carriageSeatConfig?.seatIdTrain;
+    if (typeof seatIdTrain === 'number') {
+      const occupateSeatSubscription = this.occupiedSeats$.subscribe(
+        (seats: number[]) => {
+          if (seats.includes(seatIdTrain)) {
+            if (this.carriageSeatConfig)
+              this.carriageSeatConfig.status = SeatStatus.Selected;
+            if (this.config) this.config.disabled = true;
+            console.log('I am occupite');
+          }
+        },
+      );
+
+      this.subscriptions.push(occupateSeatSubscription);
+    }
   }
 }

@@ -26,7 +26,6 @@ export const selectSegments = createSelector(
 export const selectFilteredCarriages = createSelector(
   selectRideState,
   (rideState: RideState) => {
-    console.log('Filtered Carriages:', rideState.filteredCarriages);
     return rideState.filteredCarriages;
   },
 );

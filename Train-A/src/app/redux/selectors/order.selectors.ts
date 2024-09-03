@@ -4,6 +4,7 @@ import { OrderRequest } from '../../home/models/order-responce.interface';
 import { Order } from '../../home/models/orders.interface';
 
 export const selectOrderState = createFeatureSelector<OrderState>('orderState');
+
 export const selectOrders = createSelector(
   selectOrderState,
   (state: OrderState): Order[] | [] => {

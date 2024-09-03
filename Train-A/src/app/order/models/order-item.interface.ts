@@ -26,3 +26,10 @@ export interface ScheduleSegment {
 export interface Price {
   [key: string]: number;
 }
+
+export interface User {
+  id: number;
+  email: string;
+  name: string;
+  role: 'user' | 'manager';
+}

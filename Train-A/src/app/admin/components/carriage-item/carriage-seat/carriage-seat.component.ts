@@ -72,6 +72,14 @@ export class CarriageSeatComponent
 
   override handleEvent() {
     this.bookSeat();
+    if (this.carriageSeatConfig) {
+      console.log(
+        'saetIdTrain',
+        this.carriageSeatConfig.seatIdTrain,
+        'saetIdCarr',
+        this.carriageSeatConfig.seatId,
+      );
+    }
   }
 
   private bookSeat(): void {

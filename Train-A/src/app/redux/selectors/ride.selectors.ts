@@ -23,3 +23,10 @@ export const selectSegments = createSelector(
   selectSchedule,
   (schedule) => schedule?.segments,
 );
+export const selectFilteredCarriages = createSelector(
+  selectRideState,
+  (rideState: RideState) => {
+    console.log('Filtered Carriages:', rideState.filteredCarriages);
+    return rideState.filteredCarriages;
+  },
+);

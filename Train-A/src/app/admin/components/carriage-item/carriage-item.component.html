@@ -38,6 +38,13 @@
                     config.leftSeats +
                     seatIndex +
                     1,
+                  seatIdTrain:
+                    (config.previousSeats ?? 0) +
+                    (config.rows - rowIndex - 1) *
+                      (config.leftSeats + config.rightSeats) +
+                    config.leftSeats +
+                    seatIndex +
+                    1,
                   isWorking: config.isWorking,
                   carriageNumber: carriageNumber,
                 }"
@@ -59,6 +66,12 @@
                 "
                 [carriageSeatConfig]="{
                   seatId:
+                    (config.rows - rowIndex - 1) *
+                      (config.leftSeats + config.rightSeats) +
+                    seatIndex +
+                    1,
+                  seatIdTrain:
+                    (config.previousSeats ?? 0) +
                     (config.rows - rowIndex - 1) *
                       (config.leftSeats + config.rightSeats) +
                     seatIndex +

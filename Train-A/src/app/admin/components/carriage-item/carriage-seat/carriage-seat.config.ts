@@ -5,6 +5,7 @@ export enum SeatStatus {
 }
 export interface CarriageSeatConfig {
   seatId: number;
+  seatIdTrain: number;
   status?: SeatStatus | undefined;
   styleClass?: string;
   isWorking: boolean;

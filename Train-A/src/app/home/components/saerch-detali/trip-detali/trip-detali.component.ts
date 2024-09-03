@@ -1,4 +1,4 @@
-import { selectCarriageTypes } from './../../../../redux/selectors/ride.selectors';
+import { selectFilteredCarriages } from './../../../../redux/selectors/ride.selectors';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -65,10 +65,15 @@ export class TripDetailComponent implements OnInit, OnDestroy {
 
   private updateTrain() {
     const subscription = this.store
-      .select(selectCarriageTypes)
+      .select(selectFilteredCarriages)
       .pipe()
-      .subscribe((carriageCodes) => {
-        uprateTrain(this.store, carriageCodes);
+      .subscribe((filteredCarriages) => {
+        if (filteredCarriages) {
+          const carriageNames = filteredCarriages.map(
+            (carriage) => carriage.name,
+          );
+          uprateTrain(this.store, carriageNames);
+        }
       });
 
     this.subscriptions.push(subscription);

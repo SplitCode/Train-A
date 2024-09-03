@@ -1,5 +1,5 @@
-import { Component, effect, OnInit, signal } from '@angular/core';
-import { CarriageItem } from '../../../../admin/models/carriage-item.interface';
+import { Component, OnInit, signal } from '@angular/core';
+
 import {
   combineLatest,
   filter,
@@ -17,6 +17,8 @@ import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { CommonModule } from '@angular/common';
 import { UniqueInArrPipe } from '../../../../shared/pipes/unique-in-arr.pipe';
 import { CarriageItemComponent } from '../../../../admin/components/carriage-item/carriage-item.component';
+import { selectTrainArray } from '../../../../redux/selectors/train.selectors';
+import { CarriageItem } from '../../../../admin/models/carriage-item.interface';
 
 @Component({
   selector: 'app-carriage-type-tabs',
@@ -39,19 +41,19 @@ export class CarriageTypeTabsComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
+  public carriagesFromTrain$: Observable<CarriageItem[]>;
+
   constructor(private store: Store) {
     this.carriageTypes$ = this.store.select(selectCarriageTypes);
-    this.listenSignals();
-  }
 
-  private listenSignals(): void {
-    effect(() => {
-      console.log('Current carriagesByTypes:', this.carriagesByTypes());
-    });
+    this.carriagesFromTrain$ = this.store.select(selectTrainArray);
   }
 
   public ngOnInit() {
     this.processCarriagesByTypes();
+    // this.carriagesFromTrain$.subscribe((carriages) => {
+    //   console.log('carriagesFromTrain', carriages);
+    // });
   }
 
   public ngOnDestroy() {
@@ -96,22 +98,17 @@ export class CarriageTypeTabsComponent implements OnInit {
     this.subscriptions.push(carriageTypesSubscription);
   }
 
-  private getCarriageByType(carriageType: string): CarriageItem | undefined {
-    console.log(carriageType);
-    return this.carriagesByTypes().find(
-      (carriage) => carriage.name === carriageType,
-    );
-  }
-
   public getCarriagesConfig(carriageType: string): CarriageItem[] {
     if (!this.carriagesConfigCache[carriageType]) {
-      this.carriagesConfigCache[carriageType] = this.carriagesByTypes()
-        .filter((carriage) => carriage.name === carriageType)
-        .map((carriage) => ({
-          ...carriage,
-          mode: carriage.mode || 'interActive',
-          isWorking: true,
-        }));
+      this.carriagesFromTrain$.subscribe((carriages) => {
+        this.carriagesConfigCache[carriageType] = carriages
+          .filter((carriage) => carriage.name === carriageType)
+          .map((carriage) => ({
+            ...carriage,
+            mode: carriage.mode || 'interActive',
+            isWorking: true,
+          }));
+      });
     }
     return this.carriagesConfigCache[carriageType];
   }

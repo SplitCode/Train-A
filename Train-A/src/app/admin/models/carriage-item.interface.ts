@@ -9,4 +9,5 @@ export interface CarriageItem {
   carriageNumber?: number;
   totalRidePrice?: number;
   totalSeats?: number;
+  previousSeats?: number;
 }

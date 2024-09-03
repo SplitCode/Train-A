@@ -10,4 +10,5 @@ export interface CarriageSeatConfig {
   styleClass?: string;
   isWorking: boolean;
   carriageNumber?: number | undefined;
+  carriageType?: string;
 }

@@ -73,12 +73,7 @@ export class CarriageSeatComponent
   override handleEvent() {
     if (this.carriageSeatConfig) {
       this.bookSeat();
-      console.log(
-        'saetIdTrain',
-        this.carriageSeatConfig.seatIdTrain,
-        'saetIdCarr',
-        this.carriageSeatConfig.seatId,
-      );
+      console.log('CarriageSeatConfig', this.carriageSeatConfig);
     }
   }
 
@@ -138,9 +133,10 @@ export class CarriageSeatComponent
 
       if (
         book &&
-        book.seat === this.carriageSeatConfig?.seatId &&
+        book.seat === this.carriageSeatConfig?.seatIdTrain &&
         book.carriageNumber === this.carriageSeatConfig?.carriageNumber
       ) {
+        console.log(this.carriageSeatConfig);
         this.setBookedStatus();
       }
     });

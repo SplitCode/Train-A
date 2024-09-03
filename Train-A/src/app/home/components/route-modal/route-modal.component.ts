@@ -53,7 +53,6 @@ export class RouteModalComponent implements OnInit {
 
   public ngOnInit() {
     this.buildEvents();
-    // console.log('RouteModalComponent', this.config);
   }
 
   public ngOnDestroy() {

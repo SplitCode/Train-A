@@ -4,6 +4,7 @@ import {
   OrderRequest,
   SuccessOrderResponse,
 } from '../../home/models/order-responce.interface';
+import { Order } from '../../home/models/orders.interface';
 export const createBook = createAction(
   '[Order] Create Book',
   props<{ book: OrderRequest }>(),
@@ -30,5 +31,15 @@ export const cancelOrderSuccess = createAction('[Order] Cancel Order Success');
 
 export const cancelOrderFailure = createAction(
   '[Order] Cancel Order Failure',
+  props<{ error: ErrorOrderResponse }>(),
+);
+
+export const getOrders = createAction('[Order] Get Orders');
+export const getOrdersSuccess = createAction(
+  '[Order] Get Orders Success',
+  props<{ orders: Order[] }>(),
+);
+export const getOrdersFailure = createAction(
+  '[Order] Get Orders Failure',
   props<{ error: ErrorOrderResponse }>(),
 );

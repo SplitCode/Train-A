@@ -18,14 +18,18 @@
             <p-dropdown
               [styleClass]="'w-full'"
               [formControlName]="i"
-              [options]="(allStations$ | async) || []"
+              [options]="
+                (i === stations.length - 1
+                  ? availableStationsList[i]
+                  : (allStations$ | async)) || []
+              "
               optionLabel="city"
               optionValue="id"
               placeholder="Select station"
             >
             </p-dropdown>
             <app-custom-button
-              *ngIf="stations.length > 1 && i < stations.length - 1"
+              *ngIf="i === stations.length - 2 && stations.length > 1"
               (click)="removeStationField(i)"
               [config]="{
                 icon: 'pi pi-trash',
@@ -33,6 +37,12 @@
                   'hover:text-red-600 bg-transparent border-none border-0',
               }"
             />
+          </div>
+          <div
+            *ngIf="routeForm.errors?.['stationsMinLength']"
+            class="error-text text-red-600"
+          >
+            Minimum 3 stations
           </div>
         </div>
 
@@ -60,6 +70,12 @@
                   'hover:text-red-600 bg-transparent border-none border-0',
               }"
             />
+          </div>
+          <div
+            *ngIf="routeForm.errors?.['carriagesMinLength']"
+            class="error-text text-red-600"
+          >
+            Minimum 3 carriages
           </div>
         </div>
       </div>

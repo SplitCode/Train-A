@@ -12,13 +12,10 @@ import { filter, Observable, Subscription, switchMap, take } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { selectAllStations } from '../../../../redux/selectors/stations.selectors';
-import {
-  // ConnectedStations,
-  StationsItem,
-} from '../../../../redux/states/stations.state';
+import { StationsItem } from '../../../../redux/states/stations.state';
 import { CarriageItem } from '../../../models/carriage-item.interface';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
-import { validateRouteForm } from '../create-route-form/routes-validation.directive';
+import { validateRouteForm } from '../../../utilits/routes-validation.directive';
 import {
   selectRouteById,
   selectRouteId,
@@ -50,11 +47,11 @@ export class UpdateRouteFormComponent implements OnInit {
 
   public allStations$: Observable<StationsItem[]>;
 
+  public availableStationsList: StationsItem[][] = [];
+
   public routeId$: Observable<number | null>;
 
   public currentRoute$: Observable<RoutesItem | undefined>;
-
-  // public connectedStations!: ConnectedStations[];
 
   constructor(
     private store: Store,
@@ -70,7 +67,7 @@ export class UpdateRouteFormComponent implements OnInit {
     this.routeForm = this.createForm();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.subscriptions.add(
       this.routeId$.pipe(take(1)).subscribe((routeId) => {
         this.routeId = routeId;
@@ -79,7 +76,6 @@ export class UpdateRouteFormComponent implements OnInit {
 
     this.subscriptions.add(
       this.currentRoute$.subscribe((route) => {
-        console.log('This route:', route);
         if (route) {
           this.populateStationsAndCarriages(route);
         }
@@ -87,27 +83,31 @@ export class UpdateRouteFormComponent implements OnInit {
     );
 
     this.subscriptions.add(
-      this.carriages.valueChanges.subscribe(() => {
-        this.checkAndAddCarriageField();
+      this.stations.valueChanges.subscribe(() => {
+        if (this.stations.length > 0) {
+          this.checkAndAddStationField();
+        }
       }),
     );
 
     this.subscriptions.add(
-      this.stations.valueChanges.subscribe(() => {
-        this.checkAndAddStationField();
+      this.carriages.valueChanges.subscribe(() => {
+        if (this.carriages.length > 0) {
+          this.checkAndAddCarriageField();
+        }
       }),
     );
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  get stations() {
+  public get stations() {
     return this.routeForm.get('stations') as FormArray;
   }
 
-  get carriages() {
+  public get carriages() {
     return this.routeForm.get('carriages') as FormArray;
   }
 
@@ -136,6 +136,18 @@ export class UpdateRouteFormComponent implements OnInit {
     this.checkAndAddCarriageField();
   }
 
+  private checkAndAddStationField() {
+    const stationsArray = this.stations;
+    const lastControlIndex = stationsArray.length - 1;
+    const lastControl = stationsArray.at(lastControlIndex);
+
+    if (lastControl && lastControl.value !== null) {
+      const selectedStationId: number = lastControl.value;
+      this.updateConnectedStations(selectedStationId, lastControlIndex + 1);
+      this.addStationField();
+    }
+  }
+
   private checkAndAddCarriageField() {
     const carriagesArray = this.carriages;
     const lastControl = carriagesArray.at(carriagesArray.length - 1);
@@ -145,38 +157,70 @@ export class UpdateRouteFormComponent implements OnInit {
     }
   }
 
-  private checkAndAddStationField() {
-    const stationsArray = this.stations;
-    const lastControl = stationsArray.at(stationsArray.length - 1);
+  private updateConnectedStations(stationId: number, nextIndex: number) {
+    this.allStations$.pipe(take(1)).subscribe((stations) => {
+      const selectedStation = stations.find(
+        (station) => station.id === stationId,
+      );
 
-    if (lastControl && lastControl.value) {
-      this.addStationField();
+      if (selectedStation?.connectedTo) {
+        const connectedStationIds = selectedStation.connectedTo.map(
+          (connection) => connection.id,
+        );
+
+        const connectedStations = stations.filter((station) =>
+          connectedStationIds.includes(station.id),
+        );
+
+        this.availableStationsList[nextIndex] = connectedStations;
+      } else {
+        this.availableStationsList[nextIndex] = [];
+      }
+    });
+  }
+
+  private addStationField() {
+    this.stations.push(this.fb.control(null));
+    this.availableStationsList.push([]);
+    this.updateStationControls();
+  }
+
+  private addCarriageField() {
+    this.carriages.push(this.fb.control(null));
+  }
+
+  public removeStationField(index: number) {
+    this.stations.removeAt(index);
+    this.availableStationsList.splice(index, 1);
+
+    const newLastControlIndex = this.stations.length - 1;
+    if (newLastControlIndex >= 0) {
+      if (this.stations.length === 1) {
+        this.allStations$.pipe(take(1)).subscribe((stations) => {
+          this.availableStationsList[0] = stations;
+        });
+      } else {
+        const previousStationId = this.stations.at(
+          newLastControlIndex - 1,
+        ).value;
+        this.updateConnectedStations(previousStationId, newLastControlIndex);
+      }
     }
   }
 
-  addStationField() {
-    this.stations.push(this.fb.control(''));
-  }
-
-  addCarriageField() {
-    this.carriages.push(this.fb.control(''));
-  }
-
-  removeCarriageField(index: number) {
+  public removeCarriageField(index: number) {
     this.carriages.removeAt(index);
   }
 
-  removeStationField(index: number) {
-    this.stations.removeAt(index);
+  private updateStationControls() {
+    this.stations.controls.forEach((control, index) => {
+      if (index < this.stations.length - 1) {
+        control.disable();
+      } else {
+        control.enable();
+      }
+    });
   }
-
-  // public onHide() {
-  //   this.connectedStations = this.routeForm.value.stations.connectedTo;
-
-  //   this.routeForm.patchValue({
-  //     city2: '',
-  //   });
-  // }
 
   private clearFormArrays() {
     while (this.stations.length !== 0) {
@@ -195,16 +239,21 @@ export class UpdateRouteFormComponent implements OnInit {
 
   public onSubmit() {
     if (this.routeForm.valid && this.routeId !== null) {
-      const sanitizedStations = this.stations.value.slice(0, -1);
-      const sanitizedCarriages = this.carriages.value.slice(0, -1);
+      const sanitizedStations = this.stations.controls
+        .map((control) => control.value)
+        .filter((value) => value !== null);
+
+      const sanitizedCarriages = this.carriages.controls
+        .map((control) => control.value)
+        .filter((value) => value !== null);
 
       const routeData = {
         path: sanitizedStations,
         carriages: sanitizedCarriages,
       };
 
-      this.store.dispatch(updateRoute({ id: this.routeId, route: routeData }));
       console.log(routeData);
+      this.store.dispatch(updateRoute({ id: this.routeId, route: routeData }));
       this.closeForm();
     }
   }

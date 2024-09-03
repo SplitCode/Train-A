@@ -7,3 +7,9 @@
 ::ng-deep .p-tabmenuitem:not(.p-hidden) {
   display: block;
 }
+
+@media screen and (max-width: 480px) {
+  ::ng-deep .p-tabmenu .p-tabmenu-nav {
+    font-size: 0.75rem;
+  }
+}

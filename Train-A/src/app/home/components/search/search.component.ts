@@ -98,7 +98,6 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     };
 
     this.store.dispatch(loadSearch({ form: submitedForm }));
-    // this.isSearched.next(true);
   }
 
   public onHide() {

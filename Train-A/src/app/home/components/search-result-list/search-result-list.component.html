@@ -16,7 +16,7 @@
                     </div>
                   </div>
                 </ng-template>
-                <app-search-item [cityFromTo]="cityFromTo" [segment]="segment" [path]="item.path"/>
+                <app-search-item [routeButtonConfig]="{rideId: schedule.rideId, fromStationId: cityFromTo[0].stationId, toStationId: cityFromTo[1].stationId}" [cityFromTo]="cityFromTo" [segment]="segment" [path]="item.path"/>
               </p-tabPanel>
             </ng-container>
           </p-tabView>

@@ -71,8 +71,8 @@ export class CarriageSeatComponent
   }
 
   override handleEvent() {
-    this.bookSeat();
     if (this.carriageSeatConfig) {
+      this.bookSeat();
       console.log(
         'saetIdTrain',
         this.carriageSeatConfig.seatIdTrain,
@@ -83,6 +83,7 @@ export class CarriageSeatComponent
   }
 
   private bookSeat(): void {
+    let book;
     if (this.carriageSeatConfig?.isWorking) {
       if (
         !this.config?.disabled &&
@@ -92,19 +93,20 @@ export class CarriageSeatComponent
         this.toStationId &&
         this.carriageSeatConfig.carriageNumber
       ) {
+        book = {
+          rideId: +this.rideId,
+          seat: this.carriageSeatConfig.seatIdTrain,
+          stationStart: +this.fromStationId,
+          stationEnd: +this.toStationId,
+          carriageNumber: this.carriageSeatConfig.carriageNumber,
+          isShowBook: true,
+        };
         this.store.dispatch(
           createBook({
-            book: {
-              rideId: +this.rideId,
-              seat: this.carriageSeatConfig.seatId,
-              fromStationId: +this.fromStationId,
-              toStationId: +this.toStationId,
-              carriageNumber: this.carriageSeatConfig.carriageNumber,
-              isShowBook: true,
-            },
+            book: book,
           }),
         );
-        // console.log('fromStationId', this.fromStationId);
+        console.log('book: ', book);
       }
     }
   }

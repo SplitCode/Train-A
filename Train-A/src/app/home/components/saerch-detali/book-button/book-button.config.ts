@@ -1,7 +1,6 @@
 export interface BookButtonConfig {
-  isShow: boolean;
+  isShow?: boolean;
   seatId?: number;
-  trainSeatId?: number;
   carriageNumber?: number | undefined;
   price?: number;
   rideId: string | null;

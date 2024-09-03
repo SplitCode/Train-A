@@ -58,3 +58,12 @@
     </p>
   </div>
 </ng-template>
+<app-route-modal
+  [config]="{
+    isVisiblePath: modalInfo.isVisiblePath,
+    fromStationId: modalInfo.fromStationId,
+    toStationId: modalInfo.toStationId,
+    rideId: modalInfo.rideId,
+    showFromToCities: modalInfo.showFromToCities,
+  }"
+/>

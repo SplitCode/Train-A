@@ -1,0 +1,76 @@
+<div
+  class="flex flex-col lg:flex-row border border-stone-600 border-solid rounded-md"
+>
+  <div
+    class="flex flex-col w-full lg:max-w-96 border border-stone-600 border-solid border-l-0 border-r-0 border-t-0 lg:border-b-0"
+  >
+    <div>Order ID: {{ order.id }}</div>
+    <span> Status: {{ order.status }} </span>
+    <div class="flex items-center px-4 pt-4 pb-2 w-full">
+      <div>
+        <div class="text-lg font-bold">
+          {{ order.schedule.segments[0].time[0] | date: "H:mm" }}
+        </div>
+        <div class="text-nowrap text-xs capitalize">
+          {{ order.schedule.segments[0].time[0] | date: "MMMM d" }}
+        </div>
+        <div class="text-xs font-medium leading-7 capitalize">
+          {{ order.stationStart }}
+        </div>
+      </div>
+      <div class="relative w-full h-0.5 bg-slate-600 mx-3 px-3">
+        <div
+          class="absolute left-0 top-1/2 transform size-3 rounded-full border-2 border-solid border-slate-600 bg-slate-100"
+          style="transform: translateY(-50%)"
+        ></div>
+        <div
+          class="absolute top-[50%] left-[50%] bg-slate-600 text-[12px] leading-none rounded-lg p-1"
+          style="transform: translate(-50%, -50%)"
+        >
+          {{
+            [
+              order.schedule.segments[0].time[0],
+              order.schedule.segments[0].time[1],
+            ]
+          }}
+        </div>
+        <div
+          class="absolute right-0 top-1/2 transform size-3 rounded-full border-2 border-slate-600 bg-slate-600"
+          style="transform: translateY(-50%)"
+        ></div>
+      </div>
+      <div>
+        <div class="text-lg font-bold">
+          {{ order.schedule.segments[0].time[1] | date: "H:mm" }}
+        </div>
+        <div class="text-nowrap text-xs capitalize">
+          {{ order.schedule.segments[0].time[1] | date: "MMMM d" }}
+        </div>
+        <div class="text-xs font-medium leading-7 capitalize">
+          {{ order.stationEnd }}
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center px-4 pb-4 pt-2">
+      <div
+        class="flex items-center space-x-1 bg-gray-100 rounded-full py-1 px-2 font-semibold mr-3"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14px"
+          height="14px"
+          viewBox="0 0 24 24"
+        >
+          <!-- SVG content -->
+        </svg>
+        <span class="text-gray-700 text-sm capitalize">{{
+          order.path[0] | stationCityById | async
+        }}</span>
+        <span class="text-gray-400 text-sm">→</span>
+        <span class="text-gray-700 text-sm capitalize">{{
+          order.path[order.path.length - 1] | stationCityById | async
+        }}</span>
+      </div>
+    </div>
+  </div>
+</div>

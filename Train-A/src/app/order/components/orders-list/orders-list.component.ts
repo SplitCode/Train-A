@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
-import { OrderItem, Price } from '../../models/order-item.interface';
+import { OrderItem } from '../../models/order-item.interface';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { OrderItemComponent } from '../order-item/order-item.component';
+import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
 
 @Component({
   selector: 'app-orders-list',
-  imports: [CommonModule],
+  imports: [CommonModule, OrderItemComponent, PRIME_NG_MODULES.CardModule],
   templateUrl: './orders-list.component.html',
   styleUrls: ['./orders-list.component.scss'],
 
@@ -22,9 +24,5 @@ export class OrdersListComponent implements OnInit {
     this.orders$.subscribe((orders) => {
       console.log(orders);
     });
-  }
-
-  getKeys(obj: Price): string[] {
-    return Object.keys(obj);
   }
 }

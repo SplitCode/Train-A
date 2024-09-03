@@ -51,7 +51,7 @@ export class CreateRouteFormComponent implements OnInit {
     this.routeForm = this.createForm();
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.subscriptions.add(
       this.stations.valueChanges.subscribe(() => {
         this.checkAndAddStationField();
@@ -69,15 +69,15 @@ export class CreateRouteFormComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  get stations() {
+  public get stations() {
     return this.routeForm.get('stations') as FormArray;
   }
 
-  get carriages() {
+  public get carriages() {
     return this.routeForm.get('carriages') as FormArray;
   }
 
@@ -138,21 +138,21 @@ export class CreateRouteFormComponent implements OnInit {
     });
   }
 
-  addStationField() {
+  private addStationField() {
     this.stations.push(this.createStationControl(true));
     this.availableStationsList.push([]);
     this.updateStationControls();
   }
 
-  addCarriageField() {
+  private addCarriageField() {
     this.carriages.push(this.fb.control(null));
   }
 
-  removeCarriageField(index: number) {
+  public removeCarriageField(index: number) {
     this.carriages.removeAt(index);
   }
 
-  removeStationField(index: number) {
+  public removeStationField(index: number) {
     this.stations.removeAt(index);
     this.availableStationsList.splice(index, 1);
 

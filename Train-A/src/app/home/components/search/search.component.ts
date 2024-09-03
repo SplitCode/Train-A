@@ -85,7 +85,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
       if (city) {
         findCity = city;
       } else {
-        console.log('Not founde');
+        console.log('Not found');
       }
     });
 

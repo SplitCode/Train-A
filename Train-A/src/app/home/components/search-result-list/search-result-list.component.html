@@ -32,3 +32,12 @@
     <p class="text-sm">No seats on direct trains are available right now, but there's always hope. Try again later or travel with a transfer.</p>
   </div>
 </ng-template>
+<app-route-modal
+  [config]="{
+    isVisiblePath: modalInfo.isVisiblePath,
+    fromStationId: modalInfo.fromStationId,
+    toStationId: modalInfo.toStationId,
+    rideId: modalInfo.rideId,
+    showFromToCities: modalInfo.showFromToCities,
+  }"
+/>

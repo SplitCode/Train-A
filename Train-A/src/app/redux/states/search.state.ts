@@ -12,13 +12,6 @@ export interface SearchItem {
   to: Direction;
 }
 
-export interface SearchState {
-  searchItem: SearchItem;
-  error: string;
-  loading: boolean;
-  firstFound: boolean;
-}
-
 export interface Direction {
   city: string;
   geolocation: Geolocation;
@@ -52,12 +45,34 @@ export interface Price {
   [key: string]: string;
 }
 
+export interface ModalInfo {
+  isVisiblePath: boolean;
+  fromStationId: string;
+  toStationId: string;
+  rideId: string;
+  showFromToCities: boolean;
+}
+
+export interface SearchState {
+  searchItem: SearchItem;
+  error: string;
+  loading: boolean;
+  firstFound: boolean;
+  modalInfo: ModalInfo;
+}
+
 export const initialSearchState: SearchState = {
   error: '',
   loading: false,
   firstFound: false,
+  modalInfo: {
+    isVisiblePath: false,
+    fromStationId: '',
+    toStationId: '',
+    rideId: '',
+    showFromToCities: false,
+  },
   searchItem: {
-
     from: {
       city: '',
       geolocation: {
@@ -66,7 +81,6 @@ export const initialSearchState: SearchState = {
       },
       stationId: 0,
     },
-
     routes: [
       {
         id: 0,

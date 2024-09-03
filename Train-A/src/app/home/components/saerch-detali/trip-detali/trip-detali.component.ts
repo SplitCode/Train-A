@@ -2,7 +2,7 @@ import { selectFilteredCarriages } from './../../../../redux/selectors/ride.sele
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { loadRideInfo } from '../../../../redux/actions/ride.actions';
 import { CommonModule } from '@angular/common';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
@@ -12,6 +12,8 @@ import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-t
 import { BookButtonComponent } from '../book-button/book-button.component';
 import { uprateTrain } from '../../../utilits/update-train';
 import { getOrders } from '../../../../redux/actions/order.actions';
+import { Order } from '../../../models/orders.interface';
+import { selectOrders } from '../../../../redux/selectors/order.selectors';
 
 @Component({
   selector: 'app-trip-detali',
@@ -42,10 +44,14 @@ export class TripDetailComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
+  private orders$: Observable<Order[]>;
+
   constructor(
     private route: ActivatedRoute,
     private store: Store,
-  ) {}
+  ) {
+    this.orders$ = this.store.select(selectOrders);
+  }
 
   private writeParamsFromRouter(): void {
     this.rideId = this.route.snapshot.paramMap.get('rideId');
@@ -89,6 +95,9 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     this.loadRideInfo();
     this.updateTrain();
     this.store.dispatch(getOrders());
+    this.orders$.subscribe((orders) => {
+      console.log('Orders:', orders);
+    });
   }
 
   public ngOnDestroy() {

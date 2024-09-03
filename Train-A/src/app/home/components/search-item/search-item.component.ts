@@ -5,8 +5,8 @@ import { CommonModule, KeyValuePipe } from '@angular/common';
 import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouteModalComponent } from '../route-modal/route-modal.component';
 import { Store } from '@ngrx/store';
+import { loadModalInfo } from '../../../redux/actions/search.actions';
 import { loadRideInfo } from '../../../redux/actions/ride.actions';
 
 @Component({
@@ -18,7 +18,6 @@ import { loadRideInfo } from '../../../redux/actions/ride.actions';
     KeyValuePipe,
     StationCityByIdPipe,
     CustomButtonComponent,
-    RouteModalComponent,
   ],
   templateUrl: './search-item.component.html',
   styleUrl: './search-item.component.scss',
@@ -44,11 +43,7 @@ export class SearchItemComponent implements OnInit {
     private store: Store,
   ) {}
 
-  ngOnInit(): void {
-    // console.log(this.segment);
-    // const rideId = this.routeButtonConfig.rideId.toString();
-    // this.store.dispatch(loadRideInfo({ rideId: rideId }));
-  }
+  ngOnInit(): void {}
 
   public navigate() {
     this.router.navigate([`trip/${this.routeButtonConfig.rideId}`], {
@@ -60,9 +55,26 @@ export class SearchItemComponent implements OnInit {
     });
   }
 
-  public isDialog(isShow: boolean) {
-    const rideId = this.routeButtonConfig.rideId.toString();
-    this.store.dispatch(loadRideInfo({ rideId: rideId }));
-    this.isVisiblePath = isShow;
+  public isDialog() {
+    this.loadRideInfo();
+    this.store.dispatch(
+      loadModalInfo({
+        modalInfo: {
+          isVisiblePath: true,
+          fromStationId: this.cityFromTo[0].stationId.toString(),
+          toStationId: this.cityFromTo[1].stationId.toString(),
+          rideId: this.routeButtonConfig.rideId.toString(),
+          showFromToCities: false,
+        },
+      }),
+    );
+  }
+
+  private loadRideInfo(): void {
+    if (this.routeButtonConfig.rideId) {
+      this.store.dispatch(
+        loadRideInfo({ rideId: this.routeButtonConfig.rideId.toString() }),
+      );
+    }
   }
 }

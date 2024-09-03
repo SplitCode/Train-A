@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
 import {
   Observable,
@@ -17,6 +23,7 @@ import { selectRideInfo } from '../../../redux/selectors/ride.selectors';
 import { CommonModule } from '@angular/common';
 import { TimelineEvent } from '../../models/time-line-event.interface';
 import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
+import { loadModalInfo } from '../../../redux/actions/search.actions';
 
 @Component({
   selector: 'app-route-modal',
@@ -30,7 +37,7 @@ import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
     PRIME_NG_MODULES.TimelineModule,
   ],
 })
-export class RouteModalComponent implements OnInit {
+export class RouteModalComponent implements OnInit, AfterViewChecked {
   private subscriptions: Subscription[] = [];
 
   public rideInfo$: Observable<RideResponse | null>;
@@ -41,17 +48,25 @@ export class RouteModalComponent implements OnInit {
 
   @Input() config!: {
     isVisiblePath: boolean;
-    fromStationId: string | null;
-    toStationId: string | null;
-    rideId: string | null;
+    fromStationId: string;
+    toStationId: string;
+    rideId: string;
     showFromToCities: boolean;
   };
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private cd: ChangeDetectorRef,
+  ) {
     this.rideInfo$ = this.store.select(selectRideInfo);
   }
 
   public ngOnInit() {
+    this.buildEvents();
+  }
+
+  ngAfterViewChecked(): void {
+    this.cd.detectChanges();
     this.buildEvents();
   }
 
@@ -110,9 +125,9 @@ export class RouteModalComponent implements OnInit {
           timelineEvents.push({
             status:
               index === 0
-                ? 'First Station'
+                ? 'First\xa0Station'
                 : index === filteredPath.length - 1
-                  ? 'Last Station'
+                  ? 'Last\xa0Station'
                   : '',
             date: stationCities[index],
             arrivalTime: index === 0 ? '' : segment.time[0],
@@ -153,5 +168,17 @@ export class RouteModalComponent implements OnInit {
 
   public isDialog(isShow: boolean) {
     this.config.isVisiblePath = isShow;
+
+    this.store.dispatch(
+      loadModalInfo({
+        modalInfo: {
+          isVisiblePath: false,
+          fromStationId: '',
+          toStationId: '',
+          rideId: '',
+          showFromToCities: false,
+        },
+      }),
+    );
   }
 }

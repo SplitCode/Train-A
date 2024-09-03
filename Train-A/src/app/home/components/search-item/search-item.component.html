@@ -90,16 +90,13 @@
         }}</span>
       </div>
       <app-custom-button
-        (clickEmitter)="isDialog(true)"
+        (clickEmitter)="isDialog()"
         [config]="{
           link: true,
           styleClass:
             'transition-all no-underline text-white hover:text-slate-400',
         }"
         class="transition-all no-underline text-white hover:text-slate-400"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
       >
         Route
         <svg
@@ -129,13 +126,4 @@
     </div>
   </div>
 </div>
-<app-route-modal
-  (onHide)="isVisiblePath = false"
-  [config]="{
-    isVisiblePath: isVisiblePath,
-    fromStationId: cityFromTo[0].stationId.toString(),
-    toStationId: cityFromTo[1].stationId.toString(),
-    rideId: routeButtonConfig.rideId.toString(),
-    showFromToCities: false,
-  }"
-/>
+

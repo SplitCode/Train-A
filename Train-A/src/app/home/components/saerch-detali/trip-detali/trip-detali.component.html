@@ -12,9 +12,9 @@
     <app-route-modal
       [config]="{
         isVisiblePath: isVisiblePath,
-        fromStationId: fromStationId,
-        toStationId: toStationId,
-        rideId: rideId,
+        fromStationId: fromStationId || '',
+        toStationId: toStationId || '',
+        rideId: rideId || '',
         showFromToCities: true,
       }"
     />

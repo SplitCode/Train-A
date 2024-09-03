@@ -23,3 +23,8 @@ export const selectRoute = createSelector(
   selectRoutesState,
   (state: RoutesState) => state.route,
 );
+
+export const selectRouteByPath = createSelector(
+  selectRoutesState,
+  (state: RoutesState) => state.routeByPath,
+);

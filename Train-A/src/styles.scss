@@ -15,3 +15,8 @@
 ::ng-deep p-password.ng-invalid.ng-dirty > .p-password > .p-inputtext {
   border-color: transparent;
 }
+
+.p-inputtext--div {
+  background: none;
+  border: none;
+}

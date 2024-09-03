@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_CONFIG } from '../../config/api.config';
 import { Observable } from 'rxjs';
-import { RoutesItem } from '../models/routes-item.interface';
+import { RoutesItem, RoutesItemByPath } from '../models/routes-item.interface';
+import {
+  ScheduleTimeRide,
+  SegmentsStation,
+} from '../../redux/states/search.state';
 
 @Injectable({
   providedIn: 'root',
@@ -36,5 +40,46 @@ export class RoutesService {
 
   getRouteById(id: string): Observable<RoutesItem> {
     return this.http.get<RoutesItem>(`${this.apiUrl}/${id}`);
+  }
+
+  convertRoutesItemByPath(data: RoutesItem): RoutesItemByPath {
+    console.log('data', data.schedule);
+
+    return {
+      id: data.id,
+      path: data.path,
+      carriages: data.carriages,
+      schedule: data.schedule.reduce(
+        (accSc, item, indexSchedule) => (
+          accSc.push({
+            rideId: item.rideId,
+            segments: this.convertSegments(data, indexSchedule),
+          }),
+          accSc
+        ),
+        [] as ScheduleTimeRide[],
+      ),
+    };
+  }
+
+  private convertSegments(
+    data: RoutesItem,
+    indexSchedule: number,
+  ): SegmentsStation[] {
+    console.log('data', data);
+
+    return data.path.reduce((acc, pathId, index) => {
+      const segment = data.schedule[indexSchedule].segments[index];
+      const prevSegment = data.schedule[indexSchedule].segments[index - 1];
+
+      acc.push({
+        id: pathId,
+        city: pathId,
+        departure: prevSegment ? prevSegment.time[1] : undefined,
+        arrival: segment ? segment.time[0] : undefined,
+        price: segment ? segment.price : undefined,
+      });
+      return acc;
+    }, [] as SegmentsStation[]);
   }
 }

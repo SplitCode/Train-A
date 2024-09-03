@@ -40,6 +40,19 @@ export interface Schedule {
   segments: Segments[];
 }
 
+export interface SegmentsStation {
+  id: number;
+  city: number;
+  departure?: string;
+  arrival?: string;
+  price?: Price[];
+}
+
+export interface ScheduleTimeRide {
+  rideId: number;
+  segments: SegmentsStation[];
+}
+
 export interface Segments {
   occupiedSeats: number[];
   time: string[];

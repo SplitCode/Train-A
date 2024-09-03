@@ -5,6 +5,7 @@ import {
   loadRoutesSuccess,
   showRouteForm,
   loadRouteByIdSuccess,
+  loadRouteByPathSuccess,
 } from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
@@ -45,6 +46,13 @@ export const reducer = createReducer(
     (state, { route }): RoutesState => ({
       ...state,
       route,
+    }),
+  ),
+  on(
+    loadRouteByPathSuccess,
+    (state, { routeByPath }): RoutesState => ({
+      ...state,
+      routeByPath,
     }),
   ),
 );

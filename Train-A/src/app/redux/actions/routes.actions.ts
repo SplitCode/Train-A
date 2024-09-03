@@ -1,5 +1,8 @@
 import { createAction, props } from '@ngrx/store';
-import { RoutesItem } from '../../admin/models/routes-item.interface';
+import {
+  RoutesItem,
+  RoutesItemByPath,
+} from '../../admin/models/routes-item.interface';
 
 export const loadRoutes = createAction('[Routes List] Load Routes');
 
@@ -63,6 +66,20 @@ export const loadRouteByIdSuccess = createAction(
 );
 export const loadRouteByIdFailure = createAction(
   '[Routes List] Load Route By Id Failure',
+  props<{ error: string }>(),
+);
+
+export const loadRouteByPath = createAction(
+  '[Routes List] Load Route By Path',
+  props<{ route: RoutesItem }>(),
+);
+
+export const loadRouteByPathSuccess = createAction(
+  '[Routes List] Load Route By Path Success',
+  props<{ routeByPath: RoutesItemByPath }>(),
+);
+export const loadRouteByPathFailure = createAction(
+  '[Routes List] Load Route By Path Failure',
   props<{ error: string }>(),
 );
 

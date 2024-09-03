@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadRouteById } from '../../../../redux/actions/routes.actions';
@@ -14,12 +14,13 @@ import {
 } from '../../../models/routes-item.interface';
 
 import { RideListComponent } from '../../../components/route/ride-list/ride-list.component';
-import { RoutesService } from '../../../services/routes.service';
+// import { RoutesService } from '../../../services/routes.service';
+import { CustomButtonComponent } from '../../../../shared/components';
 
 @Component({
   selector: 'app-routes-ride-page',
   standalone: true,
-  imports: [RideListComponent, CommonModule],
+  imports: [RideListComponent, CommonModule, CustomButtonComponent],
   templateUrl: './routes-ride-page.component.html',
 })
 export class RoutesRidePageComponent implements OnInit {
@@ -32,7 +33,7 @@ export class RoutesRidePageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private store: Store,
-    private routesService: RoutesService,
+    private location: Location,
   ) {
     this.id = this.route.snapshot.paramMap.get('id') as string;
 
@@ -53,7 +54,9 @@ export class RoutesRidePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(loadRouteById({ routeId: this.id }));
+  }
 
-    // this.store.dispatch(loadRouteByPath({ route: this.route$ }));
+  goBack(): void {
+    this.location.back();
   }
 }

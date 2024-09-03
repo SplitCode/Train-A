@@ -1,6 +1,13 @@
 <div class="w-100 max-w-[1600px] mx-auto">
-  <app-ride-list
-    *ngIf="routeByPath$ | async as route"
-    [data]="route"
-  ></app-ride-list>
+  <app-ride-list *ngIf="routeByPath$ | async as route" [data]="route">
+    <app-custom-button
+      (click)="goBack()"
+      class="btn btn-primary mb-4"
+      [config]="{
+        label: 'Back',
+        styleClass: 'my-2',
+        icon: 'pi pi-arrow-left',
+      }"
+    />
+  </app-ride-list>
 </div>

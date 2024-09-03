@@ -1,2 +1,71 @@
-<p>profile-page works!</p>
-<button (click)="logout()">Logout</button>
+<p-card
+  class="flex justify-center mx-auto mt-10"
+  [style]="{ maxWidth: '520px', width: '100%' }"
+>
+  <ng-template pTemplate="header">
+    <h2 class="text-center">Profile</h2>
+  </ng-template>
+
+  <form [formGroup]="UpdateUserDataForm" (ngSubmit)="onSubmit()">
+    <app-change-password />
+    <app-edit-field
+      type="text"
+      label="Name"
+      formControlName="name"
+      tooltip="Natalia"
+      placeholder="Enter your name"
+      [inValidate]="UpdateUserDataForm.get('name')?.errors ? true : false"
+    >
+      <div
+        *ngIf="submitted && UpdateUserDataForm.get('name')?.errors"
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small *ngIf="UpdateUserDataForm.get('name')?.hasError('required')"
+          >Required</small
+        >
+        <small *ngIf="UpdateUserDataForm.get('name')?.hasError('minlength')"
+          >Name must be at least 3 characters long</small
+        >
+        <small *ngIf="UpdateUserDataForm.get('name')?.hasError('serverError')">
+          {{ UpdateUserDataForm.get("name")?.getError("serverError") }}
+        </small>
+      </div>
+    </app-edit-field>
+    <app-edit-field
+      type="email"
+      label="Email"
+      formControlName="email"
+      tooltip="user@example.com"
+      placeholder="Enter your email"
+      [inValidate]="UpdateUserDataForm.get('email')?.errors ? true : false"
+    >
+      <div
+        *ngIf="submitted && UpdateUserDataForm.get('email')?.errors"
+        class="font-extralight text-red-500 mt-1"
+      >
+        <small *ngIf="UpdateUserDataForm.get('email')?.hasError('required')"
+          >Required</small
+        >
+        <small *ngIf="UpdateUserDataForm.get('email')?.hasError('pattern')"
+          >Incorrect email</small
+        >
+        <small *ngIf="UpdateUserDataForm.get('email')?.hasError('serverError')">
+          {{ UpdateUserDataForm.get("email")?.getError("serverError") }}
+        </small>
+      </div>
+    </app-edit-field>
+
+    <div class="form-group">
+      <app-custom-button
+        [config]="{
+          severity: 'danger',
+        }"
+        (click)="logout()"
+      >
+        Logout
+      </app-custom-button>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer"> </ng-template>
+</p-card>

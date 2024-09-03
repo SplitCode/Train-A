@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of } from 'rxjs';
+import { mergeMap, map, catchError, of, switchMap } from 'rxjs';
 import { RoutesService } from '../../admin/services/routes.service';
 import {
   loadRoutes,
@@ -13,6 +13,8 @@ import {
   createRouteSuccess,
   createRoute,
   updateRoute,
+  loadRouteByIdSuccess,
+  loadRouteById,
 } from '../actions/routes.actions';
 
 @Injectable()
@@ -69,6 +71,17 @@ export class RoutesEffects {
               of(createRouteFailure({ error: error.message })),
             ),
           ),
+      ),
+    );
+  });
+
+  loadRouteById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadRouteById),
+      switchMap(({ routeId }) =>
+        this.routesService
+          .getRouteById(routeId)
+          .pipe(map((route) => loadRouteByIdSuccess({ route }))),
       ),
     );
   });

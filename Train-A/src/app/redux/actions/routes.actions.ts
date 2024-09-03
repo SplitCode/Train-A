@@ -53,4 +53,17 @@ export const showRouteForm = createAction(
   props<{ mode: 'create' | 'update' }>(),
 );
 
+export const loadRouteById = createAction(
+  '[Routes List] Load Route By Id',
+  props<{ routeId: string }>(),
+);
+export const loadRouteByIdSuccess = createAction(
+  '[Routes List] Load Route By Id Success',
+  props<{ route: RoutesItem }>(),
+);
+export const loadRouteByIdFailure = createAction(
+  '[Routes List] Load Route By Id Failure',
+  props<{ error: string }>(),
+);
+
 export const hideRouteForm = createAction('[Route] Hide Route Form');

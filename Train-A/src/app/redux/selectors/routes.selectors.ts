@@ -18,3 +18,8 @@ export const selectRouteFormMode = createSelector(
   selectRoutesState,
   (state: RoutesState) => state.mode,
 );
+
+export const selectRoute = createSelector(
+  selectRoutesState,
+  (state: RoutesState) => state.route,
+);

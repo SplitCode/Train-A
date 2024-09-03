@@ -1,3 +1,4 @@
+// TODO: get this from the ride
 interface Schedule {}
 
 interface Segment {}

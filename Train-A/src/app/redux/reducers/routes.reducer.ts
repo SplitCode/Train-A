@@ -4,6 +4,7 @@ import {
   hideRouteForm,
   loadRoutesSuccess,
   showRouteForm,
+  loadRouteByIdSuccess,
 } from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
@@ -37,6 +38,13 @@ export const reducer = createReducer(
     (state): RoutesState => ({
       ...state,
       formVisible: false,
+    }),
+  ),
+  on(
+    loadRouteByIdSuccess,
+    (state, { route }): RoutesState => ({
+      ...state,
+      route,
     }),
   ),
 );

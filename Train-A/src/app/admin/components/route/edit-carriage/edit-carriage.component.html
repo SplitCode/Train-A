@@ -1,0 +1,43 @@
+<div class="flex gap-2">
+  <div class="grow">
+    <div *ngFor="let item of data | keyvalue; let i = index">
+      <div class="flex items-center gap-2">
+        <label [for]="item.key" class="block mb-4">{{ item.key }}: </label>
+
+        <app-input
+          *ngIf="editMode"
+          [formControlName]="item.key"
+          [placeholder]="'$1000.0'"
+          [value]="value"
+          class="grow"
+        >
+          <ng-content #name></ng-content>
+        </app-input>
+        <div
+          *ngIf="!editMode"
+          class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
+        >
+          {{ +item.value | currency }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <app-custom-button
+      *ngIf="editMode"
+      [config]="{
+        icon: 'pi pi-save',
+        type: 'submit',
+      }"
+      (clickEmitter)="toggleEditMode()"
+    />
+    <app-custom-button
+      *ngIf="!editMode"
+      [config]="{
+        icon: 'pi pi-pencil',
+      }"
+      ą
+      (clickEmitter)="toggleEditMode()"
+    />
+  </div>
+</div>

@@ -33,4 +33,8 @@ export class RoutesService {
     const body = { path, carriages };
     return this.http.put<RoutesItem>(`${this.apiUrl}/${id}`, body);
   }
+
+  getRouteById(id: string): Observable<RoutesItem> {
+    return this.http.get<RoutesItem>(`${this.apiUrl}/${id}`);
+  }
 }

@@ -1,0 +1,48 @@
+<form
+  class="route-container"
+  [formGroup]="UpdateRideForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="route">
+    <div class="flex justify-end gap-2">
+      <!-- <app-custom-button
+        (click)="updateRoute()"
+        [config]="{
+          label: 'Update',
+          styleClass: 'my-2',
+          icon: 'pi pi-file-edit',
+        }"
+      />
+      <app-custom-button
+        (click)="visible = true"
+        [config]="{
+          label: 'Delete',
+          styleClass: 'my-2',
+          icon: 'pi pi-trash',
+        }"
+      />
+      <app-custom-button
+        (click)="assignRide()"
+        [config]="{
+          label: 'Assign Ride',
+          styleClass: 'my-2',
+          icon: 'pi pi-calendar',
+        }"
+      /> -->
+    </div>
+    <p-fieldset [legend]="'Ride ' + data.rideId">
+      <div class="flex gap-3 mb-2 pb-2">
+        <div class="w-1/5">City</div>
+        <div class="flex-1">Time</div>
+        <div class="w-1/4">Price</div>
+      </div>
+      <ng-container formArrayName="segments">
+        <app-ride-segment
+          *ngFor="let segment of segmentsControls; let i = index"
+          [formGroupName]="i"
+          [segment]="segment.value"
+        />
+      </ng-container>
+    </p-fieldset>
+  </div>
+</form>

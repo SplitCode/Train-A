@@ -54,3 +54,11 @@ export const showCarriageForm = createAction(
 );
 
 export const hideCarriageForm = createAction('[Carriage] Hide Carriage Form');
+
+export const CreateTrain = createAction(
+  '[Carriage List] Create train',
+  props<{
+    carriageCode: CarriageItem['code'] | null;
+    mode: 'create' | 'update';
+  }>(),
+);

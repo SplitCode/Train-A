@@ -5,7 +5,9 @@ import { CommonModule, KeyValuePipe } from '@angular/common';
 import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouteModalComponent } from '../saerch-detali/route-modal/route-modal.component';
+import { RouteModalComponent } from '../route-modal/route-modal.component';
+import { Store } from '@ngrx/store';
+import { loadRideInfo } from '../../../redux/actions/ride.actions';
 
 @Component({
   selector: 'app-search-item',
@@ -39,10 +41,13 @@ export class SearchItemComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
     // console.log(this.segment);
+    // const rideId = this.routeButtonConfig.rideId.toString();
+    // this.store.dispatch(loadRideInfo({ rideId: rideId }));
   }
 
   public navigate() {
@@ -56,8 +61,8 @@ export class SearchItemComponent implements OnInit {
   }
 
   public isDialog(isShow: boolean) {
+    const rideId = this.routeButtonConfig.rideId.toString();
+    this.store.dispatch(loadRideInfo({ rideId: rideId }));
     this.isVisiblePath = isShow;
-
-    console.log(this.cityFromTo);
   }
 }

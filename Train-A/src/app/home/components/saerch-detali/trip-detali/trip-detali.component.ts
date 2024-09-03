@@ -1,14 +1,16 @@
+import { selectFilteredCarriages } from './../../../../redux/selectors/ride.selectors';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { loadRideInfo } from '../../../../redux/actions/ride.actions';
-
 import { CommonModule } from '@angular/common';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
-import { RouteModalComponent } from '../route-modal/route-modal.component';
+import { RouteModalComponent } from '../../route-modal/route-modal.component';
 import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-tabs.component';
+import { BookButtonComponent } from '../book-button/book-button.component';
+import { uprateTrain } from '../../../utilits/update-train';
 
 @Component({
   selector: 'app-trip-detali',
@@ -24,6 +26,7 @@ import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-t
     PRIME_NG_MODULES.TagModule,
     RouteModalComponent,
     CarriageTypeTabsComponent,
+    BookButtonComponent,
   ],
   standalone: true,
 })
@@ -60,6 +63,22 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  private updateTrain() {
+    const subscription = this.store
+      .select(selectFilteredCarriages)
+      .pipe()
+      .subscribe((filteredCarriages) => {
+        if (filteredCarriages) {
+          const carriageNames = filteredCarriages.map(
+            (carriage) => carriage.name,
+          );
+          uprateTrain(this.store, carriageNames);
+        }
+      });
+
+    this.subscriptions.push(subscription);
+  }
+
   public isDialog(isShow: boolean) {
     this.isVisiblePath = isShow;
   }
@@ -67,6 +86,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.writeParamsFromRouter();
     this.loadRideInfo();
+    this.updateTrain();
   }
 
   public ngOnDestroy() {

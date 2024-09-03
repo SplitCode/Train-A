@@ -1,15 +1,14 @@
-interface Schedule {
-  segments: Segment[];
+interface Price {
+  [key: string]: number;
 }
-
-interface Segment {
+export interface Segment {
   time: string[];
   price: Price;
   occupiedSeats: number[];
 }
-
-interface Price {
-  [key: string]: number;
+export interface Schedule {
+  rideId?: number;
+  segments: Segment[];
 }
 
 export interface RideResponse {

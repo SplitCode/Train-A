@@ -1,2 +1,4 @@
-// :host ::ng-deep {
-// }
+:host ::ng-deep .tabs {
+  display: block;
+  width: 80%;
+}

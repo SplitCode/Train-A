@@ -1,3 +1,5 @@
+@import url("./carriage-seat/carriage-seat.component.scss");
+
 :host ::ng-deep {
   .carriage-container {
     display: flex;
@@ -29,12 +31,5 @@
     gap: 0.5rem;
     flex-direction: column-reverse;
     align-items: center;
-  }
-
-  .seat {
-    width: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 }

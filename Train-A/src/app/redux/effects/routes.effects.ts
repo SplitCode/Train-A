@@ -48,7 +48,15 @@ export class RoutesEffects {
               detail: 'The route has been successfully deleted!',
             });
           }),
-          catchError((error) => of(deleteRouteFailure({ error }))),
+          catchError((error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message || 'Unknown error',
+            });
+
+            return of(deleteRouteFailure({ error: error.message }));
+          }),
         ),
       ),
     );
@@ -62,9 +70,14 @@ export class RoutesEffects {
           map((createdRoute: RoutesItem) =>
             createRouteSuccess({ route: createdRoute }),
           ),
-          catchError((error) =>
-            of(createRouteFailure({ error: error.message })),
-          ),
+          catchError((error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message || 'Unknown error',
+            });
+            return of(createRouteFailure({ error: error.message }));
+          }),
         ),
       ),
     );
@@ -91,11 +104,14 @@ export class RoutesEffects {
       mergeMap(({ id, route }) =>
         this.routesService.updateRoute(id, route.path, route.carriages).pipe(
           map((updatedRoute) => {
-            console.log('Effect: updateRouteSuccess', updatedRoute);
             return updateRouteSuccess({ route: updatedRoute });
           }),
           catchError((error) => {
-            console.error('Effect: updateRouteFailure', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message || 'Unknown error',
+            });
             return of(updateRouteFailure({ error: error.message }));
           }),
         ),

@@ -1,12 +1,13 @@
 interface Price {
   [key: string]: number;
 }
-interface Segment {
+export interface Segment {
   time: string[];
   price: Price;
   occupiedSeats: number[];
 }
-interface Schedule {
+export interface Schedule {
+  rideId?: number;
   segments: Segment[];
 }
 

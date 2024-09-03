@@ -8,4 +8,5 @@ export interface CarriageItem {
   isWorking: boolean;
   carriageNumber?: number;
   totalRidePrice?: number;
+  totalSeats?: number;
 }

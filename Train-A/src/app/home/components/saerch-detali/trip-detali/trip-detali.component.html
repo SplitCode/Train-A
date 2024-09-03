@@ -22,7 +22,12 @@
   <app-carriage-type-tabs class="tabs" />
 
   <app-book-button
-    [bookButtonConfig]="{ isShow: false }"
+    [bookButtonConfig]="{
+      isShow: false,
+      rideId: rideId,
+      stationStart: fromStationId,
+      stationEnd: toStationId,
+    }"
     c
     class="fixed right-4 bottom-4 inline-block"
   />

@@ -43,7 +43,7 @@ export interface Schedule {
 export interface Segments {
   occupiedSeats: number[];
   time: string[];
-  price: Price[];
+  price: Price;
 }
 
 export interface Price {
@@ -69,7 +69,7 @@ export const initialSearchState: SearchState = {
         schedule: [
           {
             rideId: 0,
-            segments: [{ occupiedSeats: [], time: [], price: [] }],
+            segments: [{ occupiedSeats: [], time: [], price: {} }],
           },
         ],
       },

@@ -30,6 +30,8 @@ export class BookButtonComponent
 
   @Output() public override clickEmitter = new EventEmitter<void>();
 
+  public rideId: string | null = null;
+
   private store = inject(Store);
 
   private subscriptions: Subscription[] = [];

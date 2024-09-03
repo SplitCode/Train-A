@@ -10,7 +10,7 @@ import { CustomButtonComponent } from '../../../../shared/components/custom-butt
 import { RouteModalComponent } from '../../route-modal/route-modal.component';
 import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-tabs.component';
 import { BookButtonComponent } from '../book-button/book-button.component';
-import { updateTrainArray } from '../../../../redux/actions/train.actions';
+import { uprateTrain } from '../../../utilits/update-train';
 
 @Component({
   selector: 'app-trip-detali',
@@ -68,16 +68,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
       .select(selectCarriageTypes)
       .pipe()
       .subscribe((carriageCodes) => {
-        if (carriageCodes) {
-          const carriagesWithNumbers = carriageCodes.map((code, index) => ({
-            code,
-            carriageNumber: index + 1,
-          }));
-
-          this.store.dispatch(
-            updateTrainArray({ carriageCodes: carriagesWithNumbers }),
-          );
-        }
+        uprateTrain(this.store, carriageCodes);
       });
 
     this.subscriptions.push(subscription);

@@ -8,3 +8,13 @@ export const selectSearch = createSelector(
   selectSearchState,
   (state: SearchState) => state.searchItem,
 );
+
+export const selectIsSearch = createSelector(
+  selectSearchState,
+  (state: SearchState) => state.loading,
+);
+
+export const selectIsSearchFounded = createSelector(
+  selectSearchState,
+  (state: SearchState) => state.firstFound,
+);

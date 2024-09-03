@@ -13,6 +13,7 @@ import {
   deletedStationSuccess,
   deletedStationFailure,
 } from '../actions/stations.actions';
+import { MessageService } from 'primeng/api';
 
 @Injectable()
 export class StationsEffects {
@@ -36,10 +37,20 @@ export class StationsEffects {
       concatMap(({ station }) =>
         this.stationsService.postStation(station).pipe(
           map((id) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Created successfully',
+              detail: 'Stations created successfully',
+            });
             return createStationSuccess({ station: { ...station, id: id } });
           }),
           catchError((error) => {
             console.error('Error creating station:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error creating station',
+              detail: error.error.message,
+            });
             return of(
               createStationFailure({ error: error.message || 'Unknown error' }),
             );
@@ -61,9 +72,21 @@ export class StationsEffects {
       ofType(deletedStation),
       mergeMap(({ id }) =>
         this.stationsService.deleteStation(id).pipe(
-          map(() => deletedStationSuccess({ stationId: id })),
+          map(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success Deleted',
+              detail: 'Station deleted successfully',
+            });
+            return deletedStationSuccess({ stationId: id });
+          }),
           catchError((error) => {
             console.error('Error deleting station:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Not deleted',
+              detail: error.error.message,
+            });
             return of(
               deletedStationFailure({
                 error: error.message || 'Unknown error',
@@ -75,5 +98,8 @@ export class StationsEffects {
     );
   });
 
-  constructor(private stationsService: StationsService) {}
+  constructor(
+    private stationsService: StationsService,
+    private messageService: MessageService,
+  ) {}
 }

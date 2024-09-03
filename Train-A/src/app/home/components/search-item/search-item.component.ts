@@ -1,0 +1,63 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { Direction, Segments } from '../../../redux/states/search.state';
+import { FullTimePipe } from '../../pipes/full-time.pipe';
+import { CommonModule, KeyValuePipe } from '@angular/common';
+import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
+import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouteModalComponent } from '../saerch-detali/route-modal/route-modal.component';
+
+@Component({
+  selector: 'app-search-item',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FullTimePipe,
+    KeyValuePipe,
+    StationCityByIdPipe,
+    CustomButtonComponent,
+    RouteModalComponent,
+  ],
+  templateUrl: './search-item.component.html',
+  styleUrl: './search-item.component.scss',
+})
+export class SearchItemComponent implements OnInit {
+  @Input() cityFromTo: Direction[] = [];
+
+  @Input() segment!: Segments;
+
+  @Input() path!: number[];
+
+  @Input() routeButtonConfig!: {
+    rideId: number;
+    fromStationId: number;
+    toStationId: number;
+  };
+
+  public isVisiblePath: boolean = false;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
+
+  ngOnInit(): void {
+    // console.log(this.segment);
+  }
+
+  public navigate() {
+    this.router.navigate([`trip/${this.routeButtonConfig.rideId}`], {
+      queryParams: {
+        from: this.routeButtonConfig.fromStationId,
+        to: this.routeButtonConfig.toStationId,
+      },
+      relativeTo: this.route,
+    });
+  }
+
+  public isDialog(isShow: boolean) {
+    this.isVisiblePath = isShow;
+
+    console.log(this.cityFromTo);
+  }
+}

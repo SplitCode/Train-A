@@ -35,4 +35,8 @@ export class RideService {
   public getRideInfo(rideId: string): Observable<RideResponse> {
     return this.http.get<RideResponse>(`${this.searchUrl}/${rideId}`);
   }
+
+  public getOrders(): Observable<[]> {
+    return this.http.get<[]>(this.orderUrl);
+  }
 }

@@ -3,6 +3,7 @@ import {
   ErrorOrderResponse,
   OrderRequest,
 } from '../../home/models/order-responce.interface';
+import { Order } from '../../home/models/orders.interface';
 
 export interface OrderState {
   book: OrderRequest | null;
@@ -10,6 +11,7 @@ export interface OrderState {
   orderResponse: SuccessOrderResponse | null;
   error?: ErrorOrderResponse;
   loading: boolean;
+  orders: Order[];
 }
 export const initialState: OrderState = {
   book: null,
@@ -17,4 +19,5 @@ export const initialState: OrderState = {
   orderResponse: null,
   error: undefined,
   loading: false,
+  orders: [],
 };

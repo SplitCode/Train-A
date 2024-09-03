@@ -2,7 +2,7 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
 
 import {
   updateTrainArray,
@@ -10,12 +10,20 @@ import {
 } from '../actions/train.actions';
 import { CarriageItem } from '../../admin/models/carriage-item.interface';
 import { selectFilteredCarriages } from '../selectors/ride.selectors';
+import {
+  getOrders,
+  getOrdersFailure,
+  getOrdersSuccess,
+} from '../actions/order.actions';
+import { RideService } from '../../home/services/ride.service';
 
 @Injectable()
 export class TrainEffects {
   private actions$ = inject(Actions);
 
   private store = inject(Store);
+
+  private rideService = inject(RideService);
 
   updateTrainArray$ = createEffect(() => {
     return this.actions$.pipe(
@@ -52,6 +60,18 @@ export class TrainEffects {
           trainArray: trainArray as CarriageItem[],
         });
       }),
+    );
+  });
+
+  getOrders$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(getOrders),
+      mergeMap(() =>
+        this.rideService.getOrders().pipe(
+          map((orders) => getOrdersSuccess({ orders })),
+          catchError((error) => of(getOrdersFailure({ error }))),
+        ),
+      ),
     );
   });
 }

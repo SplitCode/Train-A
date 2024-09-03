@@ -11,6 +11,7 @@ import { RouteModalComponent } from '../../route-modal/route-modal.component';
 import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-tabs.component';
 import { BookButtonComponent } from '../book-button/book-button.component';
 import { uprateTrain } from '../../../utilits/update-train';
+import { getOrders } from '../../../../redux/actions/order.actions';
 
 @Component({
   selector: 'app-trip-detali',
@@ -87,6 +88,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     this.writeParamsFromRouter();
     this.loadRideInfo();
     this.updateTrain();
+    this.store.dispatch(getOrders());
   }
 
   public ngOnDestroy() {

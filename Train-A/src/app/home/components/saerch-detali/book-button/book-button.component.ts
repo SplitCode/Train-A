@@ -14,6 +14,7 @@ import { OrderRequest } from '../../../models/order-responce.interface';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { BookButtonConfig } from './book-button.config';
 import { CommonModule } from '@angular/common';
+import { createOrder } from '../../../../redux/actions/order.actions';
 
 @Component({
   selector: 'app-book-button',
@@ -71,7 +72,18 @@ export class BookButtonComponent
   }
 
   override handleEvent() {
-    console.log(this.bookButtonConfig);
+    const order = {
+      rideId: +(this.bookButtonConfig?.rideId ?? 0),
+      seat: +(this.bookButtonConfig?.seatId ?? 0),
+      stationStart: +(this.bookButtonConfig?.stationStart ?? 0),
+      stationEnd: +(this.bookButtonConfig?.stationEnd ?? 0),
+    };
+    this.store.dispatch(
+      createOrder({
+        orderRequest: order,
+      }),
+    );
+    console.log('Order: ', order);
   }
 
   public get carriageNumber() {

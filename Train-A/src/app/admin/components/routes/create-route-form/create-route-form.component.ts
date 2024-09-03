@@ -15,7 +15,7 @@ import { selectAllStations } from '../../../../redux/selectors/stations.selector
 import { StationsItem } from '../../../../redux/states/stations.state';
 import { CarriageItem } from '../../../models/carriage-item.interface';
 import { selectAllCarriages } from '../../../../redux/selectors/carriage.selectors';
-import { validateRouteForm } from './routes-validation.directive';
+import { validateRouteForm } from '../../../utilits/routes-validation.directive';
 
 @Component({
   selector: 'app-create-route-form',

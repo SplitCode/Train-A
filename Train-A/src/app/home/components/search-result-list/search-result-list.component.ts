@@ -4,7 +4,11 @@ import { Store } from '@ngrx/store';
 import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
 import { Observable } from 'rxjs';
-import { Routes, SearchItem } from '../../../redux/states/search.state';
+import {
+  Direction,
+  Routes,
+  SearchItem,
+} from '../../../redux/states/search.state';
 import { selectSearch } from '../../../redux/selectors/search.selectors';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormatDatePipe } from '../../pipes/format-date.pipe';
@@ -31,20 +35,26 @@ export class SearchResultListComponent implements OnInit {
 
   public routes!: Routes[];
 
-  public cityFromTo!: string[];
+  public cityFromTo!: Direction[];
 
   constructor(private store: Store) {
     this.searchItem$ = this.store.select(selectSearch);
   }
 
   ngOnInit(): void {
-    this.searchItem$.forEach((item) => {
-      this.cityFromTo = [item.from.city, item.to.city];
-    });
-
-    this.searchItem$.forEach((item) => {
+    this.searchItem$.subscribe((item) => {
+      this.cityFromTo = [item.from, item.to];
       this.routes = item.routes;
+
       console.log(item);
     });
+  }
+
+  public indexOfStart(item: Routes): number {
+    return item.path.indexOf(this.cityFromTo[0].stationId);
+  }
+
+  public indexOfEnd(item: Routes): number {
+    return item.path.indexOf(this.cityFromTo[1].stationId);
   }
 }

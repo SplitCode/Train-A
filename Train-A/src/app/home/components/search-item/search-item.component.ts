@@ -1,27 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Segments } from '../../../redux/states/search.state';
-import { FormatDatePipe } from '../../pipes/format-date.pipe';
-import { GetTimePipe } from '../../pipes/get-time.pipe';
+import { Direction, Segments } from '../../../redux/states/search.state';
 import { FullTimePipe } from '../../pipes/full-time.pipe';
 import { CommonModule, KeyValuePipe } from '@angular/common';
+import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
 
 @Component({
   selector: 'app-search-item',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormatDatePipe,
-    GetTimePipe,
-    FullTimePipe,
-    KeyValuePipe,
-  ],
+  imports: [CommonModule, FullTimePipe, KeyValuePipe, StationCityByIdPipe],
   templateUrl: './search-item.component.html',
   styleUrl: './search-item.component.scss',
 })
 export class SearchItemComponent implements OnInit {
-  @Input() cityFromTo: string[] = [];
+  @Input() cityFromTo: Direction[] = [];
 
   @Input() segment!: Segments;
 
-  ngOnInit(): void {}
+  @Input() path!: number[];
+
+  ngOnInit(): void {
+    // console.log(this.segment);
+  }
 }

@@ -1,10 +1,10 @@
-<div class="flex flex-col md:flex-row border border-stone-600 border-solid rounded-md">
-  <div class="flex flex-col w-full md:max-w-96">
-    <div class="flex items-center px-4 pt-4 pb-2 w-full border border-stone-600 border-solid border-l-0 border-r-0 border-t-0 md:border-b-0">
+<div class="flex flex-col lg:flex-row border border-stone-600 border-solid rounded-md">
+  <div class="flex flex-col w-full lg:max-w-96 border border-stone-600 border-solid border-l-0 border-r-0 border-t-0 lg:border-b-0">
+    <div class="flex items-center px-4 pt-4 pb-2 w-full">
       <div>
-        <div class="text-lg font-bold ">{{segment.time[0] | getTime}}</div>
-        <div class="text-nowrap text-xs capitalize">{{segment.time[0] | formatDate}}</div>
-        <div class="text-xs font-medium leading-7 capitalize">{{ cityFromTo[0] }} (Maybe?)</div>
+        <div class="text-lg font-bold ">{{segment.time[0] | date:'H:mm'}}</div>
+        <div class="text-nowrap text-xs capitalize">{{segment.time[0] | date: 'MMMM d'}}</div>
+        <div class="text-xs font-medium leading-7 capitalize">{{ cityFromTo[0].city }}</div>
       </div>
       <div class="relative w-full h-0.5 bg-slate-600 mx-3 px-3">
         <div class="absolute left-0 top-1/2 trans size-3 rounded-full border-2 border-solid border-slate-600 bg-slate-100" style="transform: translateY(-50%);"></div>
@@ -12,9 +12,9 @@
         <div class="absolute right-0 top-1/2 trans size-3 rounded-full border-2 border-slate-600 bg-slate-600" style="transform: translateY(-50%);"></div>
       </div>
       <div class="">
-        <div class="text-lg font-bold ">{{segment.time[1] | getTime}}</div>
-        <div class="text-nowrap text-xs capitalize">{{ segment.time[1] | formatDate }}</div>
-        <div class="text-xs font-medium leading-7 capitalize">{{ cityFromTo[1] }} (Maybe?)</div>
+        <div class="text-lg font-bold ">{{segment.time[0] | date:'H:mm'}}</div>
+        <div class="text-nowrap text-xs capitalize">{{ segment.time[1] | date: 'MMMM d' }}</div>
+        <div class="text-xs font-medium leading-7 capitalize">{{ cityFromTo[1].city }}</div>
       </div>
     </div>
     <div class="flex items-center px-4 pb-4 pt-2">
@@ -30,9 +30,9 @@
             </g>
           </g>
         </svg>
-        <span class="text-gray-700 text-sm capitalize">City77</span>
+        <span class="text-gray-700 text-sm capitalize">{{(path[0] | stationCityById) | async}}</span>
         <span class="text-gray-400 text-sm">→</span>
-        <span class="text-gray-700 text-sm capitalize">City11</span>
+        <span class="text-gray-700 text-sm capitalize">{{(path[path.length - 1] | stationCityById) | async}}</span>
       </div>
       <a class="transition-all no-underline text-white hover:text-slate-400" href="#" target="_blank" rel="noopener noreferrer">
         Route
@@ -42,11 +42,11 @@
       </a>
     </div>
   </div>
-  <div class="flex flex-col w-full ml-auto md:w-auto sm:flex-row">
-    <div *ngFor="let price of segment.price | keyvalue" class="flex flex-col w-full h-full md:max-w-max border-t-0 border-l-0 sm:border-l sm:border-t-0 border-r-0 border-b-0 border-stone-600 border-solid p-4 text-center">
+  <div class="flex flex-col w-full ml-auto lg:w-auto sm:flex-row">
+    <div *ngFor="let price of segment.price | keyvalue" class="flex flex-col w-full h-full lg:max-w-max border-t border-l-0 sm:border-l sm:border-t-0 border-r-0 border-b-0 border-stone-600 border-solid p-4 text-center">
       <div class="mb-2 mx-auto max-w-[96px] capitalize">{{price.key}}</div>
       <div class="mb-6 text-gray-400">58 seats</div>
-      <div class="font-bold text-xl mt-auto">{{price.value}}</div>
+      <div class="font-bold text-xl mt-auto">{{+price.value | currency : 'USD' : 'symbol' : '1.0-0'}}</div>
     </div>
   </div>
 </div>

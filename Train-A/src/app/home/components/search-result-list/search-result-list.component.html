@@ -4,19 +4,21 @@
       <p-tabPanel *ngFor="let schedule of item.schedule" header="Ride Id: {{schedule.rideId}}">
         <ng-template pTemplate="content">
           <p-tabView class="inner-tabs" [scrollable]="true">
-            <p-tabPanel *ngFor="let segment of schedule.segments">
-              <ng-template pTemplate="header">
-                <div class="w-[calc(100%/14)] min-w-32 text-center">
-                  <div class="font-bold text-white">
-                    {{ (segment.time[1] | formatDate) }}
+            <ng-container *ngFor="let segment of schedule.segments">
+              <p-tabPanel *ngIf="indexOfStart(item) <= schedule.segments.indexOf(segment) && schedule.segments.indexOf(segment) <= indexOfEnd(item)">
+                <ng-template pTemplate="header">
+                  <div class="w-[calc(100%/14)] min-w-32 text-center">
+                    <div class="font-bold text-white">
+                      {{ (segment.time[1] | formatDate) }}
+                    </div>
+                    <div class="text-white text-sm">
+                      {{ (segment.time[1] | formatDay) }}
+                    </div>
                   </div>
-                  <div class="text-white text-sm">
-                    {{ (segment.time[1] | formatDay) }}
-                  </div>
-                </div>
-              </ng-template>
-              <app-search-item [cityFromTo]="cityFromTo" [segment]="segment"/>
-            </p-tabPanel>
+                </ng-template>
+                <app-search-item [cityFromTo]="cityFromTo" [segment]="segment" [path]="item.path"/>
+              </p-tabPanel>
+            </ng-container>
           </p-tabView>
         </ng-template>
       </p-tabPanel>

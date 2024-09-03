@@ -1,11 +1,9 @@
-import { createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { OrderState } from '../states/order.state';
 import { OrderRequest } from '../../home/models/order-responce.interface';
-import { AppState } from '../states/app.state';
 import { Order } from '../../home/models/orders.interface';
 
-const selectOrderState = (state: AppState): OrderState => state.orderState;
-
+export const selectOrderState = createFeatureSelector<OrderState>('orderState');
 export const selectOrders = createSelector(
   selectOrderState,
   (state: OrderState): Order[] | [] => {

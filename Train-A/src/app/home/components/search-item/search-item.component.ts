@@ -5,6 +5,7 @@ import { CommonModule, KeyValuePipe } from '@angular/common';
 import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouteModalComponent } from '../saerch-detali/route-modal/route-modal.component';
 
 @Component({
   selector: 'app-search-item',
@@ -15,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     KeyValuePipe,
     StationCityByIdPipe,
     CustomButtonComponent,
+    RouteModalComponent,
   ],
   templateUrl: './search-item.component.html',
   styleUrl: './search-item.component.scss',
@@ -31,6 +33,8 @@ export class SearchItemComponent implements OnInit {
     fromStationId: number;
     toStationId: number;
   };
+
+  public isVisiblePath: boolean = false;
 
   constructor(
     private router: Router,
@@ -49,5 +53,11 @@ export class SearchItemComponent implements OnInit {
       },
       relativeTo: this.route,
     });
+  }
+
+  public isDialog(isShow: boolean) {
+    this.isVisiblePath = isShow;
+
+    console.log(this.cityFromTo);
   }
 }

@@ -190,33 +190,23 @@ export class UpdateRouteFormComponent implements OnInit {
   }
 
   removeStationField(index: number) {
-    // this.subscriptions.unsubscribe();
     this.stations.removeAt(index);
     this.availableStationsList.splice(index, 1);
 
     const newLastControlIndex = this.stations.length - 1;
     if (newLastControlIndex >= 0) {
-      const previousStationId = this.stations.at(newLastControlIndex).value;
-      this.updateConnectedStations(previousStationId, newLastControlIndex + 1);
+      if (this.stations.length === 1) {
+        this.allStations$.pipe(take(1)).subscribe((stations) => {
+          this.availableStationsList[0] = stations;
+        });
+      } else {
+        const previousStationId = this.stations.at(
+          newLastControlIndex - 1,
+        ).value;
+        this.updateConnectedStations(previousStationId, newLastControlIndex);
+      }
     }
-
-    // this.subscriptions = new Subscription();
-    // this.subscribeToFormChanges();
   }
-
-  // private subscribeToFormChanges() {
-  //   this.subscriptions.add(
-  //     this.stations.valueChanges.subscribe(() => {
-  //       this.checkAndAddStationField();
-  //     }),
-  //   );
-
-  //   this.subscriptions.add(
-  //     this.carriages.valueChanges.subscribe(() => {
-  //       this.checkAndAddCarriageField();
-  //     }),
-  //   );
-  // }
 
   removeCarriageField(index: number) {
     this.carriages.removeAt(index);

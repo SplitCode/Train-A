@@ -7,6 +7,8 @@ import {
   cancelOrderSuccess,
   cancelOrderFailure,
   createBook,
+  getOrdersFailure,
+  getOrdersSuccess,
   // createBook,
 } from '../actions/order.actions';
 import { initialState } from '../states/order.state';
@@ -68,6 +70,22 @@ export const orderReducer = createReducer(
       ...state,
       error,
       loading: false,
+    }),
+  ),
+  on(
+    getOrdersSuccess,
+    (state, { orders }): OrderState => ({
+      ...state,
+      orders,
+      loading: false,
+    }),
+  ),
+  on(
+    getOrdersFailure,
+    (state, { error }): OrderState => ({
+      ...state,
+      loading: false,
+      error,
     }),
   ),
 );

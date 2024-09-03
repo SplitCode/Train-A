@@ -5,4 +5,9 @@ export interface CarriageItem {
   rightSeats: number;
   rows: number;
   mode?: string;
+  isWorking: boolean;
+  carriageNumber?: number;
+  totalRidePrice?: number;
+  totalSeats?: number;
+  previousSeats?: number;
 }

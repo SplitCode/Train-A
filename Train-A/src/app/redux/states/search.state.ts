@@ -45,7 +45,7 @@ export interface Schedule {
 export interface Segments {
   occupiedSeats: number[];
   time: string[];
-  price: Price[];
+  price: Price;
 }
 
 export interface Price {
@@ -65,7 +65,20 @@ export const initialSearchState: SearchState = {
       },
       stationId: 0,
     },
-    routes: [],
+
+    routes: [
+      {
+        id: 0,
+        carriages: [],
+        path: [],
+        schedule: [
+          {
+            rideId: 0,
+            segments: [{ occupiedSeats: [], time: [], price: {} }],
+          },
+        ],
+      },
+    ],
     to: {
       city: '',
       geolocation: {

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouteButtonConfig } from '../../../order/models/route-button.config';
+import { RouteButtonConfig } from '../../models/route-button.config';
 
 @Component({
   selector: 'app-route-button',

@@ -1,22 +1,43 @@
 <ng-container *ngIf="routes.length !== 0; else founded">
-  <p-card *ngFor="let item of routes" [styleClass]="'rounded-lg'" class="result w-full max-w-[1600px] block [&:not(:last-child)]:mb-3">
+  <p-card
+    *ngFor="let item of routes"
+    [styleClass]="'rounded-lg'"
+    class="result w-full max-w-[1600px] block [&:not(:last-child)]:mb-3"
+  >
     <p-tabView [scrollable]="true">
-      <p-tabPanel *ngFor="let schedule of item.schedule" header="Ride Id: {{schedule.rideId}}">
+      <p-tabPanel
+        *ngFor="let schedule of item.schedule"
+        header="Ride Id: {{ schedule.rideId }}"
+      >
         <ng-template pTemplate="content">
           <p-tabView class="inner-tabs" [scrollable]="true">
             <ng-container *ngFor="let segment of schedule.segments">
-              <p-tabPanel *ngIf="indexOfStart(item) <= schedule.segments.indexOf(segment) && schedule.segments.indexOf(segment) <= indexOfEnd(item)">
+              <p-tabPanel
+                *ngIf="
+                  indexOfStart(item) <= schedule.segments.indexOf(segment) &&
+                  schedule.segments.indexOf(segment) <= indexOfEnd(item)
+                "
+              >
                 <ng-template pTemplate="header">
                   <div class="w-[calc(100%/14)] min-w-32 text-center">
                     <div class="font-bold text-white">
-                      {{ (segment.time[1] | formatDate) }}
+                      {{ segment.time[1] | formatDate }}
                     </div>
                     <div class="text-white text-sm">
-                      {{ (segment.time[1] | formatDay) }}
+                      {{ segment.time[1] | formatDay }}
                     </div>
                   </div>
                 </ng-template>
-                <app-search-item [routeButtonConfig]="{rideId: schedule.rideId, fromStationId: cityFromTo[0].stationId, toStationId: cityFromTo[1].stationId}" [cityFromTo]="cityFromTo" [segment]="segment" [path]="item.path"/>
+                <app-search-item
+                  [routeButtonConfig]="{
+                    rideId: schedule.rideId,
+                    fromStationId: cityFromTo[0].stationId,
+                    toStationId: cityFromTo[1].stationId,
+                  }"
+                  [cityFromTo]="cityFromTo"
+                  [segment]="segment"
+                  [path]="item.path"
+                />
               </p-tabPanel>
             </ng-container>
           </p-tabView>
@@ -26,9 +47,14 @@
   </p-card>
 </ng-container>
 <ng-template #founded>
-  <div class="flex flex-col justify-center items-center max-w-xs mx-auto text-center">
-    <img class="w-full max-w-xs" src="/assets/not-found.png"/>
+  <div
+    class="flex flex-col justify-center items-center max-w-xs mx-auto text-center"
+  >
+    <img class="w-full max-w-xs" src="/assets/not-found.png" />
     <h2 class="mb-2">No direct trains found</h2>
-    <p class="text-sm">No seats on direct trains are available right now, but there's always hope. Try again later or travel with a transfer.</p>
+    <p class="text-sm">
+      No seats on direct trains are available right now, but there's always
+      hope. Try again later or travel with a transfer.
+    </p>
   </div>
 </ng-template>

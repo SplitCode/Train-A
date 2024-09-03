@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
+import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
 import {
   Observable,
   take,
@@ -10,13 +10,13 @@ import {
   switchMap,
   Subscription,
 } from 'rxjs';
-import { RideResponse } from '../../../../order/models/ride-response.interface';
-import { selectStationCityByID } from '../../../../redux/selectors/stations.selectors';
+import { RideResponse } from '../../models/ride-response.interface';
+import { selectStationCityByID } from '../../../redux/selectors/stations.selectors';
 import { Store } from '@ngrx/store';
-import { selectRideInfo } from '../../../../redux/selectors/ride.selectors';
+import { selectRideInfo } from '../../../redux/selectors/ride.selectors';
 import { CommonModule } from '@angular/common';
-import { TimelineEvent } from '../../../models/time-line-event.interface';
-import { StationCityByIdPipe } from '../../../pipes/station-sity-by-id.pipe';
+import { TimelineEvent } from '../../models/time-line-event.interface';
+import { StationCityByIdPipe } from '../../pipes/station-sity-by-id.pipe';
 
 @Component({
   selector: 'app-route-modal',
@@ -44,6 +44,7 @@ export class RouteModalComponent implements OnInit {
     fromStationId: string | null;
     toStationId: string | null;
     rideId: string | null;
+    showFromToCities: boolean;
   };
 
   constructor(private store: Store) {
@@ -52,6 +53,7 @@ export class RouteModalComponent implements OnInit {
 
   public ngOnInit() {
     this.buildEvents();
+    // console.log('RouteModalComponent', this.config);
   }
 
   public ngOnDestroy() {

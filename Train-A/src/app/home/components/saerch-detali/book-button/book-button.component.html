@@ -1,0 +1,16 @@
+<p-card *ngIf="bookButtonConfig?.isShow" [header]="carriageNumber">
+  <div class="flex gap-4 mb-4">
+    <span>Seat {{ bookButtonConfig?.seatId }}</span>
+    <span>${{ bookButtonConfig?.price }}</span>
+  </div>
+  <div class="flex justify-center">
+    <app-custom-button
+      id="book-button-process"
+      (clickEmitter)="handleEvent()"
+      [config]="{
+        label: 'Book seat',
+        severity: 'success',
+      }"
+    />
+  </div>
+</p-card>

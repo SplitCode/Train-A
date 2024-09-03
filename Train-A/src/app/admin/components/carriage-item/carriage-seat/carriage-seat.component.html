@@ -1,0 +1,8 @@
+<app-custom-button
+  [id]="carriageSeatConfig?.seatIdTrain"
+  (clickEmitter)="handleEvent()"
+  [config]="{
+    label: carriageSeatConfig?.seatId?.toString(),
+    styleClass: getSeatClass(),
+  }"
+/>

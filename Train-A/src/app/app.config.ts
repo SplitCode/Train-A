@@ -18,11 +18,12 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { indexReducer, metaReducers } from './redux/reducers/index.reducer';
 import { PRIME_NG_MODULES } from './shared/modules/prime-ng-modules';
 import { StationsEffects } from './redux/effects/stations.effects';
-import { OrderService } from './order/services/order.service';
+import { RideService } from './home/services/ride.service';
 import { RideEffects } from './redux/effects/ride.effects';
 import { SearchEffects } from './redux/effects/search.effects';
 import { RoutesEffects } from './redux/effects/routes.effects';
 import { RoutesService } from './admin/services/routes.service';
+import { TrainEffects } from './redux/effects/train.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     CarriageService,
-    OrderService,
+    RideService,
     RoutesService,
     provideEffects([
       UserEffects,
@@ -39,6 +40,7 @@ export const appConfig: ApplicationConfig = {
       RideEffects,
       SearchEffects,
       RoutesEffects,
+      TrainEffects,
     ]),
     PRIME_NG_MODULES.MessageService,
     importProvidersFrom(

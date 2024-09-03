@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { RideResponse } from '../../order/models/ride-response.interface';
+import { RideResponse } from '../../home/models/ride-response.interface';
 import { CarriageItem } from '../../admin/models/carriage-item.interface';
 
 export const loadRideInfo = createAction(
@@ -19,7 +19,9 @@ export const loadRideInfoFailure = createAction(
 
 export const updateFilteredCarriages = createAction(
   '[Ride] Update Filtered Carriages',
-  props<{ filteredCarriages: CarriageItem[] }>(),
+  (filteredCarriages: CarriageItem[]) => ({
+    filteredCarriages,
+  }),
 );
 
 export const loadFilteredCarriages = createAction(

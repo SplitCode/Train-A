@@ -3,3 +3,8 @@ export interface RoutesItem {
   path: number[];
   carriages: string[];
 }
+
+export interface CreateRouteRequest {
+  path: number[];
+  carriages: string[];
+}

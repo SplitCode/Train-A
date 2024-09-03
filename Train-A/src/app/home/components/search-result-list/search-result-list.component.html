@@ -22,17 +22,6 @@
                 </div>
               </div>
             </ng-template>
-            <ng-container *ngIf="fromToIds$ | async as fromToIds">
-              <ng-template pTemplate="route-button">
-                <app-route-button
-                  [routeButtonConfig]="{
-                    rideId: schedule.rideId,
-                    fromStationId: fromToIds.fromStationId,
-                    toStationId: fromToIds.toStationId,
-                  }"
-                />
-              </ng-template>
-            </ng-container>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed
             eligendi quod sequi asperiores dolor unde laudantium dolores
             adipisci cumque veritatis.

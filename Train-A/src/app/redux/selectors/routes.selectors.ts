@@ -8,6 +8,11 @@ export const selectAllRoutes = createSelector(
   (state: RoutesState) => state.routes,
 );
 
+export const selectRouteById = (routeId: number) =>
+  createSelector(selectAllRoutes, (routes) =>
+    routes.find((route) => route.id === routeId),
+  );
+
 export const selectRouteFormVisibility = createSelector(
   selectRoutesState,
   (state: RoutesState) => state.formVisible,
@@ -16,4 +21,14 @@ export const selectRouteFormVisibility = createSelector(
 export const selectRouteFormMode = createSelector(
   selectRoutesState,
   (state: RoutesState) => state.mode,
+);
+
+export const selectRouteId = createSelector(
+  selectRoutesState,
+  (state: RoutesState) => state.routeId,
+);
+
+export const selectModalInfo = createSelector(
+  selectRoutesState,
+  (state: RoutesState) => state.modalInfo,
 );

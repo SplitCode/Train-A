@@ -12,6 +12,14 @@ export const selectOrders = createSelector(
   },
 );
 
+export const selectOrders = createSelector(
+  selectOrderState,
+  (state: OrderState): Order[] | [] => {
+    console.log('OrderState:', state);
+    return state?.orders ? state.orders : [];
+  },
+);
+
 export const selectBook = createSelector(
   selectOrderState,
   (state: OrderState): OrderRequest | null => {

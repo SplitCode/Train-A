@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_CONFIG } from '../../config/api.config';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { OrderItem } from '../models/order-item.interface';
 import { RideResponse } from '../models/ride-response.interface';
+import { MOCK_ORDERS } from '../components/orders-list/mock-orders';
 
 @Injectable({
   providedIn: 'root',
@@ -17,8 +18,12 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
+  // public getOrders(): Observable<OrderItem[]> {
+  //   return this.http.get<OrderItem[]>(this.orderUrl);
+  // }
+
   public getOrders(): Observable<OrderItem[]> {
-    return this.http.get<OrderItem[]>(this.orderUrl);
+    return of(MOCK_ORDERS);
   }
 
   // (must be only for manager)

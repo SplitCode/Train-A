@@ -70,5 +70,8 @@
     "prettier": "3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "~5.5.4"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }

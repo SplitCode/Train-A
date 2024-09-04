@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of, tap } from 'rxjs';
+import { mergeMap, map, catchError, of, switchMap, tap } from 'rxjs';
 import { RoutesService } from '../../admin/services/routes.service';
 import { MessageService } from 'primeng/api';
 import {
@@ -14,10 +14,25 @@ import {
   createRouteSuccess,
   createRoute,
   updateRoute,
+  loadRouteByIdSuccess,
+  loadRouteById,
+  loadRouteByPathSuccess,
+  loadRouteByIdFailure,
+  loadRouteByPathFailure,
+  deleteRideByIdSuccess,
+  deleteRideByIdFailure,
+  deleteRideById,
+  updateRideById,
+  updateRideByIdSuccess,
+  updateRideByIdFailure,
   updateRouteSuccess,
   updateRouteFailure,
 } from '../actions/routes.actions';
-import { RoutesItem } from '../../admin/models/routes-item.interface';
+import {
+  RoutesItem,
+  RoutesItemByPath,
+} from '../../admin/models/routes-item.interface';
+import { Segments } from '../states/search.state';
 
 @Injectable()
 export class RoutesEffects {
@@ -116,6 +131,83 @@ export class RoutesEffects {
           }),
         ),
       ),
+    );
+  });
+
+  loadRouteById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadRouteById),
+      switchMap(({ routeId }) =>
+        this.routesService.getRouteById(routeId).pipe(
+          switchMap((route: RoutesItem) => {
+            return of(
+              loadRouteByIdSuccess({ route }),
+              // routeByPathSuccessAction,
+            );
+          }),
+          catchError((error) =>
+            of(loadRouteByIdFailure({ error: error.message })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  loadRouteByPath$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadRouteById),
+      switchMap(({ routeId }) =>
+        this.routesService.getRouteById(routeId).pipe(
+          switchMap((route: RoutesItem) => {
+            const routeByPath: RoutesItemByPath =
+              this.routesService.convertRoutesItemByPath(route);
+            return of(loadRouteByPathSuccess({ routeByPath }));
+          }),
+          catchError((error) =>
+            of(loadRouteByPathFailure({ error: error.message })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  deleteRideById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(deleteRideById),
+      switchMap(({ routeId, rideId }) =>
+        this.routesService.deleteRideById(routeId, rideId).pipe(
+          map(() => deleteRideByIdSuccess({ routeId, rideId })),
+          catchError((error) =>
+            of(deleteRideByIdFailure({ error: error.message })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  updateRideById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateRideById),
+      switchMap(({ routeId, rideId, segmentsByPath }) => {
+        const segments: Segments[] =
+          this.routesService.convertSegmentsToBase(segmentsByPath);
+
+        return this.routesService
+          .updateRideById(routeId, rideId, segments)
+          .pipe(
+            map(() =>
+              updateRideByIdSuccess({
+                routeId,
+                rideId,
+                segmentsByPath,
+                segments,
+              }),
+            ),
+            catchError((error) =>
+              of(updateRideByIdFailure({ error: error.message })),
+            ),
+          );
+      }),
     );
   });
 

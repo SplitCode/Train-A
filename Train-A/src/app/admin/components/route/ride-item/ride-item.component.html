@@ -1,0 +1,73 @@
+<form
+  class="route-container"
+  [formGroup]="UpdateRideForm"
+  (ngSubmit)="updateRide(data.rideId)"
+>
+  <div class="route">
+    <div class="flex justify-end gap-2">
+      <!-- <app-custom-button
+        (click)="updateRoute()"
+        [config]="{
+          label: 'Update',
+          styleClass: 'my-2',
+          icon: 'pi pi-file-edit',
+        }"
+      />
+      <app-custom-button
+        (click)="assignRide()"
+        [config]="{
+          label: 'Assign Ride',
+          styleClass: 'my-2',
+          icon: 'pi pi-calendar',
+        }"
+      /> -->
+    </div>
+    <p-fieldset [legend]="'Ride ' + data.rideId">
+      <div class="text-end">
+        <app-custom-button
+          (click)="deleteRide(data.rideId)"
+          [config]="{
+            type: 'button',
+            severity: 'danger',
+            outlined: true,
+            label: 'Delete',
+            styleClass: 'my-2 ml-auto',
+            icon: 'pi pi-trash',
+          }"
+        />
+      </div>
+      <div class="flex gap-3 mb-2 pb-2">
+        <div class="w-1/5">City</div>
+        <div class="flex-1">Time</div>
+        <div class="w-1/4">Price</div>
+      </div>
+      <ng-container formArrayName="segments">
+        <app-ride-segment
+          *ngFor="let segment of segmentsControls; let i = index"
+          [formGroupName]="i"
+          [segment]="segment.value"
+        />
+        <!-- (segmentUpdated)="onSegmentUpdated($event, i)" -->
+        <!-- (segmentUpdated)="onSegmentUpdated($event, i)" -->
+
+        <!-- <div
+          class="flex gap-10 py-5 border-solid border-0 border-t border-purple-400"
+          *ngFor="let segment of segmentsControls; let i = index"
+          [formGroupName]="i"
+        >
+          <div class="w-1/5">
+            {{ segment.value.city }}
+          </div>
+          <div class="flex-1">
+            <app-edit-time [time]="segment.value.time" />
+          </div>
+          <div class="w-1/4">
+            <div *ngIf="segment">
+              <app-edit-carriage [data]="getPriceControls(i)" /> 
+            </div>
+          </div>
+        </div> -->
+      </ng-container>
+    </p-fieldset>
+  </div>
+</form>

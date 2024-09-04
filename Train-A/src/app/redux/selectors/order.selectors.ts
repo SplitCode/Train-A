@@ -30,3 +30,8 @@ export const selectOrderLoading = createSelector(
   selectOrderState,
   (state: OrderState) => state.loading,
 );
+
+export const selectModalInfo = createSelector(
+  selectOrderState,
+  (state: OrderState) => state.modalInfo,
+);

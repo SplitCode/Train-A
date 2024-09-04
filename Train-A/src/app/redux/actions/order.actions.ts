@@ -6,6 +6,7 @@ import {
 } from '../../home/models/order-responce.interface';
 import { Order } from '../../home/models/orders.interface';
 import { User } from '../../order/models/order-item.interface';
+import { ModalInfo } from '../states/order.state';
 
 export const createBook = createAction(
   '[Order] Create Book',
@@ -71,4 +72,9 @@ export const getUsersSuccess = createAction(
 export const getUsersFailure = createAction(
   '[User] Get Users Failure',
   props<{ error: string }>(),
+);
+
+export const orderModal = createAction(
+  '[OrderModal] Order Modal',
+  props<{ modalInfo: ModalInfo }>(),
 );

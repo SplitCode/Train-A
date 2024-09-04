@@ -12,7 +12,9 @@ export interface OrderState {
   error?: ErrorOrderResponse;
   loading: boolean;
   orders: Order[];
+  modalInfo: ModalInfo;
 }
+
 export const initialState: OrderState = {
   book: null,
   orderRequest: null,
@@ -20,4 +22,17 @@ export const initialState: OrderState = {
   error: undefined,
   loading: false,
   orders: [],
+  modalInfo: {
+    visibleModal: false,
+    orderInfo: {
+      id: 0,
+    },
+  },
 };
+
+export interface ModalInfo {
+  visibleModal: boolean;
+  orderInfo: {
+    id: number;
+  };
+}

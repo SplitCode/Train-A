@@ -10,3 +10,21 @@
 <ng-template #noOrders>
   <p>No orders found.</p>
 </ng-template>
+
+<p-dialog
+  draggable="false"
+  header="Are you sure to cancel Order {{ localModalInfo.orderInfo.id }} ?"
+  [modal]="true"
+  [(visible)]="localModalInfo.visibleModal"
+>
+  <div class="flex justify-between">
+    <app-custom-button
+      [config]="{ label: 'Cancel', outlined: true }"
+      (click)="closeModal()"
+    />
+    <app-custom-button
+      [config]="{ label: 'Confirm' }"
+      (click)="cancelOrder(); closeModal()"
+    />
+  </div>
+</p-dialog>

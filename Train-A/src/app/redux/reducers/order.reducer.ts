@@ -9,6 +9,7 @@ import {
   createBook,
   getOrdersFailure,
   getOrdersSuccess,
+  orderModal,
   // createBook,
 } from '../actions/order.actions';
 import { initialState } from '../states/order.state';
@@ -86,6 +87,13 @@ export const orderReducer = createReducer(
       ...state,
       loading: false,
       error,
+    }),
+  ),
+  on(
+    orderModal,
+    (state, { modalInfo }): OrderState => ({
+      ...state,
+      modalInfo: modalInfo,
     }),
   ),
 );

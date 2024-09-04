@@ -58,4 +58,15 @@
     {{ order.seatId }}
   </div>
   <div class="flex items-center px-4 pb-4 pt-2">Price:</div>
+  <div class="flex items-center px-4 pb-4 pt-2">
+    <app-custom-button
+      *ngIf="order.status === 'active'"
+      (click)="setModalInfo(true, order.id)"
+      [config]="{
+        label: 'Cancel',
+        styleClass: 'my-2  button-with-label',
+        icon: 'pi pi-times',
+      }"
+    />
+  </div>
 </div>

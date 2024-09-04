@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, map, catchError, of, switchMap } from 'rxjs';
+import { mergeMap, map, catchError, of, switchMap, tap } from 'rxjs';
 import { RideService } from '../../home/services/ride.service';
 import { OrderService } from '../../order/services/order.service';
+import { MessageService } from 'primeng/api';
 import {
   getOrders,
   getOrdersSuccess,
@@ -23,6 +24,8 @@ export class OrderEffects {
   private rideService = inject(RideService);
 
   private orderService = inject(OrderService);
+
+  private messageService = inject(MessageService);
 
   getOrders$ = createEffect(() => {
     return this.actions$.pipe(
@@ -57,6 +60,20 @@ export class OrderEffects {
           catchError((error) => of(cancelOrderFailure({ error }))),
         ),
       ),
+    );
+  });
+
+  cancelOrderSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(deleteOrderSuccess),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'The order has been successfully cancelled!',
+        });
+      }),
+      map(() => getOrders()),
     );
   });
 

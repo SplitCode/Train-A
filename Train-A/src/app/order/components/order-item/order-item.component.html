@@ -1,0 +1,60 @@
+<div
+  class="flex flex-col g:flex-row border border-stone-600 border-solid rounded-md"
+>
+  <div class="p-5 flex justify-between">
+    <span>Order ID: {{ order.id }}</span>
+    <span> Status: {{ order.status }} </span>
+  </div>
+  <div class="flex items-center px-4 pt-4 pb-6 w-full">
+    <div>
+      <div class="text-lg text-nowrap font-bold">
+        {{ tripStartTime | date: "MMMM dd HH:mm" }}
+      </div>
+      <div class="text-s font-medium leading-7 capitalize">
+        {{ stationStartCity$ | async }}
+      </div>
+    </div>
+    <div class="relative w-full h-0.5 bg-slate-600 mx-3 px-3">
+      <div
+        class="absolute left-0 top-1/2 transform size-3 rounded-full border-2 border-solid border-slate-600 bg-slate-100"
+        style="transform: translateY(-50%)"
+      ></div>
+      <div
+        class="absolute top-[50%] left-[50%] bg-slate-600 text-[12px] leading-none rounded-lg p-1"
+        style="transform: translate(-50%, -50%)"
+      >
+        {{ [tripStartTime, tripEndTime] | fullTimeHour }}
+      </div>
+      <div
+        class="absolute right-0 top-1/2 transform size-3 rounded-full border-2 border-slate-600 bg-slate-600"
+        style="transform: translateY(-50%)"
+      ></div>
+    </div>
+    <div>
+      <div class="text-lg text-nowrap font-bold">
+        {{ tripEndTime | date: "MMMM dd HH:mm" }}
+      </div>
+      <div class="text-s font-medium leading-7 capitalize">
+        {{ stationEndCity$ | async }}
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center px-4 pb-1 pt-2">Carriage type:</div>
+  <div class="flex items-center px-4 pb-1 pt-2">Car number:</div>
+  <div class="flex items-center px-4 pb-1 pt-2">
+    Seat number:
+    {{ order.seatId }}
+  </div>
+  <div class="flex items-center px-4 pb-1 pt-2">Price:</div>
+  <div class="flex items-center px-4 pb-4 pt-2">
+    <app-custom-button
+      *ngIf="order.status === 'active'"
+      (click)="setModalInfo(true, order.id)"
+      [config]="{
+        label: 'Cancel',
+        styleClass: 'my-2  button-with-label',
+        icon: 'pi pi-times',
+      }"
+    />
+  </div>
+</div>

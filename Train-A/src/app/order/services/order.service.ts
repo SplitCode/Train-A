@@ -37,11 +37,12 @@ export class OrderService {
     return this.http.get<User[]>(this.userUrl);
   }
 
-  // public deleteOrder(orderId: string): Observable<OrderItem[]> {
-  //   return this.http.delete<OrderItem[]>(`${this.ordersUrl}/${orderId}`);
+  // public cancelOrder(orderId: number): Observable<void> {
+  //   return this.http.delete<void>(`${this.orderUrl}/${orderId}`);
   // }
 
   public cancelOrder(orderId: number): Observable<void> {
+    console.log('Sending DELETE request to cancel order:', orderId);
     return this.http.delete<void>(`${this.orderUrl}/${orderId}`);
   }
 
@@ -49,3 +50,7 @@ export class OrderService {
     return this.http.get<RideResponse>(`${this.searchUrl}/${rideId}`);
   }
 }
+
+// public deleteOrder(orderId: string): Observable<OrderItem[]> {
+//   return this.http.delete<OrderItem[]>(`${this.ordersUrl}/${orderId}`);
+// }

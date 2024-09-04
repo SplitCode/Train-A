@@ -12,7 +12,11 @@ import {
 } from '../../../redux/selectors/order.selectors';
 import { CustomButtonComponent } from '../../../shared/components';
 import { ModalInfo } from '../../../redux/states/order.state';
-import { cancelOrder, orderModal } from '../../../redux/actions/order.actions';
+import {
+  cancelOrder,
+  getOrders,
+  orderModal,
+} from '../../../redux/actions/order.actions';
 
 @Component({
   selector: 'app-orders-list',
@@ -35,18 +39,17 @@ export class OrdersListComponent implements OnInit {
 
   public localModalInfo!: ModalInfo;
 
-  // constructor(private orderService: OrderService) {}
-
   constructor(private store: Store) {
     this.modalInfo$ = this.store.select(selectModalInfo);
-    this.orders$ = this.store.select(selectOrders);
   }
 
   ngOnInit() {
-    // this.orders$ = this.store.dispatch(getOrders());
-    // this.orders$.subscribe((orders) => {
-    //   console.log(orders);
-    // });
+    this.store.dispatch(getOrders());
+    this.orders$ = this.store.select(selectOrders);
+
+    this.orders$.subscribe((orders) => {
+      console.log('Updated orders:', orders);
+    });
 
     this.modalInfo$.forEach((item) => {
       this.localModalInfo = { ...item };
@@ -54,6 +57,10 @@ export class OrdersListComponent implements OnInit {
   }
 
   public cancelOrder(): void {
+    console.log(
+      'Attempting to cancel order:',
+      this.localModalInfo.orderInfo.id,
+    );
     this.store.dispatch(
       cancelOrder({ orderId: this.localModalInfo.orderInfo.id }),
     );

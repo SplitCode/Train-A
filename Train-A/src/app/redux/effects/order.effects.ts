@@ -54,12 +54,21 @@ export class OrderEffects {
   cancelOrder$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(cancelOrder),
-      switchMap(({ orderId }) =>
-        this.orderService.cancelOrder(orderId).pipe(
-          map(() => deleteOrderSuccess({ orderId })),
-          catchError((error) => of(cancelOrderFailure({ error }))),
-        ),
-      ),
+      switchMap(({ orderId }) => {
+        console.log('Effect triggered for canceling order:', orderId);
+        return this.orderService.cancelOrder(orderId).pipe(
+          map(() => {
+            console.log(
+              'Order canceled successfully, dispatching deleteOrderSuccess',
+            );
+            return deleteOrderSuccess({ orderId });
+          }),
+          catchError((error) => {
+            console.error('Error canceling order:', error);
+            return of(cancelOrderFailure({ error }));
+          }),
+        );
+      }),
     );
   });
 
@@ -67,13 +76,17 @@ export class OrderEffects {
     return this.actions$.pipe(
       ofType(deleteOrderSuccess),
       tap(() => {
+        console.log('deleteOrderSuccess effect triggered');
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
           detail: 'The order has been successfully cancelled!',
         });
       }),
-      map(() => getOrders()),
+      map(() => {
+        console.log('Dispatching getOrders action');
+        return getOrders();
+      }),
     );
   });
 

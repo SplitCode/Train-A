@@ -41,7 +41,7 @@ export const cancelOrderFailure = createAction(
 );
 
 export const deleteOrderSuccess = createAction(
-  '[Order] Cancel Order Success',
+  '[Order] Delete Order Success',
   props<{ orderId: number }>(),
 );
 

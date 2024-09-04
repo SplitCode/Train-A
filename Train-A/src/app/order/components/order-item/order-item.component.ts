@@ -77,7 +77,7 @@ export class OrderItemComponent {
     const endIndex = path.indexOf(stationEnd);
 
     if (startIndex === -1 || endIndex === -1 || startIndex > endIndex) {
-      console.error('Некорректные данные');
+      console.error('Uncorrect data');
       return;
     }
 
@@ -87,7 +87,7 @@ export class OrderItemComponent {
     let endSegmentIndex = 0;
 
     let accumulatedLength = 0;
-    for (let i = 0; i < segments.length; i++) {
+    for (let i = 0; i < segments.length; i += 1) {
       accumulatedLength += Math.ceil(path.length / segments.length);
       if (startIndex < accumulatedLength && startSegmentIndex === 0) {
         startSegmentIndex = i;

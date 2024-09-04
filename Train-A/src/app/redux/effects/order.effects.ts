@@ -14,7 +14,8 @@ import {
   getUsers,
   getUsersSuccess,
   getUsersFailure,
-  deleteOrderSuccess,
+  cancelOrderSuccess,
+  // deleteOrderSuccess,
 } from '../actions/order.actions';
 
 @Injectable()
@@ -61,7 +62,7 @@ export class OrderEffects {
             console.log(
               'Order canceled successfully, dispatching deleteOrderSuccess',
             );
-            return deleteOrderSuccess({ orderId });
+            return cancelOrderSuccess();
           }),
           catchError((error) => {
             console.error('Error canceling order:', error);
@@ -74,9 +75,9 @@ export class OrderEffects {
 
   cancelOrderSuccess$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(deleteOrderSuccess),
+      ofType(cancelOrderSuccess),
       tap(() => {
-        console.log('deleteOrderSuccess effect triggered');
+        console.log('cancelOrderSuccess effect triggered');
         this.messageService.add({
           severity: 'success',
           summary: 'Success',

@@ -10,7 +10,7 @@ import {
   getOrdersFailure,
   getOrdersSuccess,
   orderModal,
-  deleteOrderSuccess,
+  // deleteOrderSuccess,
   // createBook,
 } from '../actions/order.actions';
 import { initialState } from '../states/order.state';
@@ -66,13 +66,13 @@ export const orderReducer = createReducer(
       loading: false,
     }),
   ),
-  on(
-    deleteOrderSuccess,
-    (state, { orderId }): OrderState => ({
-      ...state,
-      orders: state.orders.filter((order) => order.id !== orderId),
-    }),
-  ),
+  // on(
+  //   deleteOrderSuccess,
+  //   (state, { orderId }): OrderState => ({
+  //     ...state,
+  //     orders: state.orders.filter((order) => order.id !== orderId),
+  //   }),
+  // ),
   on(
     cancelOrderFailure,
     (state, { error }): OrderState => ({

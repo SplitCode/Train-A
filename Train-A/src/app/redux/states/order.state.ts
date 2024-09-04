@@ -3,7 +3,7 @@ import {
   ErrorOrderResponse,
   OrderRequest,
 } from '../../home/models/order-responce.interface';
-import { Order } from '../../home/models/orders.interface';
+import { OrderItem } from '../../order/models/order-item.interface';
 
 export interface OrderState {
   book: OrderRequest | null;
@@ -11,7 +11,7 @@ export interface OrderState {
   orderResponse: SuccessOrderResponse | null;
   error?: ErrorOrderResponse;
   loading: boolean;
-  orders: Order[];
+  orders: OrderItem[];
   modalInfo: ModalInfo;
 }
 

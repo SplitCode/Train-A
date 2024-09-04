@@ -1,24 +1,28 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of } from 'rxjs';
+import { mergeMap, map, catchError, of, switchMap, tap } from 'rxjs';
 import { RideService } from '../../home/services/ride.service';
 import {
   loadRideInfo,
   loadRideInfoSuccess,
   loadRideInfoFailure,
+  createOrder,
+  createOrderFailure,
+  createOrderSuccess,
 } from '../actions/ride.actions';
 import {
   cancelOrder,
   cancelOrderFailure,
   cancelOrderSuccess,
-  createOrder,
-  createOrderFailure,
-  createOrderSuccess,
+  getOrders,
 } from '../actions/order.actions';
+import { MessageService } from 'primeng/api';
 
 @Injectable()
 export class RideEffects {
   private actions$ = inject(Actions);
+
+  private messageService = inject(MessageService);
 
   loadRideInfo$ = createEffect(() => {
     return this.actions$.pipe(
@@ -56,6 +60,20 @@ export class RideEffects {
     );
   });
 
+  createOrderSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createOrderSuccess),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'The order has been successfully created!',
+        });
+      }),
+      switchMap(() => of(getOrders({ all: true }))),
+    );
+  });
+
   cancelOrder$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(cancelOrder),
@@ -68,5 +86,6 @@ export class RideEffects {
     );
   });
 
+  // switchMap(() => of(getOrders({ all: true }))),
   constructor(private rideService: RideService) {}
 }

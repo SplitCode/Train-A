@@ -14,7 +14,7 @@
         {{ order.schedule.segments[0].time[0] | date: "MMMM d" }}
       </div>
       <div class="text-xs font-medium leading-7 capitalize">
-        {{ order.stationStart }} ???
+        {{ stationStartCity$ | async }}
       </div>
     </div>
     <div class="relative w-full h-0.5 bg-slate-600 mx-3 px-3">
@@ -30,7 +30,7 @@
           [
             order.schedule.segments[0].time[0],
             order.schedule.segments[0].time[1],
-          ]
+          ] | fullTime
         }}
       </div>
       <div
@@ -46,7 +46,7 @@
         {{ order.schedule.segments[0].time[1] | date: "MMMM d" }}
       </div>
       <div class="text-xs font-medium leading-7 capitalize">
-        {{ order.stationEnd }} ???
+        {{ stationEndCity$ | async }}
       </div>
     </div>
   </div>

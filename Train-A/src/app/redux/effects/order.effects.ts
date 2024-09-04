@@ -14,6 +14,7 @@ import {
   getUsersSuccess,
   getUsersFailure,
   cancelOrderSuccess,
+  getAllOrders,
 } from '../actions/order.actions';
 
 @Injectable()
@@ -27,6 +28,18 @@ export class OrderEffects {
       ofType(getOrders),
       switchMap(() =>
         this.orderService.getOrders().pipe(
+          map((orders) => getOrdersSuccess({ orders })),
+          catchError((error) => of(getOrdersFailure({ error }))),
+        ),
+      ),
+    );
+  });
+
+  getAllOrders$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(getAllOrders),
+      switchMap(() =>
+        this.orderService.getAllOrders().pipe(
           map((orders) => getOrdersSuccess({ orders })),
           catchError((error) => of(getOrdersFailure({ error }))),
         ),

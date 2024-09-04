@@ -22,10 +22,7 @@ export const deleteOrderSuccess = createAction(
 
 export const getOrders = createAction('[Order] Get Orders');
 
-// export const getOrders = createAction(
-//   '[Order] Get Orders',
-//   props<{ all: boolean }>(),
-// );
+export const getAllOrders = createAction('[Order] Get All Orders');
 
 export const getOrdersSuccess = createAction(
   '[Order] Get Orders Success',

@@ -16,6 +16,12 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
+  public getAllOrders(all: boolean = true): Observable<OrderItem[]> {
+    return this.http.get<OrderItem[]>(this.orderUrl, {
+      params: { all: all.toString() },
+    });
+  }
+
   public getOrders(): Observable<OrderItem[]> {
     return this.http.get<OrderItem[]>(this.orderUrl);
   }

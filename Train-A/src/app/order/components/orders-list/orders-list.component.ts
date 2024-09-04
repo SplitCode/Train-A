@@ -13,9 +13,11 @@ import { CustomButtonComponent } from '../../../shared/components';
 import { ModalInfo } from '../../../redux/states/order.state';
 import {
   cancelOrder,
+  getAllOrders,
   getOrders,
   orderModal,
 } from '../../../redux/actions/order.actions';
+import { selectIsManager } from '../../../redux/selectors/user.selectors';
 
 @Component({
   selector: 'app-orders-list',
@@ -38,12 +40,22 @@ export class OrdersListComponent implements OnInit {
 
   public localModalInfo!: ModalInfo;
 
+  private isManager$: Observable<boolean>;
+
   constructor(private store: Store) {
     this.modalInfo$ = this.store.select(selectModalInfo);
+    this.isManager$ = this.store.select(selectIsManager);
   }
 
   ngOnInit() {
-    this.store.dispatch(getOrders());
+    this.isManager$.subscribe((isManager) => {
+      if (isManager) {
+        this.store.dispatch(getAllOrders());
+      } else {
+        this.store.dispatch(getOrders());
+      }
+    });
+
     this.orders$ = this.store.select(selectOrders);
 
     this.orders$.subscribe((orders) => {

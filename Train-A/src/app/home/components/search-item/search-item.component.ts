@@ -61,8 +61,8 @@ export class SearchItemComponent implements OnInit {
       loadModalInfo({
         modalInfo: {
           isVisiblePath: true,
-          fromStationId: this.cityFromTo[0].stationId.toString(),
-          toStationId: this.cityFromTo[1].stationId.toString(),
+          fromStationId: this.path[0].toString(),
+          toStationId: this.path[this.path.length - 1].toString(),
           rideId: this.routeButtonConfig.rideId.toString(),
           showFromToCities: false,
         },

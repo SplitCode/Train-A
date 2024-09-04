@@ -31,12 +31,12 @@ export class AuthGuard implements CanActivate {
       if (targetUrl === '/signin' || targetUrl === '/signup') {
         return of(true);
       } else {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
         return of(false);
       }
     } else {
       if (targetUrl === '/signin' || targetUrl === '/signup') {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
         return of(false);
       } else {
         return of(true);

@@ -33,17 +33,16 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'order',
-    loadChildren: () =>
-      import('./order/pages/order-page/order-page.routes').then(
-        (m) => m.routes,
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
     path: 'profile',
     loadChildren: () =>
       import('./profile/profile.module').then((m) => m.ProfileModule),
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./core/pages/page404/page404.component').then(
+        (m) => m.Page404Component,
+      ),
   },
 ];

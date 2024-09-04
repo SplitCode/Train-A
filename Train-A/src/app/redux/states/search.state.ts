@@ -7,14 +7,9 @@ export interface SearchForm {
 }
 
 export interface SearchItem {
-  form: Direction;
+  from: Direction;
   routes: Routes[];
   to: Direction;
-}
-
-export interface SearchState {
-  searchItem: SearchItem;
-  error: string;
 }
 
 export interface Direction {
@@ -63,10 +58,35 @@ export interface Price {
   [key: string]: string;
 }
 
+export interface ModalInfo {
+  isVisiblePath: boolean;
+  fromStationId: string;
+  toStationId: string;
+  rideId: string;
+  showFromToCities: boolean;
+}
+
+export interface SearchState {
+  searchItem: SearchItem;
+  error: string;
+  loading: boolean;
+  firstFound: boolean;
+  modalInfo: ModalInfo;
+}
+
 export const initialSearchState: SearchState = {
   error: '',
+  loading: false,
+  firstFound: false,
+  modalInfo: {
+    isVisiblePath: false,
+    fromStationId: '',
+    toStationId: '',
+    rideId: '',
+    showFromToCities: false,
+  },
   searchItem: {
-    form: {
+    from: {
       city: '',
       geolocation: {
         latitude: 0,

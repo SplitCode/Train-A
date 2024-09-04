@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { RoutesState } from '../states/routes.state';
-// import { RoutesItem } from '../../admin/models/routes-item.interface';
 
 const selectRoutesState = createFeatureSelector<RoutesState>('routesState');
 
@@ -8,6 +7,11 @@ export const selectAllRoutes = createSelector(
   selectRoutesState,
   (state: RoutesState) => state.routes,
 );
+
+export const selectRouteById = (routeId: number) =>
+  createSelector(selectAllRoutes, (routes) =>
+    routes.find((route) => route.id === routeId),
+  );
 
 export const selectRouteFormVisibility = createSelector(
   selectRoutesState,
@@ -27,4 +31,13 @@ export const selectRoute = createSelector(
 export const selectRouteByPath = createSelector(
   selectRoutesState,
   (state: RoutesState) => state.routeByPath,
+);
+export const selectRouteId = createSelector(
+  selectRoutesState,
+  (state: RoutesState) => state.routeId,
+);
+
+export const selectModalInfo = createSelector(
+  selectRoutesState,
+  (state: RoutesState) => state.modalInfo,
 );

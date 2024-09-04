@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of, switchMap } from 'rxjs';
+import { mergeMap, map, catchError, of, switchMap, tap } from 'rxjs';
 import { RoutesService } from '../../admin/services/routes.service';
+import { MessageService } from 'primeng/api';
 import {
   loadRoutes,
   loadRoutesSuccess,
@@ -24,6 +25,8 @@ import {
   updateRideById,
   updateRideByIdSuccess,
   updateRideByIdFailure,
+  updateRouteSuccess,
+  updateRouteFailure,
 } from '../actions/routes.actions';
 import {
   RoutesItem,
@@ -53,7 +56,22 @@ export class RoutesEffects {
       mergeMap((action) =>
         this.routesService.deleteRoute(action.routeId).pipe(
           map(() => deleteRouteSuccess({ routeId: action.routeId })),
-          catchError((error) => of(deleteRouteFailure({ error }))),
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'The route has been successfully deleted!',
+            });
+          }),
+          catchError((error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message || 'Unknown error',
+            });
+
+            return of(deleteRouteFailure({ error: error.message }));
+          }),
         ),
       ),
     );
@@ -64,27 +82,54 @@ export class RoutesEffects {
       ofType(createRoute),
       mergeMap(({ route }) =>
         this.routesService.createRoute(route.path, route.carriages).pipe(
-          map((createdRoute) => createRouteSuccess({ route: createdRoute })),
-          catchError((error) =>
-            of(createRouteFailure({ error: error.message })),
+          map((createdRoute: RoutesItem) =>
+            createRouteSuccess({ route: createdRoute }),
           ),
+          catchError((error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message || 'Unknown error',
+            });
+            return of(createRouteFailure({ error: error.message }));
+          }),
         ),
       ),
+    );
+  });
+
+  createRouteSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createRouteSuccess),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail:
+            'The route has been successfully created and added to the end of the list!',
+        });
+      }),
+      map(() => loadRoutes()),
     );
   });
 
   updateRoute$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updateRoute),
-      mergeMap(({ route }) =>
-        this.routesService
-          .updateRoute(route.id, route.path, route.carriages)
-          .pipe(
-            map((updatedRoute) => createRouteSuccess({ route: updatedRoute })),
-            catchError((error) =>
-              of(createRouteFailure({ error: error.message })),
-            ),
-          ),
+      mergeMap(({ id, route }) =>
+        this.routesService.updateRoute(id, route.path, route.carriages).pipe(
+          map((updatedRoute) => {
+            return updateRouteSuccess({ route: updatedRoute });
+          }),
+          catchError((error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message || 'Unknown error',
+            });
+            return of(updateRouteFailure({ error: error.message }));
+          }),
+        ),
       ),
     );
   });
@@ -166,5 +211,22 @@ export class RoutesEffects {
     );
   });
 
-  constructor(private routesService: RoutesService) {}
+  updateRouteSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateRouteSuccess),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'The route has been successfully updated!',
+        });
+      }),
+      map(() => loadRoutes()),
+    );
+  });
+
+  constructor(
+    private routesService: RoutesService,
+    private messageService: MessageService,
+  ) {}
 }

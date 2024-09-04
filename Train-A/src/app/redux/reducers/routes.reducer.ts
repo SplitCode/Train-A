@@ -1,13 +1,20 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import {
+  createRoute,
+  createRouteFailure,
+  createRouteSuccess,
+  deleteRoute,
+  deleteRouteFailure,
   deleteRouteSuccess,
   hideRouteForm,
   loadRoutesSuccess,
+  routeModal,
   showRouteForm,
   loadRouteByIdSuccess,
   loadRouteByPathSuccess,
   deleteRideByIdSuccess,
   updateRideByIdSuccess,
+  updateRouteSuccess,
 } from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
@@ -21,6 +28,11 @@ export const reducer = createReducer(
       routes,
     }),
   ),
+  on(deleteRoute, (state): RoutesState => {
+    return {
+      ...state,
+    };
+  }),
   on(
     deleteRouteSuccess,
     (state, { routeId }): RoutesState => ({
@@ -29,10 +41,52 @@ export const reducer = createReducer(
     }),
   ),
   on(
+    deleteRouteFailure,
+    (state, { error }): RoutesState => ({
+      ...state,
+      error,
+    }),
+  ),
+  on(createRoute, (state): RoutesState => {
+    return {
+      ...state,
+    };
+  }),
+  on(
+    createRouteSuccess,
+    (state, {}): RoutesState => ({
+      ...state,
+    }),
+  ),
+  on(
+    createRouteFailure,
+    (state, { error }): RoutesState => ({
+      ...state,
+      error,
+    }),
+  ),
+  on(updateRouteSuccess, (state, { route }) => {
+    const routeIndex = state.routes.findIndex((r) => r.id === route.id);
+    if (routeIndex !== -1) {
+      const updatedRoutes = [...state.routes];
+      updatedRoutes[routeIndex] = {
+        ...updatedRoutes[routeIndex],
+        ...route,
+      };
+      return {
+        ...state,
+        routes: updatedRoutes,
+        routeId: null,
+      };
+    }
+    return state;
+  }),
+  on(
     showRouteForm,
-    (state, { mode }): RoutesState => ({
+    (state, { routeId, mode }): RoutesState => ({
       ...state,
       formVisible: true,
+      routeId: routeId,
       mode,
     }),
   ),
@@ -41,6 +95,14 @@ export const reducer = createReducer(
     (state): RoutesState => ({
       ...state,
       formVisible: false,
+      routeId: null,
+    }),
+  ),
+  on(
+    routeModal,
+    (state, { modalInfo }): RoutesState => ({
+      ...state,
+      modalInfo: modalInfo,
     }),
   ),
   on(

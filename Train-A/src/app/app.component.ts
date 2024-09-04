@@ -9,6 +9,8 @@ import { appInit } from './redux/actions/app.actions';
 import { Store } from '@ngrx/store';
 import { loadCarriages } from './redux/actions/carriage.actions';
 import { loadStations } from './redux/actions/stations.actions';
+import { loadRoutes } from './redux/actions/routes.actions';
+import { getOrders } from './redux/actions/order.actions';
 
 @Component({
   selector: 'app-root',
@@ -26,20 +28,31 @@ export class AppComponent implements OnInit {
   constructor(
     private primengConfig: PrimeNGConfig,
     private store: Store,
-  ) {}
+  ) {
+    this.store.dispatch(appInit());
+  }
 
   public ngOnInit() {
     this.primengConfig.ripple = true;
-    this.store.dispatch(appInit());
     this.dispatchCarriages();
     this.dispatchStations();
+    this.dispatchRoutes();
+    this.dispatchOrders();
   }
 
   private dispatchCarriages(): void {
     this.store.dispatch(loadCarriages());
   }
 
+  private dispatchRoutes(): void {
+    this.store.dispatch(loadRoutes());
+  }
+
   private dispatchStations(): void {
     this.store.dispatch(loadStations());
+  }
+
+  private dispatchOrders(): void {
+    this.store.dispatch(getOrders());
   }
 }

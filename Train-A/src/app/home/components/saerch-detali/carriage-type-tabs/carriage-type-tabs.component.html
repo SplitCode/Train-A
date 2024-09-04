@@ -1,0 +1,22 @@
+<p-tabView *ngIf="carriageTypes$ | async as carriageTypes; else loading">
+  <p-tabPanel
+    *ngFor="let carriageType of carriageTypes | uniqueInArr"
+    [header]="carriageType"
+    [cache]="false"
+  >
+    <ng-template pTemplate="content">
+      <ng-container *ngFor="let carriageConfig of getCarriagesConfig(carriageType)">
+        <app-carriage-item
+          *ngIf="carriageConfig"
+          [config]="carriageConfig"
+        ></app-carriage-item>
+      </ng-container>
+    </ng-template>
+  </p-tabPanel>
+</p-tabView>
+<ng-template #loading>
+  <div role="status" class="animate-pulse">
+    <h3 class="h-8 bg-purple-900 opacity-20 rounded-lg w-4/12 mb-4"></h3>
+    <p class="h-28 bg-purple-900 opacity-20 rounded-lg w-full mb-2.5"></p>
+  </div>
+</ng-template>

@@ -13,3 +13,8 @@ export interface RoutesItemByPath {
   carriages: string[];
   schedule: ScheduleTimeRide[];
 }
+
+export interface CreateRouteRequest {
+  path: number[];
+  carriages: string[];
+}

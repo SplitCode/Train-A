@@ -1,3 +1,9 @@
+<span
+  *ngIf="carriageNumber"
+  class="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300"
+  >Car {{ carriageNumber }}</span
+>
+
 <div class="carriage-container">
   <div class="carriage">
     <app-custom-button
@@ -20,22 +26,30 @@
               class="row"
               *ngFor="let col of createRange(config.rows); let rowIndex = index"
             >
-              <app-custom-button
-                [config]="{ styleClass: 'seat' }"
-                class="right text-red-950"
+              <app-carriage-seat
                 *ngFor="
                   let seat of createRange(config.rightSeats);
                   let seatIndex = index
                 "
-              >
-                {{
-                  (config.rows - rowIndex - 1) *
-                    (config.leftSeats + config.rightSeats) +
+                [carriageSeatConfig]="{
+                  seatId:
+                    (config.rows - rowIndex - 1) *
+                      (config.leftSeats + config.rightSeats) +
                     config.leftSeats +
                     seatIndex +
-                    1
-                }}
-              </app-custom-button>
+                    1,
+                  seatIdTrain:
+                    (config.previousSeats ?? 0) +
+                    (config.rows - rowIndex - 1) *
+                      (config.leftSeats + config.rightSeats) +
+                    config.leftSeats +
+                    seatIndex +
+                    1,
+                  isWorking: config.isWorking,
+                  carriageNumber: carriageNumber,
+                  carriageType: config.name
+                }"
+              />
             </div>
           </div>
 
@@ -46,21 +60,28 @@
               class="row"
               *ngFor="let col of createRange(config.rows); let rowIndex = index"
             >
-              <app-custom-button
-                [config]="{ styleClass: 'seat' }"
-                class="left text-red-950"
+              <app-carriage-seat
                 *ngFor="
                   let seat of createRange(config.leftSeats);
                   let seatIndex = index
                 "
-              >
-                {{
-                  (config.rows - rowIndex - 1) *
-                    (config.leftSeats + config.rightSeats) +
+                [carriageSeatConfig]="{
+                  seatId:
+                    (config.rows - rowIndex - 1) *
+                      (config.leftSeats + config.rightSeats) +
                     seatIndex +
-                    1
-                }}
-              </app-custom-button>
+                    1,
+                  seatIdTrain:
+                    (config.previousSeats ?? 0) +
+                    (config.rows - rowIndex - 1) *
+                      (config.leftSeats + config.rightSeats) +
+                    seatIndex +
+                    1,
+                  isWorking: config.isWorking,
+                  carriageNumber: carriageNumber,
+                  carriageType: config.name
+                }"
+              />
             </div>
           </div>
         </div>

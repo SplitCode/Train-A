@@ -1,11 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RoutesItem } from '../../../models/routes-item.interface';
 import { Store } from '@ngrx/store';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { CommonModule } from '@angular/common';
 import {
-  deleteRoute,
+  routeModal,
   showRouteForm,
 } from '../../../../redux/actions/routes.actions';
 import { Router } from '@angular/router';
@@ -17,9 +17,9 @@ import { Router } from '@angular/router';
     CommonModule,
     CustomButtonComponent,
     PRIME_NG_MODULES.FieldsetModule,
-    PRIME_NG_MODULES.DialogModule,
   ],
   templateUrl: './routes-item.component.html',
+  styleUrl: './routes-item.component.scss',
 })
 export class RoutesItemComponent {
   @Input() public config!: RoutesItem;
@@ -28,6 +28,8 @@ export class RoutesItemComponent {
 
   @Input() public cityNames!: string[];
 
+  @Output() public delete = new EventEmitter<number>();
+
   visible: boolean = false;
 
   constructor(
@@ -35,22 +37,29 @@ export class RoutesItemComponent {
     private router: Router,
   ) {}
 
-  public updateRoute(): void {
+  public showUpdateForm(): void {
     this.store.dispatch(
       showRouteForm({
+        routeId: this.config.id,
         mode: 'update',
       }),
     );
-    // this.store.dispatch(showRouteForm({ mode: 'update', route }));
-  }
-
-  public deleteRoute(routeId: number): void {
-    this.store.dispatch(deleteRoute({ routeId: routeId }));
   }
 
   public assignRide(): void {
     this.router.navigate(['/admin/routes', this.config.id]);
   }
-}
 
-// this.store.dispatch(showRouteForm({ routeId: this.config.id, mode: 'update' }));
+  public setModalInfo(visible: boolean, routeId: number): void {
+    this.store.dispatch(
+      routeModal({
+        modalInfo: {
+          visibleModal: visible,
+          routeInfo: {
+            id: routeId,
+          },
+        },
+      }),
+    );
+  }
+}

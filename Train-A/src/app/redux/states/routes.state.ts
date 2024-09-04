@@ -9,6 +9,9 @@ export interface RoutesState {
   mode: 'create' | 'update';
   route: RoutesItem | null;
   routeByPath: RoutesItemByPath | null;
+  routeId: number | null;
+  modalInfo: ModalInfo;
+  error: string;
 }
 
 export const initialRoutesState: RoutesState = {
@@ -17,4 +20,19 @@ export const initialRoutesState: RoutesState = {
   mode: 'create',
   route: null,
   routeByPath: null,
+  routeId: null,
+  modalInfo: {
+    visibleModal: false,
+    routeInfo: {
+      id: 0,
+    },
+  },
+  error: '',
 };
+
+export interface ModalInfo {
+  visibleModal: boolean;
+  routeInfo: {
+    id: number;
+  };
+}

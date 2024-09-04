@@ -1,7 +1,11 @@
 import { SearchForm } from './../../../redux/states/search.state';
-import { SearchService } from './../../services/search.service';
 import { ConnectedStations } from './../../../redux/states/stations.state';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { Store } from '@ngrx/store';
@@ -18,6 +22,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { loadSearch } from '../../../redux/actions/search.actions';
+import { SearchResultListComponent } from '../search-result-list/search-result-list.component';
+import { GetCityByIDService } from '../../../shared/services/getCityByID.service';
+import {
+  selectIsSearch,
+  selectIsSearchFounded,
+} from '../../../redux/selectors/search.selectors';
 
 @Component({
   selector: 'app-search',
@@ -29,23 +39,31 @@ import { loadSearch } from '../../../redux/actions/search.actions';
     ReactiveFormsModule,
     DropdownModule,
     CalendarModule,
+    SearchResultListComponent,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, AfterViewChecked {
   public allStation$: Observable<StationsItem[]>;
 
-  public connectedStations!: ConnectedStations[];
+  public isSearched: Observable<boolean>;
+
+  public firstFound: Observable<boolean>;
+
+  public connectedStations: { cityName: string; cityId: number }[] = [];
 
   public searchForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private searchService: SearchService,
+    private cd: ChangeDetectorRef,
+    private getCityByIDService: GetCityByIDService,
   ) {
     this.allStation$ = this.store.select(selectAllStations);
+    this.isSearched = this.store.select(selectIsSearch);
+    this.firstFound = this.store.select(selectIsSearchFounded);
 
     this.searchForm = this.fb.group({
       city1: [[], Validators.required],
@@ -56,14 +74,18 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  ngAfterViewChecked(): void {
+    this.cd.detectChanges();
+  }
+
   public onSubmit() {
     let findCity!: StationsItem;
 
-    this.findCity(this.searchForm.value.city2.id).subscribe((city) => {
+    this.findCity(this.searchForm.value.city2.cityId).subscribe((city) => {
       if (city) {
         findCity = city;
       } else {
-        console.log('Not founde');
+        console.log('Not found');
       }
     });
 
@@ -75,16 +97,21 @@ export class SearchComponent implements OnInit {
       time: this.searchForm.value.date[0].toISOString(),
     };
 
-    console.log('FindCity', findCity);
-    console.log('SearchForm', this.searchForm.value);
-    console.log('SubmitedForm', submitedForm);
-
-    // this.searchService.getSearch(submitedForm).subscribe();
     this.store.dispatch(loadSearch({ form: submitedForm }));
   }
 
   public onHide() {
-    this.connectedStations = this.searchForm.value.city1.connectedTo;
+    this.connectedStations = [];
+
+    this.searchForm.value.city1.connectedTo.forEach(
+      (city: ConnectedStations) => {
+        this.getCityByIDService.getCityByID(city.id).subscribe((cityName) => {
+          if (cityName) {
+            this.connectedStations.push({ cityName, cityId: city.id });
+          }
+        });
+      },
+    );
 
     this.searchForm.patchValue({
       city2: '',

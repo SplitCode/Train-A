@@ -14,7 +14,10 @@ export const carriageReducer = createReducer(
     loadCarriagesSuccess,
     (state, { carriages }): CarriageState => ({
       ...state,
-      carriages,
+      carriages: carriages.map((carriage) => ({
+        ...carriage,
+        totalSeats: (carriage.leftSeats + carriage.rightSeats) * carriage.rows,
+      })),
     }),
   ),
   on(

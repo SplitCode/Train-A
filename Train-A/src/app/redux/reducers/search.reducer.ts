@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import {
+  loadModalInfo,
   loadSearch,
   loadSearchFailure,
   loadSearchSuccess,
@@ -12,6 +13,8 @@ export const searchReducer = createReducer(
     loadSearch,
     (state): SearchState => ({
       ...state,
+      loading: true,
+      firstFound: true,
     }),
   ),
   on(
@@ -19,6 +22,7 @@ export const searchReducer = createReducer(
     (state, { search }): SearchState => ({
       ...state,
       searchItem: search,
+      loading: false,
     }),
   ),
   on(
@@ -26,6 +30,13 @@ export const searchReducer = createReducer(
     (state, { error }): SearchState => ({
       ...state,
       error,
+    }),
+  ),
+  on(
+    loadModalInfo,
+    (state, { modalInfo }): SearchState => ({
+      ...state,
+      modalInfo,
     }),
   ),
 );

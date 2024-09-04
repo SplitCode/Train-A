@@ -53,4 +53,8 @@ export class CarriageListComponent implements OnInit, OnDestroy {
       }),
     );
   }
+
+  getCarriage(carriage: CarriageItem): CarriageItem {
+    return { ...carriage, isWorking: false };
+  }
 }

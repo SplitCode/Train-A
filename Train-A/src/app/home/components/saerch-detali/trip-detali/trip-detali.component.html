@@ -1,0 +1,34 @@
+<div class="relative">
+  <div class="flex gap-4 m-4 items-center">
+    <app-custom-button
+      routerLink="/"
+      [config]="{ label: 'Back', icon: 'pi pi-angle-double-left' }"
+    ></app-custom-button>
+
+    <app-custom-button
+      (clickEmitter)="isDialog(true)"
+      [config]="{ label: 'Route', icon: 'pi pi-map' }"
+    ></app-custom-button>
+    <app-route-modal
+      [config]="{
+        isVisiblePath: isVisiblePath,
+        fromStationId: fromStationId || '',
+        toStationId: toStationId || '',
+        rideId: rideId || '',
+        showFromToCities: true,
+      }"
+    />
+  </div>
+  <app-carriage-type-tabs class="tabs" />
+
+  <app-book-button
+    [bookButtonConfig]="{
+      isShow: false,
+      rideId: rideId,
+      stationStart: fromStationId,
+      stationEnd: toStationId,
+    }"
+    c
+    class="fixed right-4 bottom-4 inline-block"
+  />
+</div>

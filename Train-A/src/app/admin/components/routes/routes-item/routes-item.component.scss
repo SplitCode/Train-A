@@ -1,0 +1,11 @@
+::ng-deep {
+  @media screen and (max-width: 560px) {
+    .button-with-label .p-button-label {
+      display: none;
+    }
+
+    .button-with-label .p-button-icon {
+      margin: 0;
+    }
+  }
+}

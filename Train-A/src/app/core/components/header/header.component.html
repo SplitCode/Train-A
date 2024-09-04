@@ -1,7 +1,8 @@
 <div *ngIf="userRole$ | async as userRole">
   <p-toolbar>
     <div class="p-toolbar-group-start">
-      <span class="text-[#b968c7]">Example Logo</span>
+      <img class="w-20 h-20" src="'./../../../../../../logo.png" alt="logo" />
+      <span class="text-[#b968c7]">Train-A</span>
     </div>
     <div class="p-toolbar-group-center">
       <app-custom-button
@@ -9,7 +10,7 @@
         routerLink="/"
         [config]="{
           label: 'Home',
-          outlined: !isActiveHome('/'),
+          outlined: !isActiveRoute('/'),
         }"
       />
 

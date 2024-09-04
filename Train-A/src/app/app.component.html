@@ -1,7 +1,15 @@
-<app-header></app-header>
+<div class="min-h-screen flex flex-col">
+  <app-header></app-header>
 
-<p-toast></p-toast>
+  <p-toast
+    [breakpoints]="{
+      '600px': { width: '90%' },
+    }"
+  ></p-toast>
 
-<router-outlet></router-outlet>
+  <main class="flex-grow">
+    <router-outlet></router-outlet>
+  </main>
 
-<app-footer></app-footer>
+  <app-footer></app-footer>
+</div>

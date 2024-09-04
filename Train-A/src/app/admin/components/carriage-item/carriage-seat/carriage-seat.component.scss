@@ -1,0 +1,19 @@
+:host ::ng-deep {
+  .seat {
+    width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .available {
+    background-color: blue;
+  }
+  .occupied {
+    background-color: grey;
+  }
+  .reserved {
+    background-color: yellow;
+    color: #1e1e1e;
+  }
+}

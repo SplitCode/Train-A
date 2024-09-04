@@ -7,11 +7,18 @@ import { CommonModule, NgIf } from '@angular/common';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { DialogModule } from 'primeng/dialog';
 import { stationModal } from '../../../redux/actions/stations.actions';
+import { StationCityByIdPipe } from '../../../home/pipes/station-sity-by-id.pipe';
 
 @Component({
   selector: 'app-stations-item',
   standalone: true,
-  imports: [CommonModule, NgIf, CustomButtonComponent, DialogModule],
+  imports: [
+    CommonModule,
+    NgIf,
+    CustomButtonComponent,
+    DialogModule,
+    StationCityByIdPipe,
+  ],
   templateUrl: './stations-item.component.html',
   styleUrl: './stations-item.component.scss',
 })

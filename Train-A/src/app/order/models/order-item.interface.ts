@@ -20,16 +20,23 @@ export interface OrderSchedule {
 
 export interface ScheduleSegment {
   time: string[];
-  price: Price;
+  price: { [key: string]: number };
 }
 
-export interface Price {
-  [key: string]: number;
-}
+// export interface Price {
+//   [key: string]: number;
+// }
 
 export interface User {
   id: number;
   email: string;
   name: string;
   role: 'user' | 'manager';
+}
+
+export interface TripData {
+  path: number[];
+  schedule: OrderSchedule;
+  stationStart: number;
+  stationEnd: number;
 }

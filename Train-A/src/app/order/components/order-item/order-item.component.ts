@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
-import { OrderItem } from '../../models/order-item.interface';
+import { OrderItem, TripData } from '../../models/order-item.interface';
 import { CommonModule } from '@angular/common';
 import { StationCityByIdPipe } from '../../../home/pipes/station-sity-by-id.pipe';
 import { CustomButtonComponent } from '../../../shared/components';
 import { Store } from '@ngrx/store';
 import { orderModal } from '../../../redux/actions/order.actions';
-import { FullTimePipe } from '../../../home/pipes/full-time.pipe';
 import { Observable } from 'rxjs';
 import { GetCityByIDService } from '../../../shared/services/getCityByID.service';
+import { FullTimeHourPipe } from '../../../home/pipes/full-time-hour';
 
 @Component({
   selector: 'app-order-item',
@@ -16,7 +16,7 @@ import { GetCityByIDService } from '../../../shared/services/getCityByID.service
     CommonModule,
     StationCityByIdPipe,
     CustomButtonComponent,
-    FullTimePipe,
+    FullTimeHourPipe,
   ],
   templateUrl: './order-item.component.html',
   styleUrl: './order-item.component.scss',
@@ -27,6 +27,12 @@ export class OrderItemComponent {
   stationStartCity$: Observable<string | undefined> | undefined;
 
   stationEndCity$: Observable<string | undefined> | undefined;
+
+  tripStartTime: string = '';
+
+  tripEndTime: string = '';
+
+  totalPrice: number = 0;
 
   constructor(
     private store: Store,
@@ -42,6 +48,13 @@ export class OrderItemComponent {
         this.order.stationEnd,
       );
     }
+
+    this.calculateTripTime({
+      path: this.order.path,
+      schedule: this.order.schedule,
+      stationStart: this.order.stationStart,
+      stationEnd: this.order.stationEnd,
+    });
   }
 
   public setModalInfo(visible: boolean, orderId: number): void {
@@ -55,5 +68,37 @@ export class OrderItemComponent {
         },
       }),
     );
+  }
+
+  private calculateTripTime(tripData: TripData): void {
+    const { path, schedule, stationStart, stationEnd } = tripData;
+
+    const startIndex = path.indexOf(stationStart);
+    const endIndex = path.indexOf(stationEnd);
+
+    if (startIndex === -1 || endIndex === -1 || startIndex > endIndex) {
+      console.error('Некорректные данные');
+      return;
+    }
+
+    const segments = schedule.segments;
+
+    let startSegmentIndex = 0;
+    let endSegmentIndex = 0;
+
+    let accumulatedLength = 0;
+    for (let i = 0; i < segments.length; i++) {
+      accumulatedLength += Math.ceil(path.length / segments.length);
+      if (startIndex < accumulatedLength && startSegmentIndex === 0) {
+        startSegmentIndex = i;
+      }
+      if (endIndex < accumulatedLength) {
+        endSegmentIndex = i;
+        break;
+      }
+    }
+
+    this.tripStartTime = segments[startSegmentIndex].time[0];
+    this.tripEndTime = segments[endSegmentIndex].time[1];
   }
 }

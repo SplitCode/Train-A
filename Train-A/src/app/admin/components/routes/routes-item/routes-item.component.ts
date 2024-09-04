@@ -30,8 +30,6 @@ export class RoutesItemComponent {
 
   @Output() public delete = new EventEmitter<number>();
 
-  visible: boolean = false;
-
   constructor(
     private store: Store,
     private router: Router,

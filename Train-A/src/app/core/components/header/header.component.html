@@ -26,10 +26,10 @@
       <app-custom-button
         class="mx-1"
         *ngIf="isGeneralUserOrManager(userRole)"
-        routerLink="/order"
+        routerLink="/orders"
         [config]="{
           label: 'My Orders',
-          outlined: !isActiveRoute('/order'),
+          outlined: !isActiveRoute('/orders'),
         }"
       />
     </div>

@@ -70,7 +70,7 @@ export class RideEffects {
           detail: 'The order has been successfully created!',
         });
       }),
-      switchMap(() => of(getOrders({ all: true }))),
+      switchMap(() => of(getOrders())),
     );
   });
 

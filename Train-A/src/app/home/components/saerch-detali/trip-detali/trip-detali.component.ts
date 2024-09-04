@@ -95,7 +95,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     this.writeParamsFromRouter();
     this.loadRideInfo();
     this.updateTrain();
-    this.store.dispatch(getOrders({ all: true }));
+    this.store.dispatch(getOrders());
     this.orders$.subscribe((orders) => {
       console.log('Orders:', orders);
     });

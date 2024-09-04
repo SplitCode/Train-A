@@ -16,16 +16,9 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  public getOrders(all: boolean = false): Observable<OrderItem[]> {
-    return this.http.get<OrderItem[]>(this.orderUrl, {
-      params: { all: all.toString() },
-    });
+  public getOrders(): Observable<OrderItem[]> {
+    return this.http.get<OrderItem[]>(this.orderUrl);
   }
-
-  // (must be only for manager)
-  // public getUsers(): Observable<OrderItem[]> {
-  //   return this.http.get<OrderItem[]>(this.usersUrl);
-  // }
 
   public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.userUrl);

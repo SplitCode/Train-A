@@ -25,8 +25,8 @@ export class OrderEffects {
   getOrders$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(getOrders),
-      switchMap(({ all }) =>
-        this.orderService.getOrders(all).pipe(
+      switchMap(() =>
+        this.orderService.getOrders().pipe(
           map((orders) => getOrdersSuccess({ orders })),
           catchError((error) => of(getOrdersFailure({ error }))),
         ),

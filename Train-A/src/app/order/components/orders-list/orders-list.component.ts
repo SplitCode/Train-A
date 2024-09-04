@@ -43,7 +43,7 @@ export class OrdersListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(getOrders({ all: true }));
+    this.store.dispatch(getOrders());
     this.orders$ = this.store.select(selectOrders);
 
     this.orders$.subscribe((orders) => {

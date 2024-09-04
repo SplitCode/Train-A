@@ -54,7 +54,7 @@ export interface ScheduleTimeRide {
 }
 
 export interface Segments {
-  occupiedSeats: number[];
+  occupiedSeats?: number[];
   time: string[];
   price: Price[];
 }

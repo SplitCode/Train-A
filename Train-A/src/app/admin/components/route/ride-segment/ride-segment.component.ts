@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Price } from '../../../../redux/states/search.state';
 import { CommonModule } from '@angular/common';
 import { EditCarriageComponent } from '../edit-carriage/edit-carriage.component';
@@ -28,6 +28,12 @@ export class RideSegmentComponent implements OnInit {
     price: Price;
   };
 
+  @Output() segmentUpdated = new EventEmitter<{
+    city: string;
+    time: { departure: string; arrival: string };
+    price: Price;
+  }>();
+
   time: FormGroup;
 
   priceForm: FormGroup;
@@ -55,4 +61,15 @@ export class RideSegmentComponent implements OnInit {
       );
     });
   }
+
+  // onFormSubmit(): void {
+  //   if (this.time.valid && this.priceForm.valid) {
+  //     const updatedSegment = {
+  //       ...this.segment,
+  //       time: this.time.value,
+  //       price: this.priceForm.value,
+  //     };
+  //     this.segmentUpdated.emit(updatedSegment);
+  //   }
+  // }
 }

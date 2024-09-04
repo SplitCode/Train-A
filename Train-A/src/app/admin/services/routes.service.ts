@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { RoutesItem, RoutesItemByPath } from '../models/routes-item.interface';
 import {
   ScheduleTimeRide,
+  Segments,
   SegmentsStation,
 } from '../../redux/states/search.state';
 
@@ -81,5 +82,39 @@ export class RoutesService {
       });
       return acc;
     }, [] as SegmentsStation[]);
+  }
+
+  public deleteRideById(routeId: number, rideId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${routeId}/ride/${rideId}`);
+  }
+
+  public updateRideById(
+    routeId: number,
+    rideId: number,
+    segments: Segments[],
+  ): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${routeId}/ride/${rideId}`, {
+      segments,
+    });
+  }
+
+  public convertSegmentsToBase(
+    segmentsStations: SegmentsStation[],
+  ): Segments[] {
+    return segmentsStations.reduce((acc, segment, index) => {
+      const departure = segment.departure;
+      const arrival = segmentsStations[index + 1]
+        ? segmentsStations[index + 1].arrival
+        : undefined;
+
+      if (segment.price !== undefined) {
+        acc.push({
+          time: [departure as string, arrival as string],
+          price: segment.price,
+        });
+      }
+
+      return acc;
+    }, [] as Segments[]);
   }
 }

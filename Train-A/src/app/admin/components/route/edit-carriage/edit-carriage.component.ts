@@ -40,10 +40,9 @@ import {
 
 //
 export class EditCarriageComponent implements OnInit, ControlValueAccessor {
-  @Input() data!: Price;
+  @Input() data!: { [key: string]: string };
 
   @Input() value: string = '';
-  @Input() formControlName!: string;
 
   @Input() inValidate!: boolean;
 
@@ -53,7 +52,7 @@ export class EditCarriageComponent implements OnInit, ControlValueAccessor {
     this.clickEmitter.emit();
   }
 
-  formGroup!: FormGroup;
+  // formGroup!: FormGroup;
 
   editMode = false;
   // editMode = true;
@@ -78,12 +77,12 @@ export class EditCarriageComponent implements OnInit, ControlValueAccessor {
 
   constructor(private readonly formGroupDirective: FormGroupDirective) {}
 
-  get control() {
-    return this.formGroup?.get(this.formControlName);
-  }
+  // get control() {
+  //   return this.formGroup?.get(this.formControlName);
+  // }
 
   ngOnInit() {
-    this.formGroup = this.formGroupDirective.control;
+    // this.formGroup = this.formGroupDirective.control;
   }
 
   toggleEditMode() {

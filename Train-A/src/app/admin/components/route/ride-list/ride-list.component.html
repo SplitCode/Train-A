@@ -3,7 +3,7 @@
 
   <ul class="list-none p-0">
     <li *ngFor="let item of data.schedule" class="mb-8 p-0">
-      <app-ride-item [data]="item" />
+      <app-ride-item [data]="item" [routeId]="data.id" />
     </li>
   </ul>
 </p-panel>

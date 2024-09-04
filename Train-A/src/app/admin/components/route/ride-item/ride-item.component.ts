@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   Price,
   ScheduleTimeRide,
+  // Segments,
   SegmentsStation,
 } from '../../../../redux/states/search.state';
 import { RideSegmentComponent } from '../ride-segment/ride-segment.component';
@@ -16,6 +17,19 @@ import {
   FormArray,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import {
+  CustomButtonComponent,
+  InputComponent,
+} from '../../../../shared/components';
+import {
+  deleteRideById,
+  // updateRideById,
+} from '../../../../redux/actions/routes.actions';
+import { Store } from '@ngrx/store';
+// import { Route } from '@angular/router';
+import { RoutesService } from '../../../services/routes.service';
+import { EditCarriageComponent } from '../edit-carriage/edit-carriage.component';
+import { EditTimeComponent } from '../edit-time/edit-time.component';
 
 @Component({
   selector: 'app-ride-item',
@@ -27,6 +41,10 @@ import { MessageService } from 'primeng/api';
     CommonModule,
     PRIME_NG_MODULES.FieldsetModule,
     PRIME_NG_MODULES.DialogModule,
+    CustomButtonComponent,
+    EditCarriageComponent,
+    EditTimeComponent,
+    InputComponent,
   ],
   templateUrl: './ride-item.component.html',
   styleUrl: './ride-item.component.scss',
@@ -34,62 +52,27 @@ import { MessageService } from 'primeng/api';
 export class RideItemComponent implements OnInit {
   @Input() data!: ScheduleTimeRide;
 
+  @Input() routeId!: number;
+
   UpdateRideForm!: FormGroup;
 
   public submitted = false;
 
   public isSubmitting = false;
 
+  public editMode: boolean = false;
+
+  public inValidate: boolean = false;
+
   constructor(
     private messageService: MessageService,
     private fb: FormBuilder,
+    private store: Store,
+    private routesService: RoutesService,
   ) {
     this.UpdateRideForm = this.fb.group({
       segments: this.fb.array([]),
     });
-  }
-
-  public onSubmit() {
-    this.submitted = true;
-    // if (this.UpdateRideForm.valid) {
-    //   this.isSubmitting = true;
-    //   this.profileService
-    //     .updateProfileData(this.UpdateRideForm.value)
-    //     .subscribe({
-    //       next: (response) => {
-    //         this.messageService.add({
-    //           severity: 'success',
-    //           summary: 'Success',
-    //           detail: 'User data updated!',
-    //         });
-    //         this.store.dispatch(
-    //           setUserData({
-    //             name: response.name,
-    //             email: response.email,
-    //           }),
-    //         );
-    //       },
-    //       error: (err: ServerError) => {
-    //         this.isSubmitting = false;
-    //         Object.keys(err).forEach((key) => {
-    //           if (key === 'general') {
-    //             this.messageService.add({
-    //               severity: 'error',
-    //               summary: 'Error',
-    //               detail: err[key],
-    //             });
-    //           } else {
-    //             this.UpdateRideForm.get(key)?.setErrors({
-    //               serverError: err[key as keyof ServerError],
-    //             });
-    //           }
-    //         });
-    //       },
-    //       complete: () => {
-    //         this.isSubmitting = false;
-    //       },
-    //     });
-    // }
   }
 
   ngOnInit(): void {
@@ -130,12 +113,50 @@ export class RideItemComponent implements OnInit {
 
   addPriceControls(priceGroup: FormGroup, data: Price[]): void {
     for (const key in data) {
-      const value = data[key];
+      const value: Price = data[key];
       priceGroup.addControl(key, this.fb.control(value, Validators.required));
     }
   }
 
   get segmentsControls() {
     return (this.UpdateRideForm.get('segments') as FormArray)?.controls;
+  }
+
+  getPriceControls(segmentIndex: number) {
+    return (
+      (this.UpdateRideForm.get('segments') as FormArray)?.controls[
+        segmentIndex
+      ].get('price') as FormGroup
+    )?.controls;
+  }
+
+  deleteRide(rideId: number): void {
+    this.store.dispatch(
+      deleteRideById({ routeId: this.routeId, rideId: rideId }),
+    );
+  }
+
+  updateRide(rideId: number): void {
+    const segmentsStations = this.UpdateRideForm.value.segments;
+    console.log(
+      'segmentsStations',
+      rideId,
+      segmentsStations,
+      this.routesService.convertSegmentsToBase(segmentsStations),
+    );
+
+    // this.store.dispatch(
+    //   updateRideById({
+    //     routeId: this.routeId,
+    //     rideId: rideId,
+    //     segmentsByPath: segmentsStations,
+    //   }),
+    // );
+  }
+
+  toggleEditMode() {
+    if (this.inValidate !== true) {
+      this.editMode = !this.editMode;
+    }
   }
 }

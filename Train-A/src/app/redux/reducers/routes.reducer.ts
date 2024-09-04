@@ -6,6 +6,8 @@ import {
   showRouteForm,
   loadRouteByIdSuccess,
   loadRouteByPathSuccess,
+  deleteRideByIdSuccess,
+  updateRideByIdSuccess,
 } from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
@@ -53,6 +55,44 @@ export const reducer = createReducer(
     (state, { routeByPath }): RoutesState => ({
       ...state,
       routeByPath,
+    }),
+  ),
+  on(
+    deleteRideByIdSuccess,
+    (state, { rideId }): RoutesState => ({
+      ...state,
+      route: {
+        ...state.route!,
+        schedule: state.route!.schedule.filter(
+          (schedule) => schedule.rideId !== rideId,
+        ),
+      },
+      routeByPath: {
+        ...state.routeByPath!,
+        schedule: state.routeByPath!.schedule.filter(
+          (schedule) => schedule.rideId !== rideId,
+        ),
+      },
+    }),
+  ),
+  on(
+    updateRideByIdSuccess,
+    (state, { rideId, segmentsByPath, segments }): RoutesState => ({
+      ...state,
+      route: {
+        ...state.route!,
+        schedule: state.route!.schedule.map((schedule) =>
+          schedule.rideId === rideId ? { ...schedule, segments } : schedule,
+        ),
+      },
+      routeByPath: {
+        ...state.routeByPath!,
+        schedule: state.routeByPath!.schedule.map((schedule) =>
+          schedule.rideId === rideId
+            ? { ...schedule, segmentsByPath }
+            : schedule,
+        ),
+      },
     }),
   ),
 );

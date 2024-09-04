@@ -18,11 +18,18 @@ import {
   loadRouteByPathSuccess,
   loadRouteByIdFailure,
   loadRouteByPathFailure,
+  deleteRideByIdSuccess,
+  deleteRideByIdFailure,
+  deleteRideById,
+  updateRideById,
+  updateRideByIdSuccess,
+  updateRideByIdFailure,
 } from '../actions/routes.actions';
 import {
   RoutesItem,
   RoutesItemByPath,
 } from '../../admin/models/routes-item.interface';
+import { Segments } from '../states/search.state';
 
 @Injectable()
 export class RoutesEffects {
@@ -88,14 +95,6 @@ export class RoutesEffects {
       switchMap(({ routeId }) =>
         this.routesService.getRouteById(routeId).pipe(
           switchMap((route: RoutesItem) => {
-            // Сначала записываем данные в store в route
-            // const routeSuccessAction = loadRouteByIdSuccess({ route });
-            // // Затем конвертируем данные и записываем в routeByPath
-            // const routeByPath: RoutesItemByPath =
-            //   this.routesService.convertRoutesItemByPath(route);
-            // const routeByPathSuccessAction = loadRouteByPathSuccess({
-            //   routeByPath,
-            // });
             return of(
               loadRouteByIdSuccess({ route }),
               // routeByPathSuccessAction,
@@ -124,6 +123,46 @@ export class RoutesEffects {
           ),
         ),
       ),
+    );
+  });
+
+  deleteRideById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(deleteRideById),
+      switchMap(({ routeId, rideId }) =>
+        this.routesService.deleteRideById(routeId, rideId).pipe(
+          map(() => deleteRideByIdSuccess({ routeId, rideId })),
+          catchError((error) =>
+            of(deleteRideByIdFailure({ error: error.message })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  updateRideById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateRideById),
+      switchMap(({ routeId, rideId, segmentsByPath }) => {
+        const segments: Segments[] =
+          this.routesService.convertSegmentsToBase(segmentsByPath);
+
+        return this.routesService
+          .updateRideById(routeId, rideId, segments)
+          .pipe(
+            map(() =>
+              updateRideByIdSuccess({
+                routeId,
+                rideId,
+                segmentsByPath,
+                segments,
+              }),
+            ),
+            catchError((error) =>
+              of(updateRideByIdFailure({ error: error.message })),
+            ),
+          );
+      }),
     );
   });
 

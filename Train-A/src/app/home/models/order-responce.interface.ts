@@ -14,7 +14,7 @@ export interface OrderResponse {
 }
 
 export interface SuccessOrderResponse {
-  id: string;
+  id: number;
 }
 
 export interface ErrorOrderResponse {

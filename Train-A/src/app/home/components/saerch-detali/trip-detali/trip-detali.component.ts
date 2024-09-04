@@ -11,9 +11,8 @@ import { RouteModalComponent } from '../../route-modal/route-modal.component';
 import { CarriageTypeTabsComponent } from '../carriage-type-tabs/carriage-type-tabs.component';
 import { BookButtonComponent } from '../book-button/book-button.component';
 import { uprateTrain } from '../../../utilits/update-train';
-import { getOrders } from '../../../../redux/actions/order.actions';
-import { Order } from '../../../models/orders.interface';
 import { selectOrders } from '../../../../redux/selectors/order.selectors';
+import { OrderItem } from '../../../../order/models/order-item.interface';
 
 @Component({
   selector: 'app-trip-detali',
@@ -44,7 +43,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  private orders$: Observable<Order[]>;
+  private orders$: Observable<OrderItem[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -95,7 +94,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     this.writeParamsFromRouter();
     this.loadRideInfo();
     this.updateTrain();
-    this.store.dispatch(getOrders());
+    // this.store.dispatch(getOrders({ all: true }));
     this.orders$.subscribe((orders) => {
       console.log('Orders:', orders);
     });

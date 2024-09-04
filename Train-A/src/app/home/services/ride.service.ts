@@ -28,15 +28,10 @@ export class RideService {
 
   public cancelOrder(orderId: number): Observable<void | ErrorOrderResponse> {
     const url = `${this.orderUrl}/${orderId}`;
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.delete<void | ErrorOrderResponse>(url, { headers });
+    return this.http.delete<void | ErrorOrderResponse>(url);
   }
 
   public getRideInfo(rideId: string): Observable<RideResponse> {
     return this.http.get<RideResponse>(`${this.searchUrl}/${rideId}`);
-  }
-
-  public getOrders(): Observable<[]> {
-    return this.http.get<[]>(this.orderUrl);
   }
 }

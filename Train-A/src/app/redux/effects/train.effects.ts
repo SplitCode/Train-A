@@ -15,7 +15,7 @@ import {
   getOrdersFailure,
   getOrdersSuccess,
 } from '../actions/order.actions';
-import { RideService } from '../../home/services/ride.service';
+import { OrderService } from '../../order/services/order.service';
 
 @Injectable()
 export class TrainEffects {
@@ -23,7 +23,7 @@ export class TrainEffects {
 
   private store = inject(Store);
 
-  private rideService = inject(RideService);
+  private orderService = inject(OrderService);
 
   updateTrainArray$ = createEffect(() => {
     return this.actions$.pipe(
@@ -65,7 +65,7 @@ export class TrainEffects {
     return this.actions$.pipe(
       ofType(getOrders),
       mergeMap(() =>
-        this.rideService.getOrders().pipe(
+        this.orderService.getOrders().pipe(
           map((orders) => getOrdersSuccess({ orders })),
           catchError((error) => of(getOrdersFailure({ error }))),
         ),

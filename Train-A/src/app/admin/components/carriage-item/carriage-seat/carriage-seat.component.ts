@@ -11,13 +11,13 @@ import { CarriageSeatConfig, SeatStatus } from './carriage-seat.config';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
-import { createBook } from '../../../../redux/actions/order.actions';
 import { Store } from '@ngrx/store';
 import { OrderRequest } from '../../../../home/models/order-responce.interface';
 import {
   selectBook,
   selectOccupiedSeatsByRideId,
 } from '../../../../redux/selectors/order.selectors';
+import { createBook } from '../../../../redux/actions/ride.actions';
 
 @Component({
   selector: 'app-carriage-seat',

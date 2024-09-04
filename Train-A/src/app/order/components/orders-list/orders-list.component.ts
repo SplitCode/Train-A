@@ -12,11 +12,7 @@ import {
 } from '../../../redux/selectors/order.selectors';
 import { CustomButtonComponent } from '../../../shared/components';
 import { ModalInfo } from '../../../redux/states/order.state';
-import {
-  cancelOrder,
-  getOrders,
-  orderModal,
-} from '../../../redux/actions/order.actions';
+import { cancelOrder, orderModal } from '../../../redux/actions/order.actions';
 
 @Component({
   selector: 'app-orders-list',
@@ -44,7 +40,7 @@ export class OrdersListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(getOrders());
+    // this.store.dispatch(getOrders({ all: true }));
     this.orders$ = this.store.select(selectOrders);
 
     this.orders$.subscribe((orders) => {

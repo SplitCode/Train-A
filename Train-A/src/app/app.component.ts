@@ -11,7 +11,7 @@ import { loadCarriages } from './redux/actions/carriage.actions';
 import { loadStations } from './redux/actions/stations.actions';
 import { loadRoutes } from './redux/actions/routes.actions';
 // import { getAllOrders, getOrders } from './redux/actions/order.actions';
-import { getOrders } from './redux/actions/order.actions';
+// import { getOrders } from './redux/actions/order.actions';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
     this.dispatchCarriages();
     this.dispatchStations();
     this.dispatchRoutes();
-    this.dispatchOrders();
+    // this.dispatchOrders();
   }
 
   private dispatchCarriages(): void {
@@ -53,7 +53,7 @@ export class AppComponent implements OnInit {
     this.store.dispatch(loadStations());
   }
 
-  private dispatchOrders(): void {
-    this.store.dispatch(getOrders({ all: true }));
-  }
+  // private dispatchOrders(): void {
+  //   this.store.dispatch(getOrders({ all: true }));
+  // }
 }

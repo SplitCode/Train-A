@@ -13,6 +13,7 @@ import { BookButtonComponent } from '../book-button/book-button.component';
 import { uprateTrain } from '../../../utilits/update-train';
 import { selectOrders } from '../../../../redux/selectors/order.selectors';
 import { OrderItem } from '../../../../order/models/order-item.interface';
+import { getOrders } from '../../../../redux/actions/order.actions';
 
 @Component({
   selector: 'app-trip-detali',
@@ -94,7 +95,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
     this.writeParamsFromRouter();
     this.loadRideInfo();
     this.updateTrain();
-    // this.store.dispatch(getOrders({ all: true }));
+    this.store.dispatch(getOrders({ all: true }));
     this.orders$.subscribe((orders) => {
       console.log('Orders:', orders);
     });

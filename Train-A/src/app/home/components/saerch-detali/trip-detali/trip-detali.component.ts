@@ -88,6 +88,7 @@ export class TripDetailComponent implements OnInit, OnDestroy {
 
   public isDialog(isShow: boolean) {
     this.isVisiblePath = isShow;
+    console.log(isShow);
   }
 
   public ngOnInit() {

@@ -4,6 +4,7 @@ import { OrderRequest } from '../../home/models/order-responce.interface';
 import { Order } from '../../home/models/orders.interface';
 
 export const selectOrderState = createFeatureSelector<OrderState>('orderState');
+
 export const selectOrders = createSelector(
   selectOrderState,
   (state: OrderState): Order[] | [] => {
@@ -38,4 +39,9 @@ export const selectOrderError = createSelector(
 export const selectOrderLoading = createSelector(
   selectOrderState,
   (state: OrderState) => state.loading,
+);
+
+export const selectModalInfo = createSelector(
+  selectOrderState,
+  (state: OrderState) => state.modalInfo,
 );

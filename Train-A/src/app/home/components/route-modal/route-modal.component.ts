@@ -108,9 +108,13 @@ export class RouteModalComponent implements OnInit, AfterViewChecked {
     return forkJoin(stationObservables).pipe(
       map((stationCities) => {
         const timelineEvents: TimelineEvent[] = [];
-
+        let segment;
         filteredPath.forEach((stationId, index) => {
-          const segment = rideInfo.schedule.segments[startIndex + index];
+          if (filteredPath.length - 1 === index) {
+            segment = rideInfo.schedule.segments[startIndex + 1];
+          } else {
+            segment = rideInfo.schedule.segments[startIndex + index];
+          }
           const prevSegment =
             rideInfo.schedule.segments[startIndex + index - 1];
           const timeDifference =
@@ -168,6 +172,7 @@ export class RouteModalComponent implements OnInit, AfterViewChecked {
 
   public isDialog(isShow: boolean) {
     this.config.isVisiblePath = isShow;
+    console.log(this.config.isVisiblePath);
 
     this.store.dispatch(
       loadModalInfo({

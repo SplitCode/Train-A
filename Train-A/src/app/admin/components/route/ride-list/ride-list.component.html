@@ -1,0 +1,9 @@
+<p-panel class="mt-3 p-4 max-w-fit" [header]="'Route ' + data.id">
+  <ng-content #name></ng-content>
+
+  <ul class="list-none p-0">
+    <li *ngFor="let item of data.schedule" class="mb-8 p-0">
+      <app-ride-item [data]="item" [routeId]="data.id" />
+    </li>
+  </ul>
+</p-panel>

@@ -1,0 +1,13 @@
+<div class="flex gap-10 py-5 border-solid border-0 border-t border-purple-400">
+  <div class="w-1/5">
+    {{ segment.city }}
+  </div>
+  <div class="flex-1">
+    <app-edit-time [time]="segment.time" [formGroup]="time" />
+  </div>
+  <div class="w-1/4">
+    <div *ngIf="segment?.price" [formGroup]="priceForm">
+      <app-edit-carriage [data]="segment.price" />
+    </div>
+  </div>
+</div>

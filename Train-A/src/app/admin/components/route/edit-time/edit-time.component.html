@@ -1,0 +1,63 @@
+<div class="flex gap-2">
+  <div class="grow">
+    <div class=" " *ngIf="time.departure !== null">
+      <label [for]="time.departure" class="block mb-4">Departure</label>
+
+      <!-- formControlName="departure" -->
+
+      <app-input
+        *ngIf="editMode"
+        formControlName="departure"
+        [placeholder]="'Date'"
+        class="grow"
+      >
+        <ng-content #name></ng-content>
+      </app-input>
+      <div
+        *ngIf="!editMode"
+        class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
+      >
+        {{ time.departure | date: "yyyy-MM-dd h:mm a" }}
+      </div>
+    </div>
+
+    <div class=" " *ngIf="time.arrival !== null">
+      <label [for]="time.arrival" class="block mb-4">Arrival</label>
+
+      <!-- formControlName="arrival" -->
+
+      <app-input
+        formControlName="arrival"
+        *ngIf="editMode"
+        [placeholder]="'Date'"
+        class="grow"
+      >
+        <ng-content #name></ng-content>
+      </app-input>
+      <div
+        *ngIf="!editMode"
+        class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
+      >
+        {{ time.arrival | date: "yyyy-MM-dd h:mm a" }}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <app-custom-button
+      *ngIf="editMode"
+      [config]="{
+        icon: 'pi pi-save',
+        type: 'submit',
+      }"
+      (clickEmitter)="toggleEditMode()"
+    />
+    <app-custom-button
+      *ngIf="!editMode"
+      [config]="{
+        icon: 'pi pi-pencil',
+      }"
+      (clickEmitter)="toggleEditMode()"
+    />
+  </div>
+</div>

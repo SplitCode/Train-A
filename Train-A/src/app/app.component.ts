@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { loadCarriages } from './redux/actions/carriage.actions';
 import { loadStations } from './redux/actions/stations.actions';
 import { loadRoutes } from './redux/actions/routes.actions';
+// import { getAllOrders, getOrders } from './redux/actions/order.actions';
 import { getOrders } from './redux/actions/order.actions';
 
 @Component({
@@ -54,5 +55,6 @@ export class AppComponent implements OnInit {
 
   private dispatchOrders(): void {
     this.store.dispatch(getOrders());
+    // this.store.dispatch(getAllOrders({ all: true }));
   }
 }

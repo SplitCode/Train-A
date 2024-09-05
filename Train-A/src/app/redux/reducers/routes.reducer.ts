@@ -15,7 +15,6 @@ import {
   deleteRideByIdSuccess,
   updateRideByIdSuccess,
   updateRouteSuccess,
-  showRideForm,
 } from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
@@ -156,21 +155,6 @@ export const reducer = createReducer(
             : schedule,
         ),
       },
-    }),
-  ),
-  on(
-    showRideForm,
-    (state, {}): RoutesState => ({
-      ...state,
-      rideFormVisible: true,
-    }),
-  ),
-
-  on(
-    hideRouteForm,
-    (state): RoutesState => ({
-      ...state,
-      rideFormVisible: false,
     }),
   ),
 );

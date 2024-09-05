@@ -5,7 +5,7 @@
     label: 'Create Ride',
     styleClass: 'my-2',
     icon: 'pi pi-file-plus',
-    disabled: (formVisible$ | async) || false,
+    disabled: showForm,
   }"
 />
 
@@ -13,7 +13,7 @@
   class="route-container mt-10"
   [formGroup]="CreateRideForm"
   (ngSubmit)="createRide()"
-  *ngIf="formVisible$ | async"
+  *ngIf="showForm"
 >
   <div class="route">
     <div class="flex justify-end gap-2"></div>

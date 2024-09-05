@@ -41,8 +41,3 @@ export const selectModalInfo = createSelector(
   selectRoutesState,
   (state: RoutesState) => state.modalInfo,
 );
-
-export const selectRideFormVisibility = createSelector(
-  selectRoutesState,
-  (state: RoutesState) => state.rideFormVisible,
-);

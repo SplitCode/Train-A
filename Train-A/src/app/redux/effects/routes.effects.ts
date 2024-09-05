@@ -27,7 +27,6 @@ import {
   updateRouteSuccess,
   updateRouteFailure,
   createRide,
-  hideRouteForm,
 } from '../actions/routes.actions';
 import {
   RoutesItem,
@@ -240,7 +239,6 @@ export class RoutesEffects {
             });
           }),
           map(() => loadRouteById({ routeId })),
-          map(() => hideRouteForm()),
           catchError((error) => {
             this.messageService.add({
               severity: 'error',

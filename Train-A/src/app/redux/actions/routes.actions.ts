@@ -154,10 +154,6 @@ export const updateRideByIdFailure = createAction(
   props<{ error: string }>(),
 );
 
-export const showRideForm = createAction('[Ride List] Show  Ride Form');
-
-export const hideRideForm = createAction('[Ride List] Hide Ride Form');
-
 export const hideRouteForm = createAction('[Route] Hide Route Form');
 
 export const routeModal = createAction(

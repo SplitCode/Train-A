@@ -6,6 +6,7 @@ import {
 export interface RoutesState {
   routes: RoutesItem[];
   formVisible: boolean;
+  rideFormVisible: boolean;
   mode: 'create' | 'update';
   route: RoutesItem | null;
   routeByPath: RoutesItemByPath | null;
@@ -17,6 +18,7 @@ export interface RoutesState {
 export const initialRoutesState: RoutesState = {
   routes: [],
   formVisible: false,
+  rideFormVisible: false,
   mode: 'create',
   route: null,
   routeByPath: null,

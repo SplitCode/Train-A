@@ -18,7 +18,12 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { CustomButtonComponent } from '../../../../shared/components';
-import { createRide } from '../../../../redux/actions/routes.actions';
+import {
+  createRide,
+  showRideForm,
+} from '../../../../redux/actions/routes.actions';
+import { Observable } from 'rxjs';
+import { selectRideFormVisibility } from '../../../../redux/selectors/routes.selectors';
 
 @Component({
   selector: 'app-ride-form',
@@ -44,6 +49,8 @@ export class RideFormComponent implements OnInit {
   @Input() route!: number;
 
   @Input() showForm: boolean = false;
+
+  public formVisible$: Observable<boolean>;
   // @Input() showForm: boolean = true;
 
   CreateRideForm!: FormGroup;
@@ -63,71 +70,24 @@ export class RideFormComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store,
     private routesService: RoutesService,
-  ) {}
+  ) {
+    this.formVisible$ = this.store.select(selectRideFormVisibility);
+  }
 
   ngOnInit(): void {
-    // this.CreateRideForm = this.fb.group({
-    //   segments: new FormArray(
-    //     this.data.segments.map((segment) =>
-    //       this.fb.group({
-    //         city: [segment.city, Validators.required],
-    //         arrival:
-    //           segment.arrival !== null ? ['', Validators.required] : null,
-    //         departure: segment.departure ? ['', Validators.required] : null,
-    //         price: segment.price
-    //           ? this.fb.group({
-    //               ...Object.keys(segment.price || {}).reduce(
-    //                 (acc: { [key: string]: FormControl }, key: string) => {
-    //                   acc[key] = this.fb.control('', Validators.required);
-    //                   return acc;
-    //                 },
-    //                 {},
-    //               ),
-    //             })
-    //           : null,
-    //       }),
-    //     ),
-    //   ),
-    // });
-
     this.CreateRideForm = this.fb.group({
       segments: new FormArray(
         this.data.segments.map((segment) =>
           this.fb.group({
             city: [segment.city, Validators.required],
             arrival:
-              segment.arrival !== null
-                ? [
-                    segment.arrival
-                      ? new Date(segment.arrival)
-                      : segment.arrival,
-                    Validators.required,
-                  ]
-                : null,
-            departure: segment.departure
-              ? [
-                  segment.departure
-                    ? new Date(segment.departure)
-                    : segment.departure,
-                  Validators.required,
-                ]
-              : null,
+              segment.arrival !== null ? ['', Validators.required] : null,
+            departure: segment.departure ? ['', Validators.required] : null,
             price: segment.price
               ? this.fb.group({
                   ...Object.keys(segment.price || {}).reduce(
-                    (
-                      acc: { [key: string]: FormControl },
-                      key: string,
-                      index,
-                    ) => {
-                      const priceArray = segment.price
-                        ? Object.values(segment.price)
-                        : [];
-                      const carriage = segment.price ? priceArray[index] : 0;
-                      acc[key] = this.fb.control(
-                        +carriage,
-                        Validators.required,
-                      );
+                    (acc: { [key: string]: FormControl }, key: string) => {
+                      acc[key] = this.fb.control('', Validators.required);
                       return acc;
                     },
                     {},
@@ -138,6 +98,55 @@ export class RideFormComponent implements OnInit {
         ),
       ),
     });
+
+    // this.CreateRideForm = this.fb.group({
+    //   segments: new FormArray(
+    //     this.data.segments.map((segment) =>
+    //       this.fb.group({
+    //         city: [segment.city, Validators.required],
+    //         arrival:
+    //           segment.arrival !== null
+    //             ? [
+    //                 segment.arrival
+    //                   ? new Date(segment.arrival)
+    //                   : segment.arrival,
+    //                 Validators.required,
+    //               ]
+    //             : null,
+    //         departure: segment.departure
+    //           ? [
+    //               segment.departure
+    //                 ? new Date(segment.departure)
+    //                 : segment.departure,
+    //               Validators.required,
+    //             ]
+    //           : null,
+    //         price: segment.price
+    //           ? this.fb.group({
+    //               ...Object.keys(segment.price || {}).reduce(
+    //                 (
+    //                   acc: { [key: string]: FormControl },
+    //                   key: string,
+    //                   index,
+    //                 ) => {
+    //                   const priceArray = segment.price
+    //                     ? Object.values(segment.price)
+    //                     : [];
+    //                   const carriage = segment.price ? priceArray[index] : 0;
+    //                   acc[key] = this.fb.control(
+    //                     +carriage,
+    //                     Validators.required,
+    //                   );
+    //                   return acc;
+    //                 },
+    //                 {},
+    //               ),
+    //             })
+    //           : null,
+    //       }),
+    //     ),
+    //   ),
+    // });
   }
 
   get segments() {
@@ -210,6 +219,7 @@ export class RideFormComponent implements OnInit {
   }
 
   setShowForm(): void {
-    this.showForm = true;
+    // this.showForm = true;
+    this.store.dispatch(showRideForm());
   }
 }

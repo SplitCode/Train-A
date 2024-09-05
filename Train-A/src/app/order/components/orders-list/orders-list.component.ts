@@ -1,3 +1,4 @@
+/* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
 import { Component, OnInit } from '@angular/core';
 import { OrderItem } from '../../models/order-item.interface';
 import { Observable } from 'rxjs';
@@ -56,13 +57,11 @@ export class OrdersListComponent implements OnInit {
   }
 
   public cancelOrder(): void {
-    console.log(
-      'Attempting to cancel order:',
-      this.localModalInfo.orderInfo.id,
-    );
     this.store.dispatch(
       cancelOrder({ orderId: this.localModalInfo.orderInfo.id }),
     );
+
+    this.store.dispatch(getOrders({ all: true }));
   }
 
   public closeModal() {

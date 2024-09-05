@@ -40,7 +40,7 @@ export class RoutesService {
     return this.http.put<RoutesItem>(`${this.apiUrl}/${id}`, body);
   }
 
-  getRouteById(id: string): Observable<RoutesItem> {
+  getRouteById(id: number): Observable<RoutesItem> {
     return this.http.get<RoutesItem>(`${this.apiUrl}/${id}`);
   }
 
@@ -123,6 +123,7 @@ export class RoutesService {
           : undefined;
         const departure = segment.departure;
         const price: Price[] = segment.price as Price[];
+
         acc.push({
           time: [
             `${this.formatDateStringToISO(departure as string)}`,

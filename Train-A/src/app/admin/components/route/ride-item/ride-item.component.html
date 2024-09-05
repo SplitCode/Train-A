@@ -183,9 +183,7 @@
                           class="form-group mb-4 grow-1"
                           *ngIf="checkIfEditMode(i)"
                         >
-                          <input
-                            pInputText
-                            type="text"
+                          <p-inputNumber
                             class="w-full"
                             [id]="priceControl.key + i"
                             [formControlName]="priceControl.key"

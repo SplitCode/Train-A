@@ -23,7 +23,6 @@ import {
   deleteRideByIdFailure,
   deleteRideById,
   updateRideById,
-  updateRideByIdSuccess,
   updateRideByIdFailure,
   updateRouteSuccess,
   updateRouteFailure,
@@ -177,6 +176,13 @@ export class RoutesEffects {
       switchMap(({ routeId, rideId }) =>
         this.routesService.deleteRideById(routeId, rideId).pipe(
           map(() => deleteRideByIdSuccess({ routeId, rideId })),
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'The ride has been successfully deleted!',
+            });
+          }),
           catchError((error) =>
             of(deleteRideByIdFailure({ error: error.message })),
           ),
@@ -195,14 +201,14 @@ export class RoutesEffects {
         return this.routesService
           .updateRideById(routeId, rideId, segments)
           .pipe(
-            map(() =>
-              updateRideByIdSuccess({
-                routeId,
-                rideId,
-                segmentsByPath,
-                segments,
-              }),
-            ),
+            tap(() => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'The ride has been successfully updated!',
+              });
+            }),
+            map(() => loadRouteById({ routeId })),
             catchError((error) =>
               of(updateRideByIdFailure({ error: error.message })),
             ),

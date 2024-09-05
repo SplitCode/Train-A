@@ -29,6 +29,7 @@ import { EditCarriageComponent } from '../edit-carriage/edit-carriage.component'
 import { EditTimeComponent } from '../edit-time/edit-time.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-ride-item',
@@ -44,6 +45,7 @@ import { CalendarModule } from 'primeng/calendar';
     EditTimeComponent,
     InputTextModule,
     CalendarModule,
+    InputNumberModule,
   ],
   templateUrl: './ride-item.component.html',
   styleUrl: './ride-item.component.scss',
@@ -94,7 +96,7 @@ export class RideItemComponent implements OnInit {
                   const priceArray = segment.price
                     ? Object.values(segment.price)
                     : [];
-                  const carriage = segment.price ? priceArray[index] : '';
+                  const carriage = segment.price ? priceArray[index] : 0;
                   acc[key] = this.fb.control(+carriage, Validators.required);
                   return acc;
                 },
@@ -132,19 +134,11 @@ export class RideItemComponent implements OnInit {
   }
 
   updateRide(rideId: number): void {
-    const segmentsStations = this.UpdateRideForm.value.segments;
-
-    console.log('segmentsStations', segmentsStations);
-    console.log(
-      'segmentsStations',
-      this.routesService.convertSegmentsToBase(segmentsStations),
-    );
-
     this.store.dispatch(
       updateRideById({
         routeId: this.routeId,
         rideId: rideId,
-        segmentsByPath: segmentsStations,
+        segmentsByPath: this.UpdateRideForm.value.segments,
       }),
     );
   }

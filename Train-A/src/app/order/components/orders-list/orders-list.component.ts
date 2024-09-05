@@ -8,16 +8,13 @@ import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
 import { Store } from '@ngrx/store';
 import {
   selectModalInfo,
-  selectOrders,
+  // selectOrders,
 } from '../../../redux/selectors/order.selectors';
 import { CustomButtonComponent } from '../../../shared/components';
 import { ModalInfo } from '../../../redux/states/order.state';
-import {
-  cancelOrder,
-  getOrders,
-  orderModal,
-} from '../../../redux/actions/order.actions';
+import { cancelOrder, orderModal } from '../../../redux/actions/order.actions';
 import { selectIsManager } from '../../../redux/selectors/user.selectors';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-orders-list',
@@ -42,22 +39,24 @@ export class OrdersListComponent implements OnInit {
 
   private isManager$: Observable<boolean>;
 
-  constructor(private store: Store) {
+  private isManager: boolean = false;
+
+  constructor(
+    private store: Store,
+    private orderService: OrderService,
+  ) {
     this.modalInfo$ = this.store.select(selectModalInfo);
     this.isManager$ = this.store.select(selectIsManager);
   }
 
   ngOnInit() {
-    // this.store.dispatch(getOrders({ all: true }));
-    this.orders$ = this.store.select(selectOrders);
-
-    // this.store.dispatch(getOrders({ all: true }));
     this.isManager$.subscribe((isManager) => {
-      if (isManager) {
-        console.log(isManager);
-        // } else {
-        this.store.dispatch(getOrders({ all: isManager }));
-      }
+      this.isManager = isManager;
+      this.orders$ = this.orderService.getOrders(isManager);
+    });
+
+    this.modalInfo$.forEach((item) => {
+      this.localModalInfo = { ...item };
     });
 
     this.orders$.subscribe((orders) => {
@@ -74,7 +73,7 @@ export class OrdersListComponent implements OnInit {
       cancelOrder({ orderId: this.localModalInfo.orderInfo.id }),
     );
 
-    this.store.dispatch(getOrders({ all: true }));
+    this.orders$ = this.orderService.getOrders(this.isManager);
   }
 
   public closeModal() {

@@ -9,7 +9,6 @@ import { Store } from '@ngrx/store';
 import {
   selectModalInfo,
   selectOrders,
-  // selectOrders,
 } from '../../../redux/selectors/order.selectors';
 import { CustomButtonComponent } from '../../../shared/components';
 import { ModalInfo } from '../../../redux/states/order.state';
@@ -59,16 +58,11 @@ export class OrdersListComponent implements OnInit {
 
     this.isManager$.subscribe((isManager) => {
       this.isManager = isManager;
-      // this.orders$ =
     });
-    this.store.dispatch(getOrders({ all: true }));
+    this.store.dispatch(getOrders({ all: this.isManager }));
 
     this.modalInfo$.forEach((item) => {
       this.localModalInfo = { ...item };
-    });
-
-    this.orders$.subscribe((orders) => {
-      console.log('Updated orders:', orders);
     });
 
     this.modalInfo$.forEach((item) => {
@@ -81,7 +75,7 @@ export class OrdersListComponent implements OnInit {
       cancelOrder({ orderId: this.localModalInfo.orderInfo.id }),
     );
 
-    this.orders$ = this.orderService.getOrders(this.isManager);
+    this.store.dispatch(getOrders({ all: this.isManager }));
   }
 
   public closeModal() {

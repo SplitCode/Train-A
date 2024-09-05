@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { loadCarriages } from './redux/actions/carriage.actions';
 import { loadStations } from './redux/actions/stations.actions';
 import { loadRoutes } from './redux/actions/routes.actions';
-// import { getAllOrders, getOrders } from './redux/actions/order.actions';
 import { getOrders } from './redux/actions/order.actions';
 
 @Component({

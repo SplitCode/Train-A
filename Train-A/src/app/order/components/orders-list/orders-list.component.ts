@@ -1,4 +1,5 @@
 /* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
+/* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
 import { Component, OnInit } from '@angular/core';
 import { OrderItem } from '../../models/order-item.interface';
 import { Observable } from 'rxjs';
@@ -17,6 +18,8 @@ import {
   getOrders,
   orderModal,
 } from '../../../redux/actions/order.actions';
+import { selectIsManager } from '../../../redux/selectors/user.selectors';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-orders-list',
@@ -39,16 +42,28 @@ export class OrdersListComponent implements OnInit {
 
   public localModalInfo!: ModalInfo;
 
-  constructor(private store: Store) {
+  private isManager$: Observable<boolean>;
+
+  private isManager: boolean = false;
+
+  constructor(
+    private store: Store,
+    private orderService: OrderService,
+  ) {
     this.modalInfo$ = this.store.select(selectModalInfo);
+    this.isManager$ = this.store.select(selectIsManager);
   }
 
   ngOnInit() {
-    this.store.dispatch(getOrders({ all: true }));
     this.orders$ = this.store.select(selectOrders);
 
-    this.orders$.subscribe((orders) => {
-      console.log('Updated orders:', orders);
+    this.isManager$.subscribe((isManager) => {
+      this.isManager = isManager;
+    });
+    this.store.dispatch(getOrders({ all: this.isManager }));
+
+    this.modalInfo$.forEach((item) => {
+      this.localModalInfo = { ...item };
     });
 
     this.modalInfo$.forEach((item) => {
@@ -61,7 +76,7 @@ export class OrdersListComponent implements OnInit {
       cancelOrder({ orderId: this.localModalInfo.orderInfo.id }),
     );
 
-    this.store.dispatch(getOrders({ all: true }));
+    this.store.dispatch(getOrders({ all: this.isManager }));
   }
 
   public closeModal() {

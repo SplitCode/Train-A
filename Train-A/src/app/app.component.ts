@@ -53,6 +53,6 @@ export class AppComponent implements OnInit {
   }
 
   private dispatchOrders(): void {
-    this.store.dispatch(getOrders({ all: true }));
+    this.store.dispatch(getOrders({ all: false }));
   }
 }

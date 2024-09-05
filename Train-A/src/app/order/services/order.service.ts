@@ -22,6 +22,11 @@ export class OrderService {
     });
   }
 
+  // public getOrders(all: boolean = false): Observable<OrderItem[]> {
+  //   console.log(all);
+  //   return this.http.get<OrderItem[]>(this.orderUrl + `?all=${all}`);
+  // }
+
   // (must be only for manager)
   // public getUsers(): Observable<OrderItem[]> {
   //   return this.http.get<OrderItem[]>(this.usersUrl);

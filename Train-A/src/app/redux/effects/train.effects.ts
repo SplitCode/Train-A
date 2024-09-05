@@ -2,7 +2,13 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import {
+  catchError,
+  map,
+  // mergeMap,
+  of,
+  switchMap,
+} from 'rxjs';
 
 import {
   updateTrainArray,
@@ -64,8 +70,8 @@ export class TrainEffects {
   getOrders$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(getOrders),
-      mergeMap(() =>
-        this.orderService.getOrders().pipe(
+      switchMap(({ all }) =>
+        this.orderService.getOrders(all).pipe(
           map((orders) => getOrdersSuccess({ orders })),
           catchError((error) => of(getOrdersFailure({ error }))),
         ),

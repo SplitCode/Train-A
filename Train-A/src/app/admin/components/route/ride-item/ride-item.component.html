@@ -36,10 +36,10 @@
           }"
         />
       </div>
-      <div class="flex gap-3 mb-2 pb-2">
-        <div class="w-1/5">City</div>
-        <div class="flex-1">Time</div>
-        <div class="w-1/4">Price</div>
+      <div class="hidden lg:flex gap-3 mb-2 pb-2">
+        <div class="lg:w-1/5">City</div>
+        <div class="lg:flex-1">Time</div>
+        <div class="w-1/3">Price</div>
       </div>
       <ng-container formArrayName="segments">
         <!-- <app-ride-segment
@@ -51,11 +51,12 @@
         <!-- (segmentUpdated)="onSegmentUpdated($event, i)" -->
 
         <div
-          class="flex gap-10 py-5 border-solid border-0 border-t border-purple-400"
+          class="flex lg:flex-nowrap flex-wrap gap-10 py-5 border-solid border-0 border-t border-purple-400"
           *ngFor="let segment of segments.controls; let i = index"
         >
           <ng-container [formGroupName]="i">
-            <div class="w-1/5">
+            <div class="lg:w-1/5 w-full">
+              <div class="mb-2 lg:hidden">City</div>
               {{ segment.value.city }}
             </div>
             <div class="flex-1">
@@ -165,18 +166,20 @@
               </div>
             </div>
 
-            <div class="w-1/4">
+            <div class="lg:w-1/3 w-full">
               <div *ngIf="segment.get('price') as price">
                 <div class="flex gap-2" formGroupName="price">
-                  <div class="grow">
+                  <div class="">
                     <div
                       *ngFor="
                         let priceControl of getPriceControls(i).controls
                           | keyvalue
                       "
                     >
-                      <div class="flex items-center gap-2">
-                        <label [for]="priceControl.key + i" class="block mb-4"
+                      <div class="flex gap-2">
+                        <label
+                          [for]="priceControl.key + i"
+                          class="block mb-4 mt-18"
                           >{{ priceControl.key }}:</label
                         >
                         <div

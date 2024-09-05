@@ -44,6 +44,7 @@ export class RideFormComponent implements OnInit {
   @Input() route!: number;
 
   @Input() showForm: boolean = false;
+  // @Input() showForm: boolean = true;
 
   CreateRideForm!: FormGroup;
 
@@ -206,5 +207,9 @@ export class RideFormComponent implements OnInit {
         segmentsByPath: this.CreateRideForm.value.segments,
       }),
     );
+  }
+
+  setShowForm(): void {
+    this.showForm = true;
   }
 }

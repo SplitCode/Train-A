@@ -1,9 +1,20 @@
+<app-custom-button
+  (click)="setShowForm()"
+  class="btn btn-primary mb-4 ms-10"
+  [config]="{
+    label: 'Create Ride',
+    styleClass: 'my-2',
+    icon: 'pi pi-file-plus',
+    disabled: showForm,
+  }"
+/>
+
 <form
   class="route-container mt-10"
   [formGroup]="CreateRideForm"
   (ngSubmit)="createRide()"
+  *ngIf="showForm"
 >
-  <!-- *ngIf="showForm" -->
   <div class="route">
     <div class="flex justify-end gap-2"></div>
     <p-fieldset [legend]="'Create Ride '">
@@ -165,11 +176,10 @@
     [config]="{
       type: 'submit',
 
-      outlined: true,
       label: 'Create',
       styleClass: 'my-2 ml-auto w-full',
       icon: 'pi pi-plus',
+      disabled: CreateRideForm.valid,
     }"
   />
-  <!-- disabled: !CreateRideForm.valid, -->
 </form>

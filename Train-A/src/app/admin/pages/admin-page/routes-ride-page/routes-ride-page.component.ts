@@ -67,8 +67,4 @@ export class RoutesRidePageComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
-
-  showForm(): void {
-    this.showRideForm = true;
-  }
 }

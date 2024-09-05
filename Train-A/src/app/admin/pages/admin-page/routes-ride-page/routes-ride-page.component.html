@@ -9,5 +9,15 @@
         icon: 'pi pi-arrow-left',
       }"
     />
+
+    <app-custom-button
+      (click)="goBack()"
+      class="btn btn-primary mb-4 ms-10"
+      [config]="{
+        label: 'Create Ride',
+        styleClass: 'my-2',
+        icon: 'pi pi-file-plus',
+      }"
+    />
   </app-ride-list>
 </div>

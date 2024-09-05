@@ -49,7 +49,9 @@
         *ngIf="submitted && signInForm.get('password')?.errors"
         class="font-extralight text-red-500 mt-1"
       >
-        <small *ngIf="signInForm.get('password')?.hasError('whitespace')"
+        <small
+          class="block"
+          *ngIf="signInForm.get('password')?.hasError('whitespace')"
           >Required</small
         >
         <small *ngIf="signInForm.get('password')?.hasError('minlength')"

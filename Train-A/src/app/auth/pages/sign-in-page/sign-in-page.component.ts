@@ -54,7 +54,7 @@ export class SignInPageComponent {
           Validators.pattern(/^[\w\d_]+@[\w\d_]+\.\w{2,7}$/),
         ],
       ],
-      password: ['', [noWhitespaceValidator()]],
+      password: ['', [Validators.minLength(8), noWhitespaceValidator()]],
     });
 
     this.signInForm.get('email')?.valueChanges.subscribe(() => {

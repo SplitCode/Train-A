@@ -99,6 +99,12 @@ export class RoutesService {
     });
   }
 
+  public createRide(routeId: number, segments: Segments[]): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${routeId}/ride`, {
+      segments,
+    });
+  }
+
   public formatDateStringToISO(dateString: string): string {
     const date = new Date(dateString);
 

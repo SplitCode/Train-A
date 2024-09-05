@@ -16,15 +16,23 @@ import {
 import { RideListComponent } from '../../../components/route/ride-list/ride-list.component';
 // import { RoutesService } from '../../../services/routes.service';
 import { CustomButtonComponent } from '../../../../shared/components';
+import { RideFormComponent } from '../../../components/route/ride-form/ride-form.component';
 
 @Component({
   selector: 'app-routes-ride-page',
   standalone: true,
-  imports: [RideListComponent, CommonModule, CustomButtonComponent],
+  imports: [
+    RideListComponent,
+    CommonModule,
+    CustomButtonComponent,
+    RideFormComponent,
+  ],
   templateUrl: './routes-ride-page.component.html',
 })
 export class RoutesRidePageComponent implements OnInit {
   id: string = '';
+
+  showRideForm: boolean = false;
 
   public route$: Observable<RoutesItem>;
 
@@ -58,5 +66,9 @@ export class RoutesRidePageComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  showForm(): void {
+    this.showRideForm = true;
   }
 }

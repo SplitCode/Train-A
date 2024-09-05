@@ -37,11 +37,6 @@ export class RoutesRidePageComponent implements OnInit {
   ) {
     this.id = this.route.snapshot.paramMap.get('id') as string;
 
-    this.route$ = this.store.select(selectRoute) as Observable<RoutesItem>;
-
-    this.routeByPath$ = this.store.select(
-      selectRouteByPath,
-    ) as Observable<RoutesItemByPath>;
     // this.routeByPath$ = this.store.select(
     //   selectRouteByPath,
     // ) as Observable<RoutesItemByPath>;
@@ -50,10 +45,15 @@ export class RoutesRidePageComponent implements OnInit {
     //   'routeByPath$',
     //   this.routesService.convertRoutesItemByPath(this.route$  );
     // );
+    this.route$ = this.store.select(selectRoute) as Observable<RoutesItem>;
+
+    this.routeByPath$ = this.store.select(
+      selectRouteByPath,
+    ) as Observable<RoutesItemByPath>;
   }
 
   ngOnInit(): void {
-    this.store.dispatch(loadRouteById({ routeId: this.id }));
+    this.store.dispatch(loadRouteById({ routeId: +this.id }));
   }
 
   goBack(): void {

@@ -75,7 +75,7 @@ export const showRouteForm = createAction(
 
 export const loadRouteById = createAction(
   '[Routes List] Load Route By Id',
-  props<{ routeId: string }>(),
+  props<{ routeId: number }>(),
 );
 export const loadRouteByIdSuccess = createAction(
   '[Routes List] Load Route By Id Success',

@@ -37,7 +37,7 @@ import {
   styleUrl: './edit-time.component.scss',
 })
 export class EditTimeComponent implements OnInit, ControlValueAccessor {
-  @Input() time!: { departure: string | null; arrival: string | null };
+  @Input() time!: FormGroup;
 
   @Input() value: string = '';
   @Input() formControlName!: string;
@@ -52,8 +52,8 @@ export class EditTimeComponent implements OnInit, ControlValueAccessor {
 
   formGroup!: FormGroup;
 
-  editMode = false;
-  // editMode = true;
+  // editMode = false;
+  editMode = true;
 
   onChange: any = () => {};
   onTouched: any = () => {};

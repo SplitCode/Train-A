@@ -42,31 +42,169 @@
         <div class="w-1/4">Price</div>
       </div>
       <ng-container formArrayName="segments">
-        <app-ride-segment
+        <!-- <app-ride-segment
           *ngFor="let segment of segmentsControls; let i = index"
           [formGroupName]="i"
           [segment]="segment.value"
-        />
+        /> -->
         <!-- (segmentUpdated)="onSegmentUpdated($event, i)" -->
         <!-- (segmentUpdated)="onSegmentUpdated($event, i)" -->
 
-        <!-- <div
+        <div
           class="flex gap-10 py-5 border-solid border-0 border-t border-purple-400"
-          *ngFor="let segment of segmentsControls; let i = index"
-          [formGroupName]="i"
+          *ngFor="let segment of segments.controls; let i = index"
         >
-          <div class="w-1/5">
-            {{ segment.value.city }}
-          </div>
-          <div class="flex-1">
-            <app-edit-time [time]="segment.value.time" />
-          </div>
-          <div class="w-1/4">
-            <div *ngIf="segment">
-              <app-edit-carriage [data]="getPriceControls(i)" /> 
+          <ng-container [formGroupName]="i">
+            <div class="w-1/5">
+              {{ segment.value.city }}
             </div>
-          </div>
-        </div> -->
+            <div class="flex-1">
+              <!-- <app-edit-time [time]="getTimeControls" /> -->
+
+              <div class="flex gap-2">
+                <div class="grow">
+                  <ng-container
+                    class=" "
+                    *ngIf="segment.value.departure !== null"
+                  >
+                    <label [for]="'departure' + i" class="block mb-4"
+                      >Departure</label
+                    >
+
+                    <!-- *ngIf="checkIfEditTimeMode(i)" -->
+                    <p-calendar
+                      [id]="'departure' + i"
+                      class="w-full mb-4"
+                      [formControlName]="'departure'"
+                      [showTime]="true"
+                      [hourFormat]="'12'"
+                      showIcon="true"
+                      [iconDisplay]="'input'"
+                      dateFormat="mm/dd/yy"
+                    />
+                    <!-- [defaultDate]="segment.value.departure" -->
+                    <div
+                      *ngIf="!checkIfEditTimeMode(i)"
+                      class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
+                    >
+                      {{ segment.value.departure }}
+                      <br />
+                      {{ segment.value.departure | date: "yyyy-MM-dd h:mm a" }}
+                    </div>
+                  </ng-container>
+                  <ng-container
+                    class=" "
+                    *ngIf="segment.value.arrival !== null"
+                  >
+                    <label [for]="'arrival' + i" class="block mb-4"
+                      >Arrival</label
+                    >
+
+                    <!-- [id]="priceControl.key" -->
+                    <!-- *ngIf="checkIfEditTimeMode(i)" -->
+                    <p-calendar
+                      [id]="'arrival' + i"
+                      class="w-full mb-4"
+                      [formControlName]="'arrival'"
+                      [showTime]="true"
+                      [hourFormat]="'12'"
+                      showIcon="true"
+                      [iconDisplay]="'input'"
+                      dateFormat="mm/dd/yy"
+                    />
+                    <!-- [defaultDate]="segment.value.arrival" -->
+                    <div
+                      *ngIf="!checkIfEditTimeMode(i)"
+                      class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
+                    >
+                      {{ segment.value.arrival }}
+                      <br />
+                      {{ segment.value.arrival | date: "yyyy-MM-dd h:mm a" }}
+                    </div>
+                  </ng-container>
+                </div>
+
+                <div>
+                  <app-custom-button
+                    *ngIf="checkIfEditTimeMode(i)"
+                    [config]="{
+                      icon: 'pi pi-save',
+                      type: 'submit',
+                    }"
+                    (clickEmitter)="toggleEditTimeMode(i)"
+                  />
+                  <app-custom-button
+                    *ngIf="!checkIfEditTimeMode(i)"
+                    [config]="{
+                      icon: 'pi pi-pencil',
+                    }"
+                    (clickEmitter)="toggleEditTimeMode(i)"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="w-1/4">
+              <div *ngIf="segment.get('price') as price">
+                <div class="flex gap-2" formGroupName="price">
+                  <div class="grow">
+                    <div
+                      *ngFor="
+                        let priceControl of getPriceControls(i).controls
+                          | keyvalue
+                      "
+                    >
+                      <div class="flex items-center gap-2">
+                        <label [for]="priceControl.key + i" class="block mb-4"
+                          >{{ priceControl.key }}:</label
+                        >
+                        <div
+                          class="form-group mb-4 grow-1"
+                          *ngIf="checkIfEditMode(i)"
+                        >
+                          <input
+                            pInputText
+                            type="text"
+                            class="w-full"
+                            [id]="priceControl.key + i"
+                            [formControlName]="priceControl.key"
+                          />
+                        </div>
+                        <div
+                          *ngIf="!checkIfEditMode(i)"
+                          class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
+                        >
+                          {{
+                            +getPriceControls(i).controls[priceControl.key]
+                              .value | currency
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <app-custom-button
+                      *ngIf="checkIfEditMode(i)"
+                      [config]="{
+                        icon: 'pi pi-save',
+                        type: 'submit',
+                      }"
+                      (clickEmitter)="toggleEditMode(i)"
+                    />
+                    <app-custom-button
+                      *ngIf="!checkIfEditMode(i)"
+                      [config]="{
+                        icon: 'pi pi-pencil',
+                      }"
+                      (clickEmitter)="toggleEditMode(i)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
       </ng-container>
     </p-fieldset>
   </div>

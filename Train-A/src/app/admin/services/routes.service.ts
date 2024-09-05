@@ -4,6 +4,7 @@ import { API_CONFIG } from '../../config/api.config';
 import { Observable } from 'rxjs';
 import { RoutesItem, RoutesItemByPath } from '../models/routes-item.interface';
 import {
+  Price,
   ScheduleTimeRide,
   Segments,
   SegmentsStation,
@@ -76,8 +77,8 @@ export class RoutesService {
       acc.push({
         id: pathId,
         city: pathId,
-        departure: prevSegment ? prevSegment.time[1] : undefined,
-        arrival: segment ? segment.time[0] : undefined,
+        departure: segment ? segment.time[1] : undefined,
+        arrival: prevSegment ? prevSegment.time[0] : undefined,
         price: segment ? segment.price : undefined,
       });
       return acc;
@@ -102,15 +103,19 @@ export class RoutesService {
     segmentsStations: SegmentsStation[],
   ): Segments[] {
     return segmentsStations.reduce((acc, segment, index) => {
-      const departure = segment.departure;
-      const arrival = segmentsStations[index + 1]
-        ? segmentsStations[index + 1].arrival
+      const departure = segmentsStations[index + 1]
+        ? segmentsStations[index + 1].departure
         : undefined;
+      const arrival = segment.arrival;
+      const price: Price[] = segment.price as Price[];
 
-      if (segment.price !== undefined) {
+      if (index !== segmentsStations.length - 1) {
         acc.push({
-          time: [departure as string, arrival as string],
-          price: segment.price,
+          time: [
+            `${new Date(arrival as string).toISOString()}`,
+            `${new Date(departure as string).toISOString()}`,
+          ],
+          price,
         });
       }
 

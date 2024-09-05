@@ -1,22 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/lines-between-class-members */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import {
-  Component,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { Price } from '../../../../redux/states/search.state';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  ControlValueAccessor,
   FormGroup,
   FormGroupDirective,
-  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   CustomButtonComponent,
@@ -26,54 +13,32 @@ import {
 @Component({
   selector: 'app-edit-carriage',
   standalone: true,
-  imports: [CustomButtonComponent, InputComponent, CommonModule],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => EditCarriageComponent),
-      multi: true,
-    },
+  imports: [
+    CustomButtonComponent,
+    InputComponent,
+    CommonModule,
+    ReactiveFormsModule,
   ],
+
   templateUrl: './edit-carriage.component.html',
   styleUrl: './edit-carriage.component.scss',
 })
 
 //
-export class EditCarriageComponent implements OnInit, ControlValueAccessor {
-  @Input() data!: { [key: string]: string };
+export class EditCarriageComponent implements OnInit {
+  @Input() price!: FormGroup;
 
-  @Input() value: string = '';
-
-  @Input() inValidate!: boolean;
-
-  @Output() clickEmitter = new EventEmitter<void>();
-
-  onClick() {
-    this.clickEmitter.emit();
-  }
-
+  @Input() inValidate: boolean = false;
   // formGroup!: FormGroup;
 
-  editMode = false;
-  // editMode = true;
+  @Input() formGroupName!: string;
 
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  @Input() parentFormGroup!: FormGroup;
 
-  writeValue(value: any): void {
-    this.value = value;
-  }
+  @Input() formGroup!: FormGroup;
 
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-  setDisabledState?(isDisabled: boolean): void {
-    // Handle the disabled state if needed
-  }
+  // editMode = false;
+  editMode = true;
 
   constructor(private readonly formGroupDirective: FormGroupDirective) {}
 
@@ -81,8 +46,12 @@ export class EditCarriageComponent implements OnInit, ControlValueAccessor {
   //   return this.formGroup?.get(this.formControlName);
   // }
 
+  getFormGroup() {
+    return this.parentFormGroup.get(this.formGroupName) as FormGroup;
+  }
+
   ngOnInit() {
-    // this.formGroup = this.formGroupDirective.control;
+    if (!this.formGroup) this.formGroup = this.formGroupDirective.control;
   }
 
   toggleEditMode() {

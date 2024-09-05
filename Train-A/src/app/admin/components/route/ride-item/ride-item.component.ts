@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  Price,
   ScheduleTimeRide,
   // Segments,
-  SegmentsStation,
+  // SegmentsStation,
 } from '../../../../redux/states/search.state';
-import { RideSegmentComponent } from '../ride-segment/ride-segment.component';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import {
   FormsModule,
@@ -15,14 +13,13 @@ import {
   Validators,
   ReactiveFormsModule,
   FormArray,
+  FormControl,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import {
-  CustomButtonComponent,
-  InputComponent,
-} from '../../../../shared/components';
+import { CustomButtonComponent } from '../../../../shared/components';
 import {
   deleteRideById,
+  updateRideById,
   // updateRideById,
 } from '../../../../redux/actions/routes.actions';
 import { Store } from '@ngrx/store';
@@ -30,6 +27,8 @@ import { Store } from '@ngrx/store';
 import { RoutesService } from '../../../services/routes.service';
 import { EditCarriageComponent } from '../edit-carriage/edit-carriage.component';
 import { EditTimeComponent } from '../edit-time/edit-time.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-ride-item',
@@ -37,14 +36,14 @@ import { EditTimeComponent } from '../edit-time/edit-time.component';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RideSegmentComponent,
     CommonModule,
     PRIME_NG_MODULES.FieldsetModule,
     PRIME_NG_MODULES.DialogModule,
     CustomButtonComponent,
     EditCarriageComponent,
     EditTimeComponent,
-    InputComponent,
+    InputTextModule,
+    CalendarModule,
   ],
   templateUrl: './ride-item.component.html',
   styleUrl: './ride-item.component.scss',
@@ -60,7 +59,9 @@ export class RideItemComponent implements OnInit {
 
   public isSubmitting = false;
 
-  public editMode: boolean = false;
+  public editModeList: number[] = [];
+
+  public editModeTimeList: number[] = [];
 
   public inValidate: boolean = false;
 
@@ -69,65 +70,51 @@ export class RideItemComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store,
     private routesService: RoutesService,
-  ) {
-    this.UpdateRideForm = this.fb.group({
-      segments: this.fb.array([]),
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
-    if (this.data) {
-      this.setSegments(this.data.segments);
-
-      this.setPriceControls(this.data.segments);
-    }
-  }
-
-  setSegments(segments: SegmentsStation[]): void {
-    const segmentsFormArray = this.UpdateRideForm.get('segments') as FormArray;
-    segments.forEach((segment) => {
-      segmentsFormArray.push(
-        this.fb.group({
-          city: [segment.city, Validators.required],
-          time: this.fb.group({
+    this.UpdateRideForm = this.fb.group({
+      segments: new FormArray(
+        this.data.segments.map((segment) =>
+          this.fb.group({
+            city: [segment.city, Validators.required],
             departure: [segment.departure, Validators.required],
             arrival: [segment.arrival, Validators.required],
+            price: this.fb.group({
+              ...Object.keys(segment.price || {}).reduce(
+                (acc: { [key: string]: FormControl }, key: string, index) => {
+                  const priceArray = segment.price
+                    ? Object.values(segment.price)
+                    : [];
+                  const carriage = segment.price ? priceArray[index] : '';
+                  acc[key] = this.fb.control(+carriage, Validators.required);
+                  return acc;
+                },
+                {},
+              ),
+            }),
           }),
-          price: this.fb.group({}),
-        }),
-      );
+        ),
+      ),
     });
   }
 
-  setPriceControls(segments: SegmentsStation[]): void {
-    const segmentsFormArray = this.UpdateRideForm.get('segments') as FormArray;
-    segments.forEach((segment, index) => {
-      const priceGroup = segmentsFormArray.controls[index].get(
-        'price',
-      ) as FormGroup;
-      if (segment.price) {
-        this.addPriceControls(priceGroup, segment.price);
-      }
-    });
+  get segments() {
+    return this.UpdateRideForm.get('segments') as FormArray;
   }
 
-  addPriceControls(priceGroup: FormGroup, data: Price[]): void {
-    for (const key in data) {
-      const value: Price = data[key];
-      priceGroup.addControl(key, this.fb.control(value, Validators.required));
-    }
-  }
-
-  get segmentsControls() {
-    return (this.UpdateRideForm.get('segments') as FormArray)?.controls;
-  }
-
-  getPriceControls(segmentIndex: number) {
+  getPriceControls(index: number): FormGroup {
     return (
-      (this.UpdateRideForm.get('segments') as FormArray)?.controls[
-        segmentIndex
-      ].get('price') as FormGroup
-    )?.controls;
+      (this.segments.at(index).get('price') as FormGroup) || this.fb.group({})
+    );
+  }
+
+  getSegment(index: number): FormGroup {
+    return this.segments.at(index) as FormGroup;
+  }
+
+  getTimeControls(index: number): FormGroup {
+    return this.segments.at(index).get('time') as FormGroup;
   }
 
   deleteRide(rideId: number): void {
@@ -138,25 +125,47 @@ export class RideItemComponent implements OnInit {
 
   updateRide(rideId: number): void {
     const segmentsStations = this.UpdateRideForm.value.segments;
+
+    console.log('segmentsStations', segmentsStations);
     console.log(
       'segmentsStations',
-      rideId,
-      segmentsStations,
       this.routesService.convertSegmentsToBase(segmentsStations),
     );
 
-    // this.store.dispatch(
-    //   updateRideById({
-    //     routeId: this.routeId,
-    //     rideId: rideId,
-    //     segmentsByPath: segmentsStations,
-    //   }),
-    // );
+    this.store.dispatch(
+      updateRideById({
+        routeId: this.routeId,
+        rideId: rideId,
+        segmentsByPath: segmentsStations,
+      }),
+    );
   }
 
-  toggleEditMode() {
-    if (this.inValidate !== true) {
-      this.editMode = !this.editMode;
+  checkIfEditMode(index: number): boolean {
+    return this.editModeList.includes(index);
+  }
+
+  toggleEditMode(index: number) {
+    this.inValidate = !this.inValidate;
+    if (this.editModeList.includes(index)) {
+      this.editModeList = this.editModeList.filter((item) => item !== index);
+    } else {
+      this.editModeList.push(index);
+    }
+  }
+
+  checkIfEditTimeMode(index: number): boolean {
+    return this.editModeTimeList.includes(index);
+  }
+
+  toggleEditTimeMode(index: number) {
+    this.inValidate = !this.inValidate;
+    if (this.editModeTimeList.includes(index)) {
+      this.editModeTimeList = this.editModeTimeList.filter(
+        (item) => item !== index,
+      );
+    } else {
+      this.editModeTimeList.push(index);
     }
   }
 }

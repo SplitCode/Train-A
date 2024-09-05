@@ -54,7 +54,6 @@ export class AppComponent implements OnInit {
   }
 
   private dispatchOrders(): void {
-    this.store.dispatch(getOrders());
-    // this.store.dispatch(getAllOrders({ all: true }));
+    this.store.dispatch(getOrders({ all: true }));
   }
 }

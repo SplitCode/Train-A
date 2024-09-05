@@ -51,7 +51,6 @@ export class CarriageEffects {
       mergeMap(({ carriage }) =>
         this.carriageService.updateCarriage(carriage).pipe(
           map((code) => {
-            console.log('Effect: updateCarriageSuccess', code);
             return updateCarriageSuccess({ carriage: { ...carriage, code } });
           }),
           catchError((error) => {

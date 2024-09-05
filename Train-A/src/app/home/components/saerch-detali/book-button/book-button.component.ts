@@ -14,7 +14,7 @@ import { OrderRequest } from '../../../models/order-responce.interface';
 import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { BookButtonConfig } from './book-button.config';
 import { CommonModule } from '@angular/common';
-import { createOrder } from '../../../../redux/actions/order.actions';
+import { createOrder } from '../../../../redux/actions/ride.actions';
 
 @Component({
   selector: 'app-book-button',

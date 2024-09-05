@@ -78,8 +78,16 @@ export class RideItemComponent implements OnInit {
         this.data.segments.map((segment) =>
           this.fb.group({
             city: [segment.city, Validators.required],
-            departure: [segment.departure, Validators.required],
-            arrival: [segment.arrival, Validators.required],
+            arrival: [
+              segment.arrival ? new Date(segment.arrival) : segment.arrival,
+              Validators.required,
+            ],
+            departure: [
+              segment.departure
+                ? new Date(segment.departure)
+                : segment.departure,
+              Validators.required,
+            ],
             price: this.fb.group({
               ...Object.keys(segment.price || {}).reduce(
                 (acc: { [key: string]: FormControl }, key: string, index) => {

@@ -77,8 +77,8 @@ export class RoutesService {
       acc.push({
         id: pathId,
         city: pathId,
-        departure: segment ? segment.time[1] : undefined,
-        arrival: prevSegment ? prevSegment.time[0] : undefined,
+        departure: segment ? segment.time[0] : undefined,
+        arrival: prevSegment ? prevSegment.time[1] : undefined,
         price: segment ? segment.price : undefined,
       });
       return acc;
@@ -99,21 +99,34 @@ export class RoutesService {
     });
   }
 
+  public formatDateStringToISO(dateString: string): string {
+    const date = new Date(dateString);
+
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const hours = String(date.getUTCHours()).padStart(2, '0');
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+    const milliseconds = String(date.getUTCMilliseconds()).padStart(3, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+  }
+
   public convertSegmentsToBase(
     segmentsStations: SegmentsStation[],
   ): Segments[] {
     return segmentsStations.reduce((acc, segment, index) => {
-      const departure = segmentsStations[index + 1]
-        ? segmentsStations[index + 1].departure
-        : undefined;
-      const arrival = segment.arrival;
-      const price: Price[] = segment.price as Price[];
-
       if (index !== segmentsStations.length - 1) {
+        const arrival = segmentsStations[index + 1]
+          ? segmentsStations[index + 1].arrival
+          : undefined;
+        const departure = segment.departure;
+        const price: Price[] = segment.price as Price[];
         acc.push({
           time: [
-            `${new Date(arrival as string).toISOString()}`,
-            `${new Date(departure as string).toISOString()}`,
+            `${this.formatDateStringToISO(departure as string)}`,
+            `${this.formatDateStringToISO(arrival as string)}`,
           ],
           price,
         });

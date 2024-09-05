@@ -63,63 +63,84 @@
 
               <div class="flex gap-2">
                 <div class="grow">
-                  <ng-container
-                    class=" "
-                    *ngIf="segment.value.departure !== null"
-                  >
-                    <label [for]="'departure' + i" class="block mb-4"
-                      >Departure</label
-                    >
-
-                    <!-- *ngIf="checkIfEditTimeMode(i)" -->
-                    <p-calendar
-                      [id]="'departure' + i"
-                      class="w-full mb-4"
-                      [formControlName]="'departure'"
-                      [showTime]="true"
-                      [hourFormat]="'12'"
-                      showIcon="true"
-                      [iconDisplay]="'input'"
-                      dateFormat="mm/dd/yy"
-                    />
-                    <!-- [defaultDate]="segment.value.departure" -->
-                    <div
-                      *ngIf="!checkIfEditTimeMode(i)"
-                      class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
-                    >
-                      {{ segment.value.departure }}
-                      <br />
-                      {{ segment.value.departure | date: "yyyy-MM-dd h:mm a" }}
-                    </div>
-                  </ng-container>
-                  <ng-container
-                    class=" "
-                    *ngIf="segment.value.arrival !== null"
-                  >
+                  <ng-container class=" " *ngIf="data.segments[i].arrival">
                     <label [for]="'arrival' + i" class="block mb-4"
                       >Arrival</label
                     >
-
-                    <!-- [id]="priceControl.key" -->
-                    <!-- *ngIf="checkIfEditTimeMode(i)" -->
-                    <p-calendar
-                      [id]="'arrival' + i"
-                      class="w-full mb-4"
-                      [formControlName]="'arrival'"
-                      [showTime]="true"
-                      [hourFormat]="'12'"
-                      showIcon="true"
-                      [iconDisplay]="'input'"
-                      dateFormat="mm/dd/yy"
-                    />
+                    <div>
+                      <!-- [id]="priceControl.key" -->
+                      <p-calendar
+                        *ngIf="checkIfEditTimeMode(i)"
+                        [id]="'arrival' + i"
+                        class="w-full mb-4"
+                        [formControlName]="'arrival'"
+                        [showTime]="true"
+                        [hourFormat]="'12'"
+                        showIcon="true"
+                        [iconDisplay]="'input'"
+                        dateFormat="mm/dd/yy"
+                        [defaultDate]="segment.value.arrival"
+                      />
+                      <div
+                        *ngIf="
+                          segment.get('arrival')?.invalid &&
+                          (segment.get('arrival')?.dirty ||
+                            segment.get('arrival')?.touched)
+                        "
+                        class="font-extralight text-red-500"
+                      >
+                        <small
+                          *ngIf="segment.get('arrival')?.hasError('required')"
+                        >
+                          Required
+                        </small>
+                      </div>
+                    </div>
                     <!-- [defaultDate]="segment.value.arrival" -->
                     <div
                       *ngIf="!checkIfEditTimeMode(i)"
                       class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
                     >
-                      {{ segment.value.arrival }}
-                      <br />
                       {{ segment.value.arrival | date: "yyyy-MM-dd h:mm a" }}
+                    </div>
+                  </ng-container>
+
+                  <ng-container class=" " *ngIf="data.segments[i].departure">
+                    <label [for]="'departure' + i" class="block mb-4"
+                      >Departure</label
+                    >
+                    <div *ngIf="checkIfEditTimeMode(i)">
+                      <p-calendar
+                        [id]="'departure' + i"
+                        class="w-full mb-4"
+                        [formControlName]="'departure'"
+                        [showTime]="true"
+                        [hourFormat]="'12'"
+                        showIcon="true"
+                        [iconDisplay]="'input'"
+                        dateFormat="mm/dd/yy"
+                        [defaultDate]="segment.value.departure"
+                      />
+                      <div
+                        *ngIf="
+                          segment.get('departure')?.invalid &&
+                          (segment.get('departure')?.dirty ||
+                            segment.get('departure')?.touched)
+                        "
+                        class="font-extralight text-red-500"
+                      >
+                        <small
+                          *ngIf="segment.get('departure')?.hasError('required')"
+                        >
+                          Required
+                        </small>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="!checkIfEditTimeMode(i)"
+                      class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
+                    >
+                      {{ segment.value.departure | date: "yyyy-MM-dd h:mm a" }}
                     </div>
                   </ng-container>
                 </div>
@@ -169,6 +190,27 @@
                             [id]="priceControl.key + i"
                             [formControlName]="priceControl.key"
                           />
+                          <div
+                            *ngIf="
+                              getPriceControls(i).get(priceControl.key)
+                                ?.invalid &&
+                              (getPriceControls(i).get(priceControl.key)
+                                ?.dirty ||
+                                getPriceControls(i).get(priceControl.key)
+                                  ?.touched)
+                            "
+                            class="font-extralight text-red-500"
+                          >
+                            <small
+                              *ngIf="
+                                getPriceControls(i)
+                                  .get(priceControl.key)
+                                  ?.hasError('required')
+                              "
+                            >
+                              Required
+                            </small>
+                          </div>
                         </div>
                         <div
                           *ngIf="!checkIfEditMode(i)"

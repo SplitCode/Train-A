@@ -76,8 +76,8 @@
       />
       <div
         *ngIf="
-          (signUpForm.get('repeatPassword')?.dirty || submitted) &&
-          (signUpForm.get('repeatPassword')?.errors ||
+          (submitted && signUpForm.get('repeatPassword')?.errors) ||
+          (signUpForm.get('repeatPassword')?.touched &&
             signUpForm.hasError('passwordsMismatch'))
         "
         class="font-extralight text-red-500 mt-1"

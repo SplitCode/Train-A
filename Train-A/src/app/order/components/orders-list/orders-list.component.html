@@ -1,10 +1,12 @@
 <div *ngIf="orders$ | async as orders; else noOrders">
-  <p-card class="mt-3 p-4 max-w-fit">
-    <app-order-item
-      *ngFor="let order of orders"
-      [order]="order"
-    ></app-order-item>
-  </p-card>
+  <ng-container *ngIf="orders && orders.length > 0; else noOrders">
+    <p-card class="mt-3 p-4 max-w-fit">
+      <app-order-item
+        *ngFor="let order of orders"
+        [order]="order"
+      ></app-order-item>
+    </p-card>
+  </ng-container>
 </div>
 
 <ng-template #noOrders>

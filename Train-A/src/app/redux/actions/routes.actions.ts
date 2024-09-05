@@ -77,10 +77,12 @@ export const loadRouteById = createAction(
   '[Routes List] Load Route By Id',
   props<{ routeId: number }>(),
 );
+
 export const loadRouteByIdSuccess = createAction(
   '[Routes List] Load Route By Id Success',
   props<{ route: RoutesItem }>(),
 );
+
 export const loadRouteByIdFailure = createAction(
   '[Routes List] Load Route By Id Failure',
   props<{ error: string }>(),
@@ -95,6 +97,7 @@ export const loadRouteByPathSuccess = createAction(
   '[Routes List] Load Route By Path Success',
   props<{ routeByPath: RoutesItemByPath }>(),
 );
+
 export const loadRouteByPathFailure = createAction(
   '[Routes List] Load Route By Path Failure',
   props<{ error: string }>(),

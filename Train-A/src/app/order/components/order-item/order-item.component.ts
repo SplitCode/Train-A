@@ -24,6 +24,8 @@ import { FullTimeHourPipe } from '../../../home/pipes/full-time-hour';
 export class OrderItemComponent {
   @Input() order!: OrderItem;
 
+  @Input() isManager: boolean = false;
+
   stationStartCity$: Observable<string | undefined> | undefined;
 
   stationEndCity$: Observable<string | undefined> | undefined;

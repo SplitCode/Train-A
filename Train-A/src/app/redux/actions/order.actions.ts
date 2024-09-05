@@ -15,13 +15,6 @@ export const cancelOrderFailure = createAction(
   props<{ error: ErrorOrderResponse }>(),
 );
 
-export const deleteOrderSuccess = createAction(
-  '[Order] Delete Order Success',
-  props<{ orderId: number }>(),
-);
-
-// export const getOrders = createAction('[Order] Get Orders');
-
 export const getOrders = createAction(
   '[Order] Get Orders',
   props<{ all: boolean }>(),

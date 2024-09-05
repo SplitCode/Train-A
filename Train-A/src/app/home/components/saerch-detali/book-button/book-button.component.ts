@@ -15,6 +15,7 @@ import { PRIME_NG_MODULES } from '../../../../shared/modules/prime-ng-modules';
 import { BookButtonConfig } from './book-button.config';
 import { CommonModule } from '@angular/common';
 import { createOrder } from '../../../../redux/actions/ride.actions';
+import { CalculatePriceService } from '../../../services/calculate-price.service';
 
 @Component({
   selector: 'app-book-button',
@@ -39,7 +40,7 @@ export class BookButtonComponent
 
   public book$: Observable<OrderRequest | null>;
 
-  constructor() {
+  constructor(private calculatePriceService: CalculatePriceService) {
     super();
     this.book$ = this.store.select(selectBook);
   }
@@ -53,12 +54,16 @@ export class BookButtonComponent
   }
 
   private writeBookAndShow(book: OrderRequest): void {
-    const { carriageNumber, seat, isShowBook, price } = book;
+    const { carriageNumber, seat, isShowBook } = book;
     if (this.bookButtonConfig) {
       this.bookButtonConfig.isShow = isShowBook;
       this.bookButtonConfig.carriageNumber = carriageNumber;
       this.bookButtonConfig.seatId = seat;
-      this.bookButtonConfig.price = price;
+      this.bookButtonConfig.price = this.calculatePriceService.calculatePrice(
+        book.stationStart,
+        book.stationEnd,
+        book.carriageType ? book.carriageType : '',
+      );
     }
   }
 

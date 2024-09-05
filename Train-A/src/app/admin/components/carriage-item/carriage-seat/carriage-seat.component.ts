@@ -108,6 +108,7 @@ export class CarriageSeatComponent
           stationEnd: +this.toStationId,
           carriageNumber: this.carriageSeatConfig.carriageNumber,
           isShowBook: true,
+          carriageType: this.carriageSeatConfig.carriageType,
         };
         this.store.dispatch(
           createBook({

@@ -55,6 +55,6 @@ export class AppComponent implements OnInit {
   }
 
   private dispatchOrders(): void {
-    this.orderService.getOrders(false);
+    // this.orderService.getOrders(false);
   }
 }

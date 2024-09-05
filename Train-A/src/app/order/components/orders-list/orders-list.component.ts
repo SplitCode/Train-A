@@ -8,11 +8,16 @@ import { PRIME_NG_MODULES } from '../../../shared/modules/prime-ng-modules';
 import { Store } from '@ngrx/store';
 import {
   selectModalInfo,
+  selectOrders,
   // selectOrders,
 } from '../../../redux/selectors/order.selectors';
 import { CustomButtonComponent } from '../../../shared/components';
 import { ModalInfo } from '../../../redux/states/order.state';
-import { cancelOrder, orderModal } from '../../../redux/actions/order.actions';
+import {
+  cancelOrder,
+  getOrders,
+  orderModal,
+} from '../../../redux/actions/order.actions';
 import { selectIsManager } from '../../../redux/selectors/user.selectors';
 import { OrderService } from '../../services/order.service';
 
@@ -50,10 +55,13 @@ export class OrdersListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.orders$ = this.store.select(selectOrders);
+
     this.isManager$.subscribe((isManager) => {
       this.isManager = isManager;
-      this.orders$ = this.orderService.getOrders(isManager);
+      // this.orders$ =
     });
+    this.store.dispatch(getOrders({ all: true }));
 
     this.modalInfo$.forEach((item) => {
       this.localModalInfo = { ...item };

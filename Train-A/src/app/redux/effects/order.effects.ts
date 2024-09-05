@@ -22,17 +22,18 @@ export class OrderEffects {
 
   private orderService = inject(OrderService);
 
-  getOrders$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(getOrders),
-      switchMap(({ all }) =>
-        this.orderService.getOrders(all).pipe(
-          map((orders) => getOrdersSuccess({ orders })),
-          catchError((error) => of(getOrdersFailure({ error }))),
-        ),
-      ),
-    );
-  });
+  // getOrders$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(getOrders),
+  //     switchMap(({ all }) => {
+  //       console.log('Effect triggered for getting orders:', all);
+  //       return this.orderService.getOrders(all).pipe(
+  //         map((orders) => getOrdersSuccess({ orders })),
+  //         catchError((error) => of(getOrdersFailure({ error }))),
+  //       );
+  //     }),
+  //   );
+  // });
 
   cancelOrder$ = createEffect(() => {
     return this.actions$.pipe(

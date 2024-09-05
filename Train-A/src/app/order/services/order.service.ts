@@ -16,10 +16,15 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
+  // public getOrders(all: boolean = false): Observable<OrderItem[]> {
+  //   return this.http.get<OrderItem[]>(this.orderUrl, {
+  //     params: { all: all.toString() },
+  //   });
+  // }
+
   public getOrders(all: boolean = false): Observable<OrderItem[]> {
-    return this.http.get<OrderItem[]>(this.orderUrl, {
-      params: { all: all.toString() },
-    });
+    console.log(all);
+    return this.http.get<OrderItem[]>(this.orderUrl + `?all=${all}`);
   }
 
   // (must be only for manager)

@@ -17,6 +17,7 @@ import {
   getOrders,
   orderModal,
 } from '../../../redux/actions/order.actions';
+import { selectIsManager } from '../../../redux/selectors/user.selectors';
 
 @Component({
   selector: 'app-orders-list',
@@ -39,13 +40,25 @@ export class OrdersListComponent implements OnInit {
 
   public localModalInfo!: ModalInfo;
 
+  private isManager$: Observable<boolean>;
+
   constructor(private store: Store) {
     this.modalInfo$ = this.store.select(selectModalInfo);
+    this.isManager$ = this.store.select(selectIsManager);
   }
 
   ngOnInit() {
-    this.store.dispatch(getOrders({ all: true }));
+    // this.store.dispatch(getOrders({ all: true }));
     this.orders$ = this.store.select(selectOrders);
+
+    // this.store.dispatch(getOrders({ all: true }));
+    this.isManager$.subscribe((isManager) => {
+      if (isManager) {
+        console.log(isManager);
+        // } else {
+        this.store.dispatch(getOrders({ all: isManager }));
+      }
+    });
 
     this.orders$.subscribe((orders) => {
       console.log('Updated orders:', orders);

@@ -6,6 +6,7 @@ export interface OrderRequest {
   carriageNumber?: number;
   isShowBook?: boolean;
   price?: number;
+  carriageType?: string;
 }
 
 export interface OrderResponse {

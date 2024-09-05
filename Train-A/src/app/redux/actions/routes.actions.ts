@@ -115,17 +115,17 @@ export const deleteRideByIdFailure = createAction(
   props<{ error: string }>(),
 );
 
-export const createRideById = createAction(
+export const createRide = createAction(
   '[Routes List] Create Ride By Id',
-  props<{ routeId: number; segmentsByPath: Segments[] }>(),
+  props<{ routeId: number; segmentsByPath: SegmentsStation[] }>(),
 );
 
-export const createRideByIdSuccess = createAction(
+export const createRideSuccess = createAction(
   '[Routes List] Create Ride By Id Success',
   props<{ routeId: number; segments: Segments[] }>(),
 );
 
-export const createRideByIdFailure = createAction(
+export const createRideFailure = createAction(
   '[Routes List] Create Ride By Id Failure',
   props<{ error: string }>(),
 );

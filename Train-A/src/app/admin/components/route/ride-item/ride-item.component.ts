@@ -25,8 +25,6 @@ import {
 import { Store } from '@ngrx/store';
 // import { Route } from '@angular/router';
 import { RoutesService } from '../../../services/routes.service';
-import { EditCarriageComponent } from '../edit-carriage/edit-carriage.component';
-import { EditTimeComponent } from '../edit-time/edit-time.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -41,8 +39,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     PRIME_NG_MODULES.FieldsetModule,
     PRIME_NG_MODULES.DialogModule,
     CustomButtonComponent,
-    EditCarriageComponent,
-    EditTimeComponent,
+
     InputTextModule,
     CalendarModule,
     InputNumberModule,

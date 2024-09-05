@@ -74,13 +74,39 @@ export class RideEffects {
     );
   });
 
+  // cancelOrder$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(cancelOrder),
+  //     mergeMap((action) =>
+  //       this.rideService.cancelOrder(action.orderId).pipe(
+  //         map(() => cancelOrderSuccess()),
+  //         catchError((error) => of(cancelOrderFailure({ error }))),
+  //       ),
+  //     ),
+  //   );
+  // });
+
   cancelOrder$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(cancelOrder),
-      mergeMap((action) =>
-        this.rideService.cancelOrder(action.orderId).pipe(
+      switchMap(({ orderId }) =>
+        this.rideService.cancelOrder(orderId).pipe(
           map(() => cancelOrderSuccess()),
-          catchError((error) => of(cancelOrderFailure({ error }))),
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'The order has been successfully cancelled!',
+            });
+          }),
+          catchError((error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message || 'Unknown error',
+            });
+            return of(cancelOrderFailure({ error: error.message }));
+          }),
         ),
       ),
     );

@@ -51,7 +51,7 @@
       *ngIf="order.status === 'active'"
       (click)="setModalInfo(true, order.id)"
       [config]="{
-        label: 'Cancel',
+        label: isManager ? 'Cancel Order' : 'Cancel',
         styleClass: 'my-2  button-with-label',
         icon: 'pi pi-times',
       }"

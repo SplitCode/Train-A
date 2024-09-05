@@ -6,18 +6,22 @@ import {
   OrderRequest,
   SuccessOrderResponse,
 } from '../../home/models/order-responce.interface';
+
 export const createBook = createAction(
   '[Order] Create Book',
   props<{ book: OrderRequest }>(),
 );
+
 export const createOrder = createAction(
   '[Order] Create Order',
   props<{ orderRequest: OrderRequest }>(),
 );
+
 export const loadRideInfo = createAction(
   '[Ride] Load Ride Info',
   props<{ rideId: string }>(),
 );
+
 export const createOrderSuccess = createAction(
   '[Order] Create Order Success',
   props<{ orderResponse: SuccessOrderResponse }>(),
@@ -27,6 +31,7 @@ export const createOrderFailure = createAction(
   '[Order] Create Order Failure',
   props<{ error: ErrorOrderResponse }>(),
 );
+
 export const loadRideInfoSuccess = createAction(
   '[Ride] Load Ride Info Success',
   props<{ rideInfo: RideResponse }>(),

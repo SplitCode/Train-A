@@ -4,6 +4,7 @@
       <app-order-item
         *ngFor="let order of orders"
         [order]="order"
+        [isManager]="isManager"
       ></app-order-item>
     </p-card>
   </ng-container>

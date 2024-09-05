@@ -152,6 +152,7 @@
                     [config]="{
                       icon: 'pi pi-save',
                       type: 'submit',
+                      disabled: checkTimeControls(i),
                     }"
                     (clickEmitter)="toggleEditTimeMode(i)"
                   />
@@ -232,6 +233,7 @@
                       [config]="{
                         icon: 'pi pi-save',
                         type: 'submit',
+                        disabled: checkPriceControls(i),
                       }"
                       (clickEmitter)="toggleEditMode(i)"
                     />

@@ -25,8 +25,6 @@ import {
 import { Store } from '@ngrx/store';
 // import { Route } from '@angular/router';
 import { RoutesService } from '../../../services/routes.service';
-import { EditCarriageComponent } from '../edit-carriage/edit-carriage.component';
-import { EditTimeComponent } from '../edit-time/edit-time.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -41,8 +39,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     PRIME_NG_MODULES.FieldsetModule,
     PRIME_NG_MODULES.DialogModule,
     CustomButtonComponent,
-    EditCarriageComponent,
-    EditTimeComponent,
+
     InputTextModule,
     CalendarModule,
     InputNumberModule,
@@ -63,7 +60,11 @@ export class RideItemComponent implements OnInit {
 
   public editModeList: number[] = [];
 
+  public isError: boolean = false;
+
   public editModeTimeList: number[] = [];
+
+  public isErrorTime: boolean = false;
 
   public inValidate: boolean = false;
 
@@ -80,33 +81,53 @@ export class RideItemComponent implements OnInit {
         this.data.segments.map((segment) =>
           this.fb.group({
             city: [segment.city, Validators.required],
-            arrival: [
-              segment.arrival ? new Date(segment.arrival) : segment.arrival,
-              Validators.required,
-            ],
-            departure: [
-              segment.departure
-                ? new Date(segment.departure)
-                : segment.departure,
-              Validators.required,
-            ],
-            price: this.fb.group({
-              ...Object.keys(segment.price || {}).reduce(
-                (acc: { [key: string]: FormControl }, key: string, index) => {
-                  const priceArray = segment.price
-                    ? Object.values(segment.price)
-                    : [];
-                  const carriage = segment.price ? priceArray[index] : 0;
-                  acc[key] = this.fb.control(+carriage, Validators.required);
-                  return acc;
-                },
-                {},
-              ),
-            }),
+            arrival:
+              segment.arrival !== null
+                ? [
+                    segment.arrival
+                      ? new Date(segment.arrival)
+                      : segment.arrival,
+                    Validators.required,
+                  ]
+                : null,
+            departure: segment.departure
+              ? [
+                  segment.departure
+                    ? new Date(segment.departure)
+                    : segment.departure,
+                  Validators.required,
+                ]
+              : null,
+            price: segment.price
+              ? this.fb.group({
+                  ...Object.keys(segment.price || {}).reduce(
+                    (
+                      acc: { [key: string]: FormControl },
+                      key: string,
+                      index,
+                    ) => {
+                      const priceArray = segment.price
+                        ? Object.values(segment.price)
+                        : [];
+                      const carriage = segment.price ? priceArray[index] : 0;
+                      acc[key] = this.fb.control(
+                        +carriage,
+                        Validators.required,
+                      );
+                      return acc;
+                    },
+                    {},
+                  ),
+                })
+              : null,
           }),
         ),
       ),
     });
+
+    this.isError = this.UpdateRideForm.invalid;
+
+    this.isErrorTime = this.UpdateRideForm.invalid;
   }
 
   get segments() {
@@ -116,6 +137,19 @@ export class RideItemComponent implements OnInit {
   getPriceControls(index: number): FormGroup {
     return (
       (this.segments.at(index).get('price') as FormGroup) || this.fb.group({})
+    );
+  }
+
+  checkPriceControls(index: number): boolean {
+    return (this.segments.at(index).get('price') as FormGroup).invalid;
+  }
+
+  checkTimeControls(index: number): boolean {
+    return (
+      ((this.segments.at(index).get('arrival') as FormControl).invalid &&
+        !!this.data.segments[index].arrival) ||
+      ((this.segments.at(index).get('departure') as FormControl).invalid &&
+        !!this.data.segments[index].departure)
     );
   }
 
@@ -149,6 +183,7 @@ export class RideItemComponent implements OnInit {
 
   toggleEditMode(index: number) {
     this.inValidate = !this.inValidate;
+    // if (!this.isError)
     if (this.editModeList.includes(index)) {
       this.editModeList = this.editModeList.filter((item) => item !== index);
     } else {
@@ -161,7 +196,7 @@ export class RideItemComponent implements OnInit {
   }
 
   toggleEditTimeMode(index: number) {
-    this.inValidate = !this.inValidate;
+    // if (!this.isErrorTime)
     if (this.editModeTimeList.includes(index)) {
       this.editModeTimeList = this.editModeTimeList.filter(
         (item) => item !== index,

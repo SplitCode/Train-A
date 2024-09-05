@@ -26,6 +26,8 @@ import {
   updateRideByIdFailure,
   updateRouteSuccess,
   updateRouteFailure,
+  createRide,
+  hideRouteForm,
 } from '../actions/routes.actions';
 import {
   RoutesItem,
@@ -209,10 +211,45 @@ export class RoutesEffects {
               });
             }),
             map(() => loadRouteById({ routeId })),
-            catchError((error) =>
-              of(updateRideByIdFailure({ error: error.message })),
-            ),
+            catchError((error) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: error.error.message || 'Unknown error',
+              });
+              return of(updateRideByIdFailure({ error: error.message }));
+            }),
           );
+      }),
+    );
+  });
+
+  createRide$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createRide),
+      switchMap(({ routeId, segmentsByPath }) => {
+        const segments: Segments[] =
+          this.routesService.convertSegmentsToBase(segmentsByPath);
+
+        return this.routesService.createRide(routeId, segments).pipe(
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'The ride has been successfully updated!',
+            });
+          }),
+          map(() => loadRouteById({ routeId })),
+          map(() => hideRouteForm()),
+          catchError((error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message || 'Unknown error',
+            });
+            return of(updateRideByIdFailure({ error: error.message }));
+          }),
+        );
       }),
     );
   });

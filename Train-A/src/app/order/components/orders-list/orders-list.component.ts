@@ -1,4 +1,5 @@
 /* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
+/* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
 import { Component, OnInit } from '@angular/core';
 import { OrderItem } from '../../models/order-item.interface';
 import { Observable } from 'rxjs';

@@ -1,1 +1,185 @@
-<p>ride-form works!</p>
+<app-custom-button
+  (click)="setShowForm()"
+  class="btn btn-primary mb-4 ms-10"
+  [config]="{
+    label: 'Create Ride',
+    styleClass: 'my-2',
+    icon: 'pi pi-file-plus',
+    disabled: (formVisible$ | async) || false,
+  }"
+/>
+
+<form
+  class="route-container mt-10"
+  [formGroup]="CreateRideForm"
+  (ngSubmit)="createRide()"
+  *ngIf="formVisible$ | async"
+>
+  <div class="route">
+    <div class="flex justify-end gap-2"></div>
+    <p-fieldset [legend]="'Create Ride '">
+      <div class="hidden lg:flex gap-3 mb-2 pb-2">
+        <div class="lg:w-1/5">City</div>
+        <div class="lg:flex-1">Time</div>
+        <div class="w-1/3">Price</div>
+      </div>
+      <ng-container formArrayName="segments">
+        <!-- <app-ride-segment
+          *ngFor="let segment of segmentsControls; let i = index"
+          [formGroupName]="i"
+          [segment]="segment.value"
+        /> -->
+        <!-- (segmentUpdated)="onSegmentUpdated($event, i)" -->
+        <!-- (segmentUpdated)="onSegmentUpdated($event, i)" -->
+
+        <div
+          class="flex lg:flex-nowrap flex-wrap gap-10 py-5 border-solid border-0 border-t border-purple-400"
+          *ngFor="let segment of segments.controls; let i = index"
+        >
+          <ng-container [formGroupName]="i">
+            <div class="lg:w-1/5 w-full">
+              <div class="mb-2 lg:hidden">City</div>
+              {{ segment.value.city }}
+            </div>
+            <div class="flex-1">
+              <!-- <app-edit-time [time]="getTimeControls" /> -->
+
+              <div class="flex gap-2">
+                <div class="grow">
+                  <ng-container class=" " *ngIf="data.segments[i].arrival">
+                    <label [for]="'arrival' + i" class="block mb-4"
+                      >Arrival</label
+                    >
+                    <div class="mb-10">
+                      <!-- [id]="priceControl.key" -->
+                      <p-calendar
+                        [id]="'arrival' + i"
+                        class="w-full mb-4"
+                        [formControlName]="'arrival'"
+                        [showTime]="true"
+                        [hourFormat]="'12'"
+                        showIcon="true"
+                        [iconDisplay]="'input'"
+                        dateFormat="mm/dd/yy"
+                        [defaultDate]="segment.value.arrival"
+                      />
+                      <div
+                        *ngIf="
+                          segment.get('arrival')?.invalid &&
+                          (segment.get('arrival')?.dirty ||
+                            segment.get('arrival')?.touched)
+                        "
+                        class="font-extralight text-red-500"
+                      >
+                        <small
+                          *ngIf="segment.get('arrival')?.hasError('required')"
+                        >
+                          Required
+                        </small>
+                      </div>
+                    </div>
+                    <!-- [defaultDate]="segment.value.arrival" -->
+                  </ng-container>
+
+                  <ng-container class=" " *ngIf="data.segments[i].departure">
+                    <label [for]="'departure' + i" class="block mb-4"
+                      >Departure</label
+                    >
+                    <div>
+                      <p-calendar
+                        [id]="'departure' + i"
+                        class="w-full mb-4"
+                        [formControlName]="'departure'"
+                        [showTime]="true"
+                        [hourFormat]="'12'"
+                        showIcon="true"
+                        [iconDisplay]="'input'"
+                        dateFormat="mm/dd/yy"
+                        [defaultDate]="segment.value.departure"
+                      />
+                      <div
+                        *ngIf="
+                          segment.get('departure')?.invalid &&
+                          (segment.get('departure')?.dirty ||
+                            segment.get('departure')?.touched)
+                        "
+                        class="font-extralight text-red-500"
+                      >
+                        <small
+                          *ngIf="segment.get('departure')?.hasError('required')"
+                        >
+                          Required
+                        </small>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:w-1/3 w-full">
+              <div *ngIf="segment.get('price') as price">
+                <div class="flex gap-2" formGroupName="price">
+                  <div class="grow">
+                    <div
+                      *ngFor="
+                        let priceControl of getPriceControls(i).controls
+                          | keyvalue
+                      "
+                    >
+                      <div class="flex gap-2">
+                        <label
+                          [for]="priceControl.key + i"
+                          class="block mb-4 mt-18"
+                          >{{ priceControl.key }}:</label
+                        >
+                        <div class="form-group mb-4 grow">
+                          <p-inputNumber
+                            class="w-full"
+                            [id]="priceControl.key + i"
+                            [formControlName]="priceControl.key"
+                          />
+                          <div
+                            *ngIf="
+                              getPriceControls(i).get(priceControl.key)
+                                ?.invalid &&
+                              (getPriceControls(i).get(priceControl.key)
+                                ?.dirty ||
+                                getPriceControls(i).get(priceControl.key)
+                                  ?.touched)
+                            "
+                            class="font-extralight text-red-500"
+                          >
+                            <small
+                              *ngIf="
+                                getPriceControls(i)
+                                  .get(priceControl.key)
+                                  ?.hasError('required')
+                              "
+                            >
+                              Required
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </p-fieldset>
+  </div>
+  <app-custom-button
+    [config]="{
+      type: 'submit',
+
+      label: 'Create',
+      styleClass: 'my-2 ml-auto w-full',
+      icon: 'pi pi-plus',
+      disabled: CreateRideForm.valid,
+    }"
+  />
+</form>

@@ -21,10 +21,10 @@
                 <ng-template pTemplate="header">
                   <div class="w-[calc(100%/14)] min-w-32 text-center">
                     <div class="font-bold text-white">
-                      {{ segment.time[1] | formatDate }}
+                      {{ segment.time[0] | formatDate }}
                     </div>
                     <div class="text-white text-sm">
-                      {{ segment.time[1] | formatDay }}
+                      {{ segment.time[0] | formatDay }}
                     </div>
                   </div>
                 </ng-template>

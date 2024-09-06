@@ -160,6 +160,10 @@ export const updateRideByIdFailure = createAction(
 export const showRideForm = createAction('[Ride List] Show  Ride Form');
 
 export const hideRideForm = createAction('[Ride List] Hide Ride Form');
+export const setRideFormVisible = createAction(
+  '[Ride List] Set Ride Form Visible',
+  props<{ visible: boolean }>(),
+);
 
 export const hideRouteForm = createAction('[Route] Hide Route Form');
 

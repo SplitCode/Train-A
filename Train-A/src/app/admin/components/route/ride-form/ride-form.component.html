@@ -46,10 +46,7 @@
 
               <div class="flex gap-2">
                 <div class="grow">
-                  <ng-container
-                    class=" "
-                    *ngIf="i !== this.data.path.length - 1"
-                  >
+                  <ng-container class=" " *ngIf="i !== 0">
                     <label [for]="'arrival' + i" class="block mb-4"
                       >Arrival</label
                     >
@@ -84,7 +81,10 @@
                     <!-- [defaultDate]="segment.value.arrival" -->
                   </ng-container>
 
-                  <ng-container class=" " *ngIf="i !== 0">
+                  <ng-container
+                    class=" "
+                    *ngIf="i !== this.data.path.length - 1"
+                  >
                     <label [for]="'departure' + i" class="block mb-4"
                       >Departure</label
                     >
@@ -182,7 +182,6 @@
       label: 'Create',
       styleClass: 'my-2 ml-auto w-full',
       icon: 'pi pi-plus',
-      disabled: CreateRideForm.valid,
     }"
   />
 </form>

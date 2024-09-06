@@ -16,6 +16,7 @@ import {
   updateRideByIdSuccess,
   updateRouteSuccess,
   showRideForm,
+  setRideFormVisible,
 } from '../actions/routes.actions';
 
 import { RoutesState, initialRoutesState } from '../states/routes.state';
@@ -171,6 +172,13 @@ export const reducer = createReducer(
     (state): RoutesState => ({
       ...state,
       rideFormVisible: false,
+    }),
+  ),
+  on(
+    setRideFormVisible,
+    (state, { visible }): RoutesState => ({
+      ...state,
+      rideFormVisible: visible,
     }),
   ),
 );

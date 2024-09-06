@@ -19,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CustomButtonComponent } from '../../../../shared/components';
 import {
   createRide,
+  setRideFormVisible,
   showRideForm,
 } from '../../../../redux/actions/routes.actions';
 import { Observable, tap } from 'rxjs';
@@ -75,6 +76,8 @@ export class RideFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(setRideFormVisible({ visible: false }));
+
     this.formVisible$
       .pipe(
         tap((visible) => {

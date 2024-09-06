@@ -110,16 +110,16 @@ export class RideItemComponent implements OnInit {
                         ? Object.values(segment.price)
                         : [];
                       const carriage = segment.price ? priceArray[index] : 0;
-                      acc[key] = this.fb.control(
-                        +carriage,
+                      acc[key] = this.fb.control(+carriage, [
                         Validators.required,
-                      );
+                        Validators.min(1),
+                      ]);
                       return acc;
                     },
                     {},
                   ),
                 })
-              : null,
+              : undefined,
           }),
         ),
       ),

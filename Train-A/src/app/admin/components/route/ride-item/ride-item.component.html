@@ -170,15 +170,10 @@
             </div>
 
             <div class="lg:w-1/3 w-full">
-              <div *ngIf="segment.get('price') as price">
+              <div *ngIf="getPriceControls(i).controls as price">
                 <div class="flex gap-2" formGroupName="price">
                   <div class="grow">
-                    <div
-                      *ngFor="
-                        let priceControl of getPriceControls(i).controls
-                          | keyvalue
-                      "
-                    >
+                    <div *ngFor="let priceControl of price | keyvalue">
                       <div class="flex gap-2">
                         <label
                           [for]="priceControl.key + i"
@@ -220,9 +215,7 @@
                           *ngIf="!checkIfEditMode(i)"
                           class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
                         >
-                          {{
-                            +getDataPrice(i, priceControl.key) || 0 | currency
-                          }}
+                          {{ +priceControl.value.value | currency }}
                         </div>
                       </div>
                     </div>

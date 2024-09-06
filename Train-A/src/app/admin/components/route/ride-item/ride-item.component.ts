@@ -140,6 +140,12 @@ export class RideItemComponent implements OnInit {
     );
   }
 
+  getDataPrice(index: number, in2: string): string {
+    return Object.keys(this.data.segments[index].price ?? {}).filter((key) => {
+      return key === in2;
+    })[0] as string;
+  }
+
   checkPriceControls(index: number): boolean {
     return (this.segments.at(index).get('price') as FormGroup).invalid;
   }

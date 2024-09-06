@@ -46,7 +46,10 @@
 
               <div class="flex gap-2">
                 <div class="grow">
-                  <ng-container class=" " *ngIf="data.segments[i].arrival">
+                  <ng-container
+                    class=" "
+                    *ngIf="i !== this.data.path.length - 1"
+                  >
                     <label [for]="'arrival' + i" class="block mb-4"
                       >Arrival</label
                     >
@@ -81,7 +84,7 @@
                     <!-- [defaultDate]="segment.value.arrival" -->
                   </ng-container>
 
-                  <ng-container class=" " *ngIf="data.segments[i].departure">
+                  <ng-container class=" " *ngIf="i !== 0">
                     <label [for]="'departure' + i" class="block mb-4"
                       >Departure</label
                     >

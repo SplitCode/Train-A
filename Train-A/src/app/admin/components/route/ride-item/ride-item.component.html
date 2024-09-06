@@ -102,7 +102,7 @@
                       *ngIf="!checkIfEditTimeMode(i)"
                       class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
                     >
-                      {{ segment.value.arrival | date: "yyyy-MM-dd h:mm a" }}
+                      {{ data.segments[i].arrival | date: "yyyy-MM-dd h:mm a" }}
                     </div>
                   </ng-container>
 
@@ -141,7 +141,9 @@
                       *ngIf="!checkIfEditTimeMode(i)"
                       class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
                     >
-                      {{ segment.value.departure | date: "yyyy-MM-dd h:mm a" }}
+                      {{
+                        data.segments[i].departure | date: "yyyy-MM-dd h:mm a"
+                      }}
                     </div>
                   </ng-container>
                 </div>
@@ -219,8 +221,7 @@
                           class="p-inputtext p-inputtext--div p-component p-element grow mb-4"
                         >
                           {{
-                            +getPriceControls(i).controls[priceControl.key]
-                              .value | currency
+                            +getDataPrice(i, priceControl.key) || 0 | currency
                           }}
                         </div>
                       </div>

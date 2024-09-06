@@ -88,7 +88,7 @@ export class RideFormComponent implements OnInit {
             price:
               index !== this.data.path.length - 1
                 ? this.fb.group({
-                    ...Object.keys(this.data.carriages || {}).reduce(
+                    ...this.data.carriages.reduce(
                       (acc: { [key: string]: FormControl }, key: string) => {
                         acc[key] = this.fb.control('', Validators.required);
                         return acc;

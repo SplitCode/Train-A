@@ -85,22 +85,10 @@ export class OrderItemComponent {
 
     const segments = schedule.segments;
 
-    let startSegmentIndex = 0;
-    let endSegmentIndex = 0;
+    const startSegmentIndex = startIndex;
+    const endSegmentIndex = endIndex;
 
-    let accumulatedLength = 0;
-    for (let i = 0; i < segments.length; i += 1) {
-      accumulatedLength += Math.ceil(path.length / segments.length);
-      if (startIndex < accumulatedLength && startSegmentIndex === 0) {
-        startSegmentIndex = i;
-      }
-      if (endIndex < accumulatedLength) {
-        endSegmentIndex = i;
-        break;
-      }
-    }
-
-    this.tripStartTime = segments[startSegmentIndex].time[0];
-    this.tripEndTime = segments[endSegmentIndex].time[1];
+    this.tripStartTime = segments[startSegmentIndex].time[1];
+    this.tripEndTime = segments[endSegmentIndex].time[0];
   }
 }

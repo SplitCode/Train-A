@@ -8,7 +8,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ScheduleTimeRide } from '../../../../redux/states/search.state';
 import { MessageService } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { RoutesService } from '../../../services/routes.service';
@@ -24,6 +23,7 @@ import {
 } from '../../../../redux/actions/routes.actions';
 import { Observable } from 'rxjs';
 import { selectRideFormVisibility } from '../../../../redux/selectors/routes.selectors';
+import { RoutesItemByPath } from '../../../models/routes-item.interface';
 
 @Component({
   selector: 'app-ride-form',
@@ -44,7 +44,7 @@ import { selectRideFormVisibility } from '../../../../redux/selectors/routes.sel
   styleUrl: './ride-form.component.scss',
 })
 export class RideFormComponent implements OnInit {
-  @Input() data!: ScheduleTimeRide;
+  @Input() data!: RoutesItemByPath;
 
   @Input() route!: number;
 
@@ -77,23 +77,26 @@ export class RideFormComponent implements OnInit {
   ngOnInit(): void {
     this.CreateRideForm = this.fb.group({
       segments: new FormArray(
-        this.data.segments.map((segment) =>
+        this.data.path.map((city, index) =>
           this.fb.group({
-            city: [segment.city, Validators.required],
+            city: [city, Validators.required],
             arrival:
-              segment.arrival !== null ? ['', Validators.required] : null,
-            departure: segment.departure ? ['', Validators.required] : null,
-            price: segment.price
-              ? this.fb.group({
-                  ...Object.keys(segment.price || {}).reduce(
-                    (acc: { [key: string]: FormControl }, key: string) => {
-                      acc[key] = this.fb.control('', Validators.required);
-                      return acc;
-                    },
-                    {},
-                  ),
-                })
-              : null,
+              index !== this.data.path.length - 1
+                ? ['', Validators.required]
+                : null,
+            departure: index !== 0 ? ['', Validators.required] : null,
+            price:
+              index !== this.data.path.length - 1
+                ? this.fb.group({
+                    ...Object.keys(this.data.carriages || {}).reduce(
+                      (acc: { [key: string]: FormControl }, key: string) => {
+                        acc[key] = this.fb.control('', Validators.required);
+                        return acc;
+                      },
+                      {},
+                    ),
+                  })
+                : null,
           }),
         ),
       ),
@@ -166,9 +169,9 @@ export class RideFormComponent implements OnInit {
   checkTimeControls(index: number): boolean {
     return (
       ((this.segments.at(index).get('arrival') as FormControl).invalid &&
-        !!this.data.segments[index].arrival) ||
+        index !== this.data.path.length - 1) ||
       ((this.segments.at(index).get('departure') as FormControl).invalid &&
-        !!this.data.segments[index].departure)
+        index !== 0)
     );
   }
 

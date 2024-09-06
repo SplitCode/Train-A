@@ -21,7 +21,7 @@ import {
   createRide,
   showRideForm,
 } from '../../../../redux/actions/routes.actions';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { selectRideFormVisibility } from '../../../../redux/selectors/routes.selectors';
 import { RoutesItemByPath } from '../../../models/routes-item.interface';
 
@@ -75,32 +75,46 @@ export class RideFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.CreateRideForm = this.fb.group({
-      segments: new FormArray(
-        this.data.path.map((city, index) =>
-          this.fb.group({
-            city: [city, Validators.required],
-            arrival:
-              index !== this.data.path.length - 1
-                ? ['', Validators.required]
-                : null,
-            departure: index !== 0 ? ['', Validators.required] : null,
-            price:
-              index !== this.data.path.length - 1
-                ? this.fb.group({
-                    ...this.data.carriages.reduce(
-                      (acc: { [key: string]: FormControl }, key: string) => {
-                        acc[key] = this.fb.control('', Validators.required);
-                        return acc;
-                      },
-                      {},
-                    ),
-                  })
-                : null,
-          }),
-        ),
-      ),
-    });
+    this.formVisible$
+      .pipe(
+        tap((visible) => {
+          if (visible) {
+            this.CreateRideForm = this.fb.group({
+              segments: new FormArray(
+                this.data.path.map((city, index) =>
+                  this.fb.group({
+                    city: [city, Validators.required],
+                    arrival:
+                      index !== this.data.path.length - 1
+                        ? ['', Validators.required]
+                        : null,
+                    departure: index !== 0 ? ['', Validators.required] : null,
+                    price:
+                      index !== this.data.path.length - 1
+                        ? this.fb.group({
+                            ...this.data.carriages.reduce(
+                              (
+                                acc: { [key: string]: FormControl },
+                                key: string,
+                              ) => {
+                                acc[key] = this.fb.control(
+                                  '1',
+                                  Validators.required,
+                                );
+                                return acc;
+                              },
+                              {},
+                            ),
+                          })
+                        : null,
+                  }),
+                ),
+              ),
+            });
+          }
+        }),
+      )
+      .subscribe();
 
     // this.CreateRideForm = this.fb.group({
     //   segments: new FormArray(
@@ -213,6 +227,8 @@ export class RideFormComponent implements OnInit {
   }
 
   createRide(): void {
+    console.log(this.CreateRideForm.value.segments);
+
     this.store.dispatch(
       createRide({
         routeId: this.route,

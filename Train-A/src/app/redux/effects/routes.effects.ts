@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, map, catchError, of, switchMap, tap } from 'rxjs';
+import { mergeMap, map, catchError, of, switchMap, tap, concatMap } from 'rxjs';
 import { RoutesService } from '../../admin/services/routes.service';
 import { MessageService } from 'primeng/api';
 import {
@@ -27,7 +27,7 @@ import {
   updateRouteSuccess,
   updateRouteFailure,
   createRide,
-  hideRouteForm,
+  setRideFormVisible,
 } from '../actions/routes.actions';
 import {
   RoutesItem,
@@ -146,6 +146,7 @@ export class RoutesEffects {
               // routeByPathSuccessAction,
             );
           }),
+
           catchError((error) =>
             of(loadRouteByIdFailure({ error: error.message })),
           ),
@@ -157,6 +158,7 @@ export class RoutesEffects {
   loadRouteByPath$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadRouteById),
+
       switchMap(({ routeId }) =>
         this.routesService.getRouteById(routeId).pipe(
           switchMap((route: RoutesItem) => {
@@ -164,6 +166,8 @@ export class RoutesEffects {
               this.routesService.convertRoutesItemByPath(route);
             return of(loadRouteByPathSuccess({ routeByPath }));
           }),
+
+          // map(() => hideRideForm()),
           catchError((error) =>
             of(loadRouteByPathFailure({ error: error.message })),
           ),
@@ -210,6 +214,7 @@ export class RoutesEffects {
                 detail: 'The ride has been successfully updated!',
               });
             }),
+
             map(() => loadRouteById({ routeId })),
             catchError((error) => {
               this.messageService.add({
@@ -232,15 +237,11 @@ export class RoutesEffects {
           this.routesService.convertSegmentsToBase(segmentsByPath);
 
         return this.routesService.createRide(routeId, segments).pipe(
-          tap(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'The ride has been successfully updated!',
-            });
-          }),
-          map(() => loadRouteById({ routeId })),
-          map(() => hideRouteForm()),
+          // eslint-disable-next-line @ngrx/no-multiple-actions-in-effects
+          concatMap(() => [
+            loadRouteById({ routeId }),
+            setRideFormVisible({ visible: false }),
+          ]),
           catchError((error) => {
             this.messageService.add({
               severity: 'error',

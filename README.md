@@ -11,6 +11,13 @@ Regardless of whether you are planning a short trip around the city or a long tr
 
 Start your journey with [Train-A](https://angular-train.netlify.app/) ⭐
 
+### !important
+To get to the admin panel, enter the following credentials:
+
+email: admin@admin.com
+
+password: my-password
+
 ## Stack
 
 - Language: [TypeScript](https://www.typescriptlang.org/)
